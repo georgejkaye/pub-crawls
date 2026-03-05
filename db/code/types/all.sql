@@ -10,13 +10,13 @@ DROP TYPE IF EXISTS user_follow_data CASCADE;
 DROP TYPE IF EXISTS user_high_level_summary_data CASCADE;
 
 CREATE TYPE user_data AS (
-    user_id INTEGER,
-    email TEXT,
-    display_name TEXT,
-    hashed_password TEXT,
-    is_active BOOLEAN,
-    is_superuser BOOLEAN,
-    is_verified BOOLEAN,
+    user_id INTEGER_NOTNULL,
+    email TEXT_NOTNULL,
+    display_name TEXT_NOTNULL,
+    hashed_password TEXT_NOTNULL,
+    is_active BOOLEAN_NOTNULL,
+    is_superuser BOOLEAN_NOTNULL,
+    is_verified BOOLEAN_NOTNULL,
     last_verify_request TIMESTAMP WITH TIME ZONE
 );
 
@@ -34,8 +34,7 @@ CREATE TYPE venue_input_data AS (
     venue_name TEXT,
     venue_address TEXT,
     latitude DECIMAL,
-    longitude DECIMAL,
-    pin_location BOOLEAN
+    longitude DECIMAL
 );
 
 CREATE TYPE venue_data AS (
