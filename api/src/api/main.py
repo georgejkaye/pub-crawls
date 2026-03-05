@@ -1,0 +1,173 @@
+from dataclasses import dataclass
+from datetime import datetime
+
+import uvicorn
+from fastapi import Depends, FastAPI, HTTPException
+from fastapi_users import FastAPIUsers
+from psycopg import Connection
+
+from api.db.functions.all import (
+    insert_visit_fetchone,
+    select_user_counts_fetchall,
+    select_user_summary_fetchone,
+    select_venue_by_venue_id_fetchone,
+    select_venues_fetchall,
+    select_visits_fetchall,
+    update_user_display_name,
+)
+from api.db.types.all import (
+    SingleUserVisitData,
+    UserCountData,
+    UserSummaryData,
+    UserVisitData,
+    VenueData,
+)
+from api.users.auth import auth_backend
+from api.users.db import FastApiUser
+from api.users.manager import get_user_manager
+from api.users.schemas import UserCreate, UserRead
+from api.utils import (
+    get_env_variable,
+    get_env_variable_with_default,
+    get_secret,
+)
+
+app = FastAPI(title="Brum Brew Fest Tracker")
+
+conn = Connection.connect(
+    dbname=get_env_variable("DB_NAME"),
+    user=get_env_variable("DB_USER"),
+    password=get_secret("DB_PASSWORD"),
+    host=get_env_variable("DB_HOST"),
+)
+
+
+@app.get("/", summary="Say hello!", tags=["home"])
+async def hello() -> str:
+    return "Hello!"
+
+
+fastapi_users = FastAPIUsers[FastApiUser, int](get_user_manager, [auth_backend])
+current_user = fastapi_users.current_user()
+
+
+@app.get("/users", summary="Get all users and their counts", tags=["user"])
+async def get_users() -> list[UserCountData]:
+    return select_user_counts_fetchall(conn)
+
+
+@app.get("/users/{user_id}", summary="Get a user and their visits", tags=["user"])
+async def get_user_by_user_id(user_id: int) -> UserSummaryData:
+    summary = select_user_summary_fetchone(conn, user_id)
+    if summary is None:
+        raise HTTPException(status_code=404)
+    return summary
+
+
+@app.get("/venues", summary="Get a list of venues and their visits", tags=["venue"])
+async def get_venues() -> list[VenueData]:
+    return select_venues_fetchall(conn)
+
+
+@app.get("/venues/{venue_id}", summary="Get a venue and its visits", tags=["venue"])
+async def get_venue_by_id(venue_id: int) -> VenueData:
+    venue = select_venue_by_venue_id_fetchone(conn, venue_id)
+    if venue is None:
+        raise HTTPException(status_code=404)
+    return venue
+
+
+@app.get("/visits", summary="Get all the visits", tags=["visit"])
+async def get_visits() -> list[UserVisitData]:
+    return select_visits_fetchall(conn)
+
+
+@app.post("/visit", summary="Log a visit", tags=["visit"])
+async def post_visit(
+    venue_id: int,
+    visit_date: datetime,
+    notes: str,
+    rating: int,
+    drink: str,
+    user: FastApiUser = Depends(current_user),
+) -> None:
+    insert_visit_fetchone(conn, user.id, venue_id, visit_date, notes, rating, drink)
+
+
+app.include_router(
+    fastapi_users.get_auth_router(auth_backend, requires_verification=True),
+    prefix="/auth/jwt",
+    tags=["auth"],
+)
+
+app.include_router(
+    fastapi_users.get_register_router(UserRead, UserCreate),
+    prefix="/auth",
+    tags=["auth"],
+)
+
+app.include_router(
+    fastapi_users.get_verify_router(UserRead),
+    prefix="/auth",
+    tags=["auth"],
+)
+
+app.include_router(
+    fastapi_users.get_reset_password_router(),
+    prefix="/auth",
+    tags=["auth"],
+)
+
+
+@dataclass
+class UserPublicDetails:
+    user_id: int
+    email: str
+    display_name: str
+    is_verified: bool
+    visits: list[SingleUserVisitData]
+
+
+@app.get("/auth/me", summary="Get details about the current user", tags=["auth"])
+async def get_user_details(
+    user: FastApiUser = Depends(current_user),
+) -> UserPublicDetails:
+    user_details = select_user_summary_fetchone(conn, user.id)
+    return UserPublicDetails(
+        user.id,
+        user.email,
+        user.display_name,
+        user.is_verified,
+        user_details.visits if user_details is not None else [],
+    )
+
+
+@app.patch("/auth/me/display-name", tags=["auth"])
+async def post_update_display_name(
+    display_name: str, user: FastApiUser = Depends(current_user)
+) -> None:
+    update_user_display_name(conn, user.id, display_name)
+
+
+def start() -> None:
+    if get_env_variable("API_ENV") == "prod":
+        reload = False
+    elif get_env_variable("API_ENV") == "dev":
+        reload = True
+    else:
+        raise RuntimeError("API_ENV not set")
+    port_var = get_env_variable_with_default("API_PORT", "8000")
+    if not port_var.isnumeric():
+        raise RuntimeError(f"API_PORT must be number but it is {port_var}")
+    else:
+        port = int(port_var)
+    uvicorn.run(
+        "api.main:app",
+        host="0.0.0.0",
+        port=port,
+        reload=reload,
+    )
+
+
+if __name__ == "__main__":
+    start()

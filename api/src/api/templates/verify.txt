@@ -1,0 +1,5 @@
+Welcome to the Real Ale Trail tracker!
+
+To record visits you will need to verify your account by clicking the link below:
+
+{{ verify_url }}
