@@ -133,19 +133,6 @@ VALUES (
 RETURNING visit_id AS new_visit_id;
 $$;
 
-CREATE OR REPLACE FUNCTION insert_follow (
-    p_source_user_id INTEGER,
-    p_target_user_id INTEGER
-)
-RETURNS INTEGER
-LANGUAGE sql
-AS
-$$
-INSERT INTO follow (follow_source_user_id, follow_target_user_id)
-VALUES (p_source_user_id, p_target_user_id)
-RETURNING follow_id;
-$$;
-
 CREATE OR REPLACE FUNCTION select_user_by_user_id (
     p_user_id INTEGER
 )
@@ -391,34 +378,6 @@ ON app_user.user_id = visit_table.user_id
 WHERE app_user.user_id = p_user_id;
 $$;
 
-CREATE OR REPLACE FUNCTION select_user_follows (
-    p_user_id INTEGER
-)
-RETURNS SETOF user_follow_data
-LANGUAGE sql
-AS
-$$
-SELECT
-    follow.follow_id,
-    follow.follow_target_user_id,
-    follow_target_user.display_name,
-    user_visit_count.visit_count,
-    user_visit_count.unique_visit_count
-FROM follow
-INNER JOIN app_user follow_target_user
-ON follow.follow_target_user_id = follow_target_user.user_id
-INNER JOIN (
-    SELECT
-        user_id,
-        COUNT(*) AS visit_count,
-        COUNT(DISTINCT venue_id) AS unique_visit_count
-    FROM visit
-    GROUP BY user_id
-) user_visit_count
-ON follow_target_user.user_id = user_visit_count.user_id
-WHERE follow.follow_source_user_id = p_user_id;
-$$;
-
 CREATE OR REPLACE FUNCTION select_user_counts ()
 RETURNS SETOF user_count_data
 LANGUAGE sql
@@ -511,17 +470,4 @@ AS
 $$
 DELETE FROM app_user
 WHERE user_id = p_user_id;
-$$;
-
-CREATE OR REPLACE FUNCTION delete_follow (
-    p_user_id INTEGER,
-    p_follow_id INTEGER
-)
-RETURNS VOID
-LANGUAGE sql
-AS
-$$
-DELETE FROM follow
-WHERE follow_source_user_id = p_user_id
-AND follow_id = p_follow_id;
 $$;
