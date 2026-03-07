@@ -4,7 +4,6 @@ from datetime import datetime
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi_users import FastAPIUsers
-from psycopg import Connection
 
 from api.db.functions.all import (
     insert_visit_fetchone,
@@ -22,6 +21,7 @@ from api.db.types.all import (
     UserVisitData,
     VenueData,
 )
+from api.lifespan import get_db_connection, lifespan
 from api.users.auth import auth_backend
 from api.users.db import FastApiUser
 from api.users.manager import get_user_manager
@@ -29,17 +29,9 @@ from api.users.schemas import UserCreate, UserRead
 from api.utils import (
     get_env_variable,
     get_env_variable_with_default,
-    get_secret,
 )
 
-app = FastAPI(title="Brum Brew Fest Tracker")
-
-conn = Connection.connect(
-    dbname=get_env_variable("DB_NAME"),
-    user=get_env_variable("DB_USER"),
-    password=get_secret("DB_PASSWORD"),
-    host=get_env_variable("DB_HOST"),
-)
+app = FastAPI(title="Real Ale Trail tracker", lifespan=lifespan)
 
 
 @app.get("/", summary="Say hello!", tags=["home"])
@@ -53,12 +45,12 @@ current_user = fastapi_users.current_user()
 
 @app.get("/users", summary="Get all users and their counts", tags=["user"])
 async def get_users() -> list[UserCountData]:
-    return select_user_counts_fetchall(conn)
+    return select_user_counts_fetchall(get_db_connection())
 
 
 @app.get("/users/{user_id}", summary="Get a user and their visits", tags=["user"])
 async def get_user_by_user_id(user_id: int) -> UserSummaryData:
-    summary = select_user_summary_fetchone(conn, user_id)
+    summary = select_user_summary_fetchone(get_db_connection(), user_id)
     if summary is None:
         raise HTTPException(status_code=404)
     return summary
@@ -66,12 +58,12 @@ async def get_user_by_user_id(user_id: int) -> UserSummaryData:
 
 @app.get("/venues", summary="Get a list of venues and their visits", tags=["venue"])
 async def get_venues() -> list[VenueData]:
-    return select_venues_fetchall(conn)
+    return select_venues_fetchall(get_db_connection())
 
 
 @app.get("/venues/{venue_id}", summary="Get a venue and its visits", tags=["venue"])
 async def get_venue_by_id(venue_id: int) -> VenueData:
-    venue = select_venue_by_venue_id_fetchone(conn, venue_id)
+    venue = select_venue_by_venue_id_fetchone(get_db_connection(), venue_id)
     if venue is None:
         raise HTTPException(status_code=404)
     return venue
@@ -79,7 +71,7 @@ async def get_venue_by_id(venue_id: int) -> VenueData:
 
 @app.get("/visits", summary="Get all the visits", tags=["visit"])
 async def get_visits() -> list[UserVisitData]:
-    return select_visits_fetchall(conn)
+    return select_visits_fetchall(get_db_connection())
 
 
 @app.post("/visit", summary="Log a visit", tags=["visit"])
@@ -91,7 +83,9 @@ async def post_visit(
     drink: str,
     user: FastApiUser = Depends(current_user),
 ) -> None:
-    insert_visit_fetchone(conn, user.id, venue_id, visit_date, notes, rating, drink)
+    insert_visit_fetchone(
+        get_db_connection(), user.id, venue_id, visit_date, notes, rating, drink
+    )
 
 
 app.include_router(
@@ -132,7 +126,7 @@ class UserPublicDetails:
 async def get_user_details(
     user: FastApiUser = Depends(current_user),
 ) -> UserPublicDetails:
-    user_details = select_user_summary_fetchone(conn, user.id)
+    user_details = select_user_summary_fetchone(get_db_connection(), user.id)
     return UserPublicDetails(
         user.id,
         user.email,
@@ -146,7 +140,7 @@ async def get_user_details(
 async def post_update_display_name(
     display_name: str, user: FastApiUser = Depends(current_user)
 ) -> None:
-    update_user_display_name(conn, user.id, display_name)
+    update_user_display_name(get_db_connection(), user.id, display_name)
 
 
 def start() -> None:

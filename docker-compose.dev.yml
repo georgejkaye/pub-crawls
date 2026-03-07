@@ -82,6 +82,7 @@ services:
       DB_USER: realaletrail
       DB_PASSWORD: /run/secrets/db_secret
       FROM_EMAIL: ${FROM_EMAIL}
+      OPENAPI_JSON_PATH: /app/openapi/openapi.json
       SMTP_SERVER: ${SMTP_SERVER}
       SMTP_PORT: ${SMTP_PORT}
       SMTP_USER: ${SMTP_USER}
@@ -89,6 +90,7 @@ services:
       USER_SECRET: /run/secrets/user_secret
     volumes:
       - ./api/src:/app/src
+      - ./api/openapi:/app/openapi
     secrets:
       - smtp_secret
     networks:

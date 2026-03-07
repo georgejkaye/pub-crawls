@@ -9,12 +9,12 @@ from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin
 from fastapi_users.db import BaseUserDatabase
 
-secret = get_secret("USER_SECRET")
-if secret is None:
-    raise RuntimeError("USER_SECRET secret not defined")
-
 
 class UserManager(IntegerIDMixin, BaseUserManager[FastApiUser, int]):
+    secret = get_secret("USER_SECRET")
+    if secret is None:
+        raise RuntimeError("USER_SECRET secret not defined")
+
     reset_password_token_secret = secret
     verification_token_secret = secret
 
