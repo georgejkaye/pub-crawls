@@ -114,24 +114,24 @@ services:
     volumes:
       - ./api/openapi:/app/input
       - ./client/src/app/api:/app/output
-#   client:
-#     depends_on:
-#       api:
-#         condition: service_healthy
-#     build:
-#       context: client
-#       dockerfile: Dockerfile.dev
-#       args:
-#         CLIENT_PORT: ${CLIENT_PORT:-3000}
-#         API_PROTOCOL: ${API_PROTOCOL:-http}
-#         API_HOST: ${API_HOST:-api:8000}
-#     ports:
-#       - ${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}
-#     volumes:
-#       - ./client/src:/app/src
-#       - ./client/public:/app/public
-#     networks:
-#       - internal
+  client:
+    depends_on:
+      api:
+        condition: service_healthy
+    build:
+      context: client
+      dockerfile: Dockerfile.dev
+      args:
+        CLIENT_PORT: ${CLIENT_PORT:-3000}
+        API_PROTOCOL: ${API_PROTOCOL:-http}
+        API_HOST: ${API_HOST:-api:8000}
+    ports:
+      - ${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+    networks:
+      - internal
 secrets:
   smtp_secret:
     file: smtp.secret
