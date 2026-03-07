@@ -32,15 +32,13 @@ services:
       start_period: 0s
   data:
     build:
-      context: data
-      dockerfile: Dockerfile
+      context: api
+      dockerfile: Dockerfile.data
       args:
         POETRY_VERSION: 2.3.0
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      - ./api:/app/api
     networks:
       - internal
   codegen:

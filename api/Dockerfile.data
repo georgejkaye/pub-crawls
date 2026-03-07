@@ -1,0 +1,19 @@
+FROM python:3.14-bookworm AS builder
+
+ARG POETRY_VERSION
+RUN pip install poetry==${POETRY_VERSION}
+
+WORKDIR /app
+
+COPY ./pyproject.toml .
+COPY ./poetry.lock .
+COPY ./src ./src
+
+RUN touch README.md
+RUN poetry install
+
+COPY ./venues.json .
+COPY ./populate.sh .
+RUN chmod +x ./populate.sh
+
+ENTRYPOINT [ "./populate.sh" ]
