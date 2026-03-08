@@ -1,48 +1,58 @@
 "use client"
 import { KeyboardEvent, useState } from "react"
 import { SubmitButton, TextInput } from "../components/forms"
-import { registerUser, requestVerifyToken } from "../api"
 import { Loader } from "../components/Loader"
 import Link from "next/link"
+import client from "../api/client"
 
 const Page = () => {
-  const [isLoading, setLoading] = useState(false)
   const [emailString, setEmailString] = useState("")
   const [displayNameString, setDisplayNameString] = useState("")
   const [passwordString, setPasswordString] = useState("")
   const [confirmPasswordString, setConfirmPasswordString] = useState("")
   const [errorString, setErrorString] = useState("")
   const [successString, setSuccessString] = useState("")
-  const performRegister = async () => {
-    setLoading(true)
-    if (passwordString !== confirmPasswordString) {
-      setErrorString("Passwords do not match")
-      setPasswordString("")
-      setConfirmPasswordString("")
-    } else {
-      const registerResult = await registerUser(
-        emailString,
-        passwordString,
-        displayNameString,
-      )
-      if (registerResult.user === undefined) {
-        setSuccessString("")
-        setErrorString(`Registration failed: ${registerResult.error}`)
-        setPasswordString("")
-        setConfirmPasswordString("")
-      } else {
-        requestVerifyToken(registerResult.user.email)
-        setSuccessString(
-          `Verification email sent to ${registerResult.user.email}!`,
-        )
+
+  const { mutate: mutateRequestToken } = client.useMutation(
+    "post",
+    "/auth/request-verify-token",
+  )
+
+  const { mutate: mutateRegister, isPending: isPendingRegister } =
+    client.useMutation("post", "/auth/register", {
+      onSuccess: (response) => {
+        setSuccessString(`Verification email sent to ${response.email}!`)
         setErrorString("")
         setEmailString("")
         setPasswordString("")
         setConfirmPasswordString("")
         setDisplayNameString("")
+        mutateRequestToken({ body: { email: response.email } })
+      },
+      onError: (error) => {
+        setSuccessString("")
+        setErrorString(`Registration failed: ${error.detail}`)
+        setPasswordString("")
+        setConfirmPasswordString("")
+      },
+    })
+
+  const performRegister = async () => {
+    if (passwordString !== confirmPasswordString) {
+      setErrorString("Passwords do not match")
+      setPasswordString("")
+      setConfirmPasswordString("")
+    } else {
+      const body = {
+        email: emailString,
+        password: passwordString,
+        display_name: displayNameString,
+        is_active: true,
+        is_superuser: false,
+        is_verified: false,
       }
+      mutateRegister({ body })
     }
-    setLoading(false)
   }
   const onClickRegister = () => {
     performRegister()
@@ -54,7 +64,7 @@ const Page = () => {
   }
   return (
     <div className="flex flex-col gap-4 md:w-1/2 lg:w-1/3 md:mx-auto p-4 items-center">
-      {isLoading ? (
+      {isPendingRegister ? (
         <Loader />
       ) : (
         <div className="flex flex-col gap-4 w-full">
