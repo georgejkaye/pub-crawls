@@ -45,7 +45,7 @@ def write_email_template(template_name: str, args: dict[str, Any]) -> str:
 def write_email(subject: str, to_email: str, body: str) -> MIMEMultipart:
     message = MIMEMultipart("mixed")
     message["Subject"] = subject
-    message["From"] = formataddr(("Brum Brew Fest Tracker", from_email))
+    message["From"] = formataddr(("Real Ale Trail Tracker", from_email))
     message["To"] = to_email
     message["Message-ID"] = make_msgid()
     message.attach(MIMEText(body))
@@ -53,7 +53,7 @@ def write_email(subject: str, to_email: str, body: str) -> MIMEMultipart:
 
 
 def send_email(message: MIMEMultipart):
-    if (smtp_server is None):
+    if smtp_server is None:
         print(f"No SMTP server configured, would have sent:\n{message.as_string()}")
         return
     conn = smtplib.SMTP(smtp_server, smtp_port)
