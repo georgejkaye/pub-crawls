@@ -1,73 +1,68 @@
 "use client"
 
 import {
-    createContext,
-    useState,
-    PropsWithChildren,
-    SetStateAction,
-    Dispatch,
-    useEffect,
-    useCallback,
+  createContext,
+  useState,
+  PropsWithChildren,
+  SetStateAction,
+  Dispatch,
+  useEffect,
 } from "react"
-import { User } from "../interfaces"
-import { getUserDetails } from "../api"
+import client, { fetchClient, User } from "@/app/api/client"
+import { type Middleware } from "openapi-fetch"
 
 export const UserContext = createContext({
-    token: undefined as string | undefined,
-    user: undefined as User | undefined,
-    refreshUser: () => {},
-    setUser: (() => undefined) as Dispatch<SetStateAction<User | undefined>>,
-    fetchUser: (token: string) => {},
-    isLoadingUser: false,
+  token: undefined as string | undefined,
+  user: undefined as User | undefined,
+  setToken: (() => undefined) as Dispatch<SetStateAction<string | undefined>>,
+  fetchUser: () => {},
+  isLoadingUser: false,
 })
 
 export const UserProvider = ({ children }: PropsWithChildren) => {
-    const [token, setToken] = useState<string | undefined>(undefined)
-    const [user, setUser] = useState<User | undefined>(undefined)
-    const [isLoadingUser, setLoadingUser] = useState(true)
-    const fetchUser = useCallback(
-        async (token: string) => {
-            setLoadingUser(true)
-            const user = await getUserDetails(token)
-            if (user) {
-                localStorage.setItem("token", token)
-                setUser(user)
-                setToken(token)
-            } else {
-                localStorage.removeItem("token")
-                setUser(undefined)
-                setToken(undefined)
-            }
-            setLoadingUser(false)
-        },
-        [setLoadingUser]
-    )
+  const [token, setToken] = useState<string | undefined>(
+    localStorage.getItem("token") ?? undefined,
+  )
 
-    const refreshUser = useCallback(() => {
-        const token = localStorage.getItem("token")
-        if (token) {
-            fetchUser(token)
-        } else {
-            setLoadingUser(false)
-            setToken(undefined)
-        }
-    }, [fetchUser])
-    useEffect(() => {
-        setLoadingUser(true)
-        refreshUser()
-    }, [refreshUser])
-    return (
-        <UserContext.Provider
-            value={{
-                token,
-                user,
-                fetchUser,
-                refreshUser,
-                setUser,
-                isLoadingUser,
-            }}
-        >
-            {children}
-        </UserContext.Provider>
-    )
+  const authMiddleware: Middleware = {
+    onRequest({ request }) {
+      if (token) {
+        request.headers.set("Authorization", `Bearer ${token}`)
+      }
+      return request
+    },
+  }
+
+  fetchClient.use(authMiddleware)
+
+  const {
+    data,
+    isLoading,
+    refetch: fetchUser,
+    isRefetching,
+  } = client.useQuery("get", "/auth/me")
+
+  useEffect(() => {
+    if (!data) {
+      localStorage.setItem("token", "")
+    }
+  }, [data])
+
+  useEffect(() => {
+    fetchUser()
+  }, [token, fetchUser])
+
+  return (
+    <UserContext.Provider
+      value={{
+        token,
+        user: data,
+        fetchUser,
+        setToken,
+        isLoadingUser: isLoading || isRefetching,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  )
 }

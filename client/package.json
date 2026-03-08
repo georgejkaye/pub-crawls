@@ -10,15 +10,21 @@
   },
   "dependencies": {
     "@smastrom/react-rating": "^1.5.0",
+    "@tanstack/query-sync-storage-persister": "^5.90.24",
+    "@tanstack/react-query": "^5.90.21",
     "@turf/bbox": "^7.2.0",
     "@vis.gl/react-maplibre": "^8.0.4",
+    "add": "^2.0.6",
     "axios": "^1.11.0",
     "geojson": "^0.5.0",
-    "maplibre-gl": "^5.6.1",
+    "maplibre-gl": "^5.19.0",
     "next": "15.4.4",
+    "openapi-fetch": "^0.17.0",
+    "openapi-react-query": "^0.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-loader-spinner": "^6.1.6"
+    "react-loader-spinner": "^6.1.6",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

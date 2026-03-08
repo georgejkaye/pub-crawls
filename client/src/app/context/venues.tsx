@@ -1,34 +1,25 @@
 "use client"
 
-import { createContext, useState, PropsWithChildren, useEffect } from "react"
-import { Venue } from "../interfaces"
-import { getVenues } from "../api"
+import { createContext, PropsWithChildren } from "react"
+import client, { Venue } from "../api/client"
 
 export const VenuesContext = createContext({
-    venues: [] as Venue[],
-    isLoadingVenues: false,
-    fetchVenues: () => {},
+  venues: [] as Venue[],
+  isLoadingVenues: false,
+  fetchVenues: () => {},
 })
 
 export const VenuesProvider = ({ children }: PropsWithChildren) => {
-    const [venues, setVenues] = useState<Venue[]>([])
-    const [isLoadingVenues, setLoadingVenues] = useState(true)
-    const fetchVenues = async () => {
-        const venuesResult = await getVenues()
-        if (venuesResult) {
-            setVenues(venuesResult)
-            setLoadingVenues(false)
-        }
-    }
-    useEffect(() => {
-        setLoadingVenues(true)
-        fetchVenues()
-    }, [])
-    return (
-        <VenuesContext.Provider
-            value={{ venues, isLoadingVenues, fetchVenues }}
-        >
-            {children}
-        </VenuesContext.Provider>
-    )
+  const {
+    data: venues,
+    isLoading: isLoadingVenues,
+    refetch: fetchVenues,
+  } = client.useQuery("get", "/venues")
+  return (
+    <VenuesContext.Provider
+      value={{ venues: venues ?? [], isLoadingVenues, fetchVenues }}
+    >
+      {children}
+    </VenuesContext.Provider>
+  )
 }

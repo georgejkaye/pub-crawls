@@ -637,6 +637,33 @@
     postcss "^8.5.6"
     tailwindcss "4.2.1"
 
+"@tanstack/query-core@5.90.20":
+  version "5.90.20"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.90.20.tgz#e12128e39210715d4ce4fb299c33498ac297771e"
+  integrity sha512-OMD2HLpNouXEfZJWcKeVKUgQ5n+n3A2JFmBaScpNDUqSrQSjiveC7dKMe53uJUg1nDG16ttFPz2xfilz6i2uVg==
+
+"@tanstack/query-persist-client-core@5.92.1":
+  version "5.92.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-5.92.1.tgz#330099cd7d6f427c4448a080299fa7e5e4c5a7fa"
+  integrity sha512-XGzB1lulFrGc8UwQnMI12r71R7ock/XOZvDaz3Fu3xrxCFwLHuFcABAOkIolS/6hFHe0pRdsBRXd4Q8ECqiCug==
+  dependencies:
+    "@tanstack/query-core" "5.90.20"
+
+"@tanstack/query-sync-storage-persister@^5.90.24":
+  version "5.90.24"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-5.90.24.tgz#cc4b40ff242d44283780d0a281ea4f83a48d0252"
+  integrity sha512-/L0XnUNe+XanPpnTka9J/5M8Xj/6Ap1zre1fVLN/HsoMlLrFiqDijwMiwvwbSuaCyVUnH8Kh8ECXX5fPZtEsBg==
+  dependencies:
+    "@tanstack/query-core" "5.90.20"
+    "@tanstack/query-persist-client-core" "5.92.1"
+
+"@tanstack/react-query@^5.90.21":
+  version "5.90.21"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.90.21.tgz#e0eb40831a76510be438109435b8807ef63ab1b9"
+  integrity sha512-0Lu6y5t+tvlTJMTO7oh5NSpJfpg/5D41LlThfepTixPYkJ0sE2Jj0m0f6yYqujBwIXlId87e234+MxG3D3g7kg==
+  dependencies:
+    "@tanstack/query-core" "5.90.20"
+
 "@turf/bbox@^7.2.0":
   version "7.3.4"
   resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-7.3.4.tgz#75673871c2d7e086bef085cce7b1daa4bed66aae"
@@ -931,6 +958,11 @@ acorn@^8.15.0:
   version "8.16.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.16.0.tgz#4ce79c89be40afe7afe8f3adb902a1f1ce9ac08a"
   integrity sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==
+
+add@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/add/-/add-2.0.6.tgz#248f0a9f6e5a528ef2295dbeec30532130ae2235"
+  integrity sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==
 
 ajv@^6.14.0:
   version "6.14.0"
@@ -2649,6 +2681,25 @@ object.values@^1.1.6, object.values@^1.2.1:
     define-properties "^1.2.1"
     es-object-atoms "^1.0.0"
 
+openapi-fetch@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/openapi-fetch/-/openapi-fetch-0.17.0.tgz#0c392afbeed2c95a12056a50a8e6180c77c9ced3"
+  integrity sha512-PsbZR1wAPcG91eEthKhN+Zn92FMHxv+/faECIwjXdxfTODGSGegYv0sc1Olz+HYPvKOuoXfp+0pA2XVt2cI0Ig==
+  dependencies:
+    openapi-typescript-helpers "^0.1.0"
+
+openapi-react-query@^0.5.4:
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/openapi-react-query/-/openapi-react-query-0.5.4.tgz#f58f402aef42c8b1d3ad6f53ace0564a2a224135"
+  integrity sha512-V9lRiozjHot19/BYSgXYoyznDxDJQhEBSdi26+SJ0UqjMANLQhkni4XG+Z7e3Ag7X46ZLMrL9VxYkghU3QvbWg==
+  dependencies:
+    openapi-typescript-helpers "^0.1.0"
+
+openapi-typescript-helpers@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/openapi-typescript-helpers/-/openapi-typescript-helpers-0.1.0.tgz#2102a2ea1c473cb1cfe19f87c662ff053fbb1d70"
+  integrity sha512-OKTGPthhivLw/fHz6c3OPtg72vi86qaMlqbJuVJ23qOvQ+53uw1n7HdmkJFibloF7QEjDrDkzJiOJuockM/ljw==
+
 optionator@^0.9.3:
   version "0.9.4"
   resolved "https://registry.yarnpkg.com/optionator/-/optionator-0.9.4.tgz#7ea1c1a5d91d764fb282139c88fe11e182a3a734"
@@ -3508,6 +3559,11 @@ word-wrap@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.5.tgz#d2c45c6dd4fbce621a66f136cbe328afd0410b34"
   integrity sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==
+
+yarn@^1.22.22:
+  version "1.22.22"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.22.tgz#ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+  integrity sha512-prL3kGtyG7o9Z9Sv8IPfBNrWTDmXB4Qbes8A9rEzt6wkJV8mUvoirjU0Mp3GGAU06Y0XQyA3/2/RQFVuK7MTfg==
 
 yocto-queue@^0.1.0:
   version "0.1.0"
