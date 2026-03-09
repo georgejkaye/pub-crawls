@@ -1,15 +1,17 @@
 import { ColorRing } from "react-loader-spinner"
 
 interface LoaderProps {
-    size?: number
+  size?: number
 }
 
-export const Loader = ({ size = 100 }: LoaderProps) => {
-    return (
-        <ColorRing
-            height={size}
-            width={size}
-            colors={["#38db98", "#38db98", "#38db98", "#38db98", "#38db98"]}
-        />
-    )
+export const Loader = ({ size = 50 }: LoaderProps) => {
+  return (
+    <div className="flex justify-center">
+      <ColorRing
+        height={size}
+        width={size}
+        colors={["#282e54", "#282e54", "#282e54", "#282e54", "#282e54"]}
+      />
+    </div>
+  )
 }

@@ -4,8 +4,9 @@ import { useContext, useState } from "react"
 import { UserContext } from "./context/user"
 
 const TopBar = () => {
-  const linkStyle = "text-white hover:underline cursor-pointer"
-  const { user, isLoadingUser, setToken } = useContext(UserContext)
+  const linkStyle = "hover:underline cursor-pointer"
+  const { user, isLoadingUser, isRetrievingFromStorage, setToken } =
+    useContext(UserContext)
   const [isMenuOpen, setMenuOpen] = useState(false)
   const onClickLogout = () => {
     setToken(undefined)
@@ -17,13 +18,13 @@ const TopBar = () => {
   }
   return (
     <div>
-      <div className="flex flex-row p-4 bg-[#282e54] w-full items-center h-[60px]">
-        <div className="flex-1 text-2xl text-white font-bold">
+      <div className="flex flex-row p-4 bg-accent text-accentfg w-full items-center h-[60px]">
+        <div className="flex-1 text-2xl font-bold">
           <Link className={linkStyle} onClick={onClickLink} href="/">
             Real Ale Trail tracker
           </Link>
         </div>
-        {!isLoadingUser && (
+        {!isLoadingUser && !isRetrievingFromStorage && (
           <>
             <div className="hidden md:flex flex-row gap-4">
               <Link className={linkStyle} onClick={onClickLink} href="/">
@@ -38,13 +39,6 @@ const TopBar = () => {
               </Link>
               {user ? (
                 <>
-                  <Link
-                    href="/follows"
-                    onClick={onClickLink}
-                    className={linkStyle}
-                  >
-                    Follows
-                  </Link>
                   <div className={linkStyle} onClick={onClickLogout}>
                     Logout
                   </div>
@@ -81,9 +75,6 @@ const TopBar = () => {
           </Link>
           {user ? (
             <>
-              <Link href="/follows" onClick={onClickLink}>
-                Follows
-              </Link>
               <button className={linkStyle} onClick={onClickLogout}>
                 Logout
               </button>

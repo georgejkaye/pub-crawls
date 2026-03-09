@@ -5,7 +5,7 @@ import { UserContext } from "../context/user"
 import Link from "next/link"
 import { SubmitButton, TextInput } from "../components/forms"
 import { useRouter } from "next/navigation"
-import client, { fetchClient } from "../api/client"
+import client from "../api/client"
 
 interface LoginBoxProps {
   performLogin: (email: string, password: string) => Promise<void>
@@ -96,7 +96,7 @@ const Page = () => {
         <Loader />
       ) : isLoginSuccessful ? (
         <>
-          <div className="w-full p-4 bg-green-300 rounded">
+          <div className="w-full p-4 bg-accent text-accentfg rounded">
             Login successful, redirecting you to the home page...
           </div>
           <Loader />

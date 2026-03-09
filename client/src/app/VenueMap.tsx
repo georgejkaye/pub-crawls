@@ -26,7 +26,7 @@ import {
 } from "react"
 import { UserContext } from "./context/user"
 import Pin from "./components/Pin"
-import { SubmitButton } from "./components/forms"
+import { LinkButton, SubmitButton } from "./components/forms"
 import { useRouter } from "next/navigation"
 import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
@@ -134,7 +134,7 @@ const CurrentVenueBox = ({
       closeButton={false}
       offset={47}
       maxWidth="60"
-      className="w-3/4 md:w-1/2 lg:w-1/8"
+      className="w-3/4 md:w-1/2 lg:w-1/8 bg-back"
     >
       <div className="flex flex-col gap-2">
         <div className="font-bold text-xl">
@@ -156,10 +156,8 @@ const CurrentVenueBox = ({
           </div>
         )}
         <div className="flex flex-col gap-2">
-          <SubmitButton label="More details" onClick={onClickDetails} />
-          {user && (
-            <SubmitButton label="Record visit" onClick={onClickRecord} />
-          )}
+          <LinkButton label="More details" onClick={onClickDetails} />
+          {user && <LinkButton label="Record visit" onClick={onClickRecord} />}
         </div>
       </div>
     </Popup>

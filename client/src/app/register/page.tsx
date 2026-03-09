@@ -73,7 +73,9 @@ const Page = () => {
             <div className="p-4 bg-red-300 rounded-lg">{errorString}</div>
           )}
           {successString && (
-            <div className="p-4 bg-green-300 rounded-lg">{successString}</div>
+            <div className="p-4 bg-accent rounded-lg text-accentfg">
+              {successString}
+            </div>
           )}
           <form action={onSubmit} className="flex flex-col gap-4 w-full">
             <div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { SubmitButton } from "@/app/components/forms"
+import { LinkButton, SubmitButton } from "@/app/components/forms"
 import { UserContext } from "@/app/context/user"
 import { VenueContext } from "@/app/context/venue"
 import Pin from "@/app/components/Pin"
@@ -155,7 +155,7 @@ const Page = () => {
   }
   return (
     <div className="flex flex-col md:w-1/3 p-4 md:mx-auto">
-      {isLoadingVenue ? (
+      {false ? (
         <Loader />
       ) : isError ? (
         notFound()
@@ -176,7 +176,7 @@ const Page = () => {
               longitude={Number(venue.longitude)}
             />
             {user && (
-              <SubmitButton label="Record visit" onClick={onClickRecordVisit} />
+              <LinkButton label="Record visit" onClick={onClickRecordVisit} />
             )}
             {venue.visits.map((visit) => (
               <VenueVisitCard key={visit.visit_id} visit={visit} />

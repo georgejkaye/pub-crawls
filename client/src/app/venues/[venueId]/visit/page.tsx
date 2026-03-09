@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  useContext,
-  useEffect,
-  useState,
-  KeyboardEvent,
-  FormEvent,
-} from "react"
+import { useContext, useEffect, useState } from "react"
 import { UserContext } from "@/app/context/user"
 import { useRouter } from "next/navigation"
 import { VenueContext } from "@/app/context/venue"
@@ -27,22 +21,15 @@ const RecordVisitForm = ({ submitVisit }: RecordVisitFormProps) => {
   const performSubmitVisit = () => {
     submitVisit(notesText, ratingValue, drinkText)
   }
-  const onKeyDownDrink = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      performSubmitVisit()
-    }
-  }
-  const onClickSubmit = () => {
-    performSubmitVisit()
-  }
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-  }
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form action={performSubmitVisit} className="flex flex-col gap-4">
       <div>
         <div>Notes</div>
-        <TextAreaInput value={notesText} setValue={setNotesText} />
+        <TextAreaInput
+          value={notesText}
+          setValue={setNotesText}
+          maxLength={250}
+        />
       </div>
       <div>
         <div>Rating</div>
@@ -54,20 +41,15 @@ const RecordVisitForm = ({ submitVisit }: RecordVisitFormProps) => {
       </div>
       <div>
         <div>Drink</div>
-        <TextInput
-          value={drinkText}
-          setValue={setDrinkText}
-          type="text"
-          onKeyDown={onKeyDownDrink}
-        />
+        <TextInput value={drinkText} setValue={setDrinkText} type="text" />
       </div>
-      <SubmitButton label="Submit" onClick={onClickSubmit} />
+      <SubmitButton label="Submit" />
     </form>
   )
 }
 
 const Page = () => {
-  const { user, isLoadingUser } = useContext(UserContext)
+  const { token, user, isLoadingUser } = useContext(UserContext)
   const { venue, isLoadingVenue } = useContext(VenueContext)
   const router = useRouter()
   const [errorText, setErrorText] = useState("")
@@ -95,16 +77,18 @@ const Page = () => {
   }, [isLoadingVenue, router, venue])
 
   const submitVisit = async (notes: string, rating: number, drink: string) => {
-    const params = {
-      query: {
-        venue_id: venue.venueId,
-        visit_date: new Date(Date.now()).toISOString(),
-        notes,
-        rating,
-        drink,
-      },
+    if (venue && venue.venue_id) {
+      const params = {
+        query: {
+          venue_id: venue.venue_id,
+          visit_date: new Date(Date.now()).toISOString(),
+          notes,
+          rating,
+          drink,
+        },
+      }
+      postVisit({ params, headers: { Authorization: `Bearer ${token}` } })
     }
-    postVisit({ params })
   }
 
   return !user || !venue ? (
@@ -119,7 +103,7 @@ const Page = () => {
           {errorText && (
             <div className="bg-red-300 rounded p-4">{errorText}</div>
           )}
-          <div className="text-xl">{venue.name}</div>
+          <div className="text-xl">{venue.venue_name}</div>
           <RecordVisitForm submitVisit={submitVisit} />
         </div>
       )}

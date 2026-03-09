@@ -23,7 +23,8 @@ export const TextInput = ({
   onKeyDown,
   placeholder = "",
 }: TextInputProps) => {
-  const inputStyle = "w-full text-lg p-2 rounded border-2 border-gray-400"
+  const inputStyle =
+    "w-full text-lg p-2 rounded border-2 border-gray-400 bg-white"
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
   }
@@ -45,6 +46,7 @@ interface TextAreaInputProps {
   value: string
   setValue: Dispatch<SetStateAction<string>>
   onKeyDown?: (e: KeyboardEvent<HTMLTextAreaElement>) => void
+  maxLength: number
 }
 
 export const TextAreaInput = ({
@@ -52,8 +54,10 @@ export const TextAreaInput = ({
   value,
   setValue,
   onKeyDown,
+  maxLength,
 }: TextAreaInputProps) => {
-  const inputStyle = "w-full text-lg p-2 rounded border-2 border-gray-400"
+  const inputStyle =
+    "w-full text-lg p-2 rounded border-2 border-gray-400 bg-white"
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value)
   }
@@ -64,9 +68,13 @@ export const TextAreaInput = ({
       value={value}
       onChange={onChange}
       onKeyDown={onKeyDown}
+      maxLength={maxLength}
     />
   )
 }
+
+const buttonStyle =
+  "font-bold text-white p-2 rounded bg-accent cursor-pointer hover:bg-accenthover disabled:bg-accentdisabled disabled:cursor-not-allowed"
 
 interface SubmitButtonProps {
   label: string
@@ -78,10 +86,29 @@ export const SubmitButton = ({
   disabled = false,
 }: SubmitButtonProps) => {
   return (
+    <button type="submit" className={buttonStyle} disabled={disabled}>
+      {label}
+    </button>
+  )
+}
+
+interface LinkButtonProps {
+  label: string
+  disabled?: boolean
+  onClick: (e: React.MouseEvent) => void
+}
+
+export const LinkButton = ({
+  label,
+  onClick,
+  disabled = false,
+}: LinkButtonProps) => {
+  return (
     <button
-      type="submit"
-      className="font-bold text-white p-2 rounded bg-[#282e54] cursor-pointer hover:bg-[#404880] disabled:bg-[#8d93b8] disabled:cursor-not-allowed"
+      type="button"
+      className={buttonStyle}
       disabled={disabled}
+      onClick={onClick}
     >
       {label}
     </button>

@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[#f9eed2]">
+      <body className="bg-back">
         <ReactQueryClientProvider>
           <UserProvider>
             <VenuesProvider>

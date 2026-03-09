@@ -35,7 +35,9 @@ const Page = ({ params }: { params: Promise<{ token: string }> }) => {
       ) : errorString !== "" ? (
         <div className="w-full bg-red-200 p-4 rounded">{errorString}</div>
       ) : (
-        <div className="w-full bg-green-200 p-4 rounded">{successString}</div>
+        <div className="w-full bg-accent text-accentfg p-4 rounded">
+          {successString}
+        </div>
       )}
     </div>
   )
