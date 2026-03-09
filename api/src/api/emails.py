@@ -71,7 +71,7 @@ def send_verify_email(user: FastApiUser, token: str) -> None:
         "verify.txt",
         {"verify_url": f"{client_protocol}://{client_host}/verify/{token}"},
     )
-    message = write_email("[bbf] Verify your account", user.email, body)
+    message = write_email("[realaletrail] Verify your account", user.email, body)
     send_email(message)
 
 
@@ -80,5 +80,5 @@ def send_forgot_password_email(user: FastApiUser, token: str) -> None:
         "forgot-password.txt",
         {"reset_url": f"{client_protocol}://{client_host}/reset/{token}"},
     )
-    message = write_email("[bbf] Password reset request", user.email, body)
+    message = write_email("[realaletrail] Password reset request", user.email, body)
     send_email(message)
