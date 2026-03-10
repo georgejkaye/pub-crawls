@@ -1,5 +1,33 @@
 [
     {
+        "name": "The Anvil",
+        "address": "Aston Rd, Shifnal, Shropshire, TF11 8DU",
+        "latitude": 52.667289,
+        "longitude": -2.368597,
+        "pumps": 10
+    },
+    {
+        "name": "The Bird in Hand",
+        "address": "Victoria Square, Stafford, Staffordshire, ST16 2AQ",
+        "latitude": 52.805629,
+        "longitude": -2.119111,
+        "pumps": 19
+    },
+    {
+        "name": "The Black Country Arms",
+        "address": "High St, Walsall, West Midlands, WS1 1QW",
+        "latitude": 52.583310,
+        "longitude": -1.979156,
+        "pumps": 20
+    },
+    {
+        "name": "The Bridge Inn",
+        "address": "118 Moss Grove, Kingswinford, DY6 9HH",
+        "latitude": 52.502711,
+        "longitude": -2.170135,
+        "pumps": 12
+    },
+    {
         "name": "The Wellington",
         "address": "37 Bennetts Hill, Birmingham B2 5SN",
         "latitude": 52.480626,
