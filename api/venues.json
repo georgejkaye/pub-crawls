@@ -28,6 +28,61 @@
         "pumps": 12
     },
     {
+        "name": "The Bridge Tavern",
+        "address": "55 Upper St. John Street, Lichfield, Staffordshire, WS14 9DT",
+        "latitude": 52.679326,
+        "longitude": -1.826402,
+        "pumps": 10
+    },
+    {
+        "name": "The Cottage Spring",
+        "address": "9 Brook Street, Woodsetton, Dudley, West Midlands, DY3 1AD",
+        "latitude": 52.535740,
+        "longitude": -2.103066,
+        "pumps": 8
+    },
+    {
+        "name": "The Craven Arms",
+        "address": "47 Upper Gough St, Birmingham, West Midlands, B1 1JG",
+        "latitude": 52.475059,
+        "longitude": -1.903754,
+        "pumps": "12"
+    },
+    {
+        "name": "The Cross Inn",
+        "address": "34 Alcester Rd, Finstall, Bromsgrove, Worcestershire, B60 1EW",
+        "latitude": 52.329582,
+        "longitude": -2.029155,
+        "pumps": 9
+    },
+    {
+        "name": "The Cross Inn",
+        "address": "Church Hill, Kinver, Stourbridge, West Midlands, DY7 6HZ",
+        "latitude": 52.446268,
+        "longitude": -2.224621,
+        "pumps": 10
+    },
+    {
+        "name": "The Dog",
+        "address": "5 Lichfield Street, Burton-Upon-Trent, Staffordshire, DE14 3QZ",
+        "latitude": 52.800581,
+        "longitude": -1.631564,
+        "pumps": 14
+    },
+    {
+        "name": "The Duke of Cambridge",
+        "address": "82 Coltham Road, Short Heath, Willenhall, West Midlands, WV12 5QD",
+        "latitude": 52.607249,
+        "longitude": -2.034182,
+        "pumps": 16
+    },
+    {
+        "name": "The Hanbury Turn",
+        "address": "44 Hanbury Road, Stoke Heath, Bromsgrove, B60 4LU",
+        "latitude": 52.314252,
+        "longitude": -2.078277
+    },
+    {
         "name": "The Wellington",
         "address": "37 Bennetts Hill, Birmingham B2 5SN",
         "latitude": 52.480626,
