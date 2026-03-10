@@ -41,7 +41,12 @@ const RecordVisitForm = ({ submitVisit }: RecordVisitFormProps) => {
       </div>
       <div>
         <div>Drink</div>
-        <TextInput value={drinkText} setValue={setDrinkText} type="text" />
+        <TextInput
+          value={drinkText}
+          setValue={setDrinkText}
+          type="text"
+          maxLength={50}
+        />
       </div>
       <SubmitButton label="Submit" />
     </form>
