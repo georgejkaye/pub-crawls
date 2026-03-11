@@ -32,7 +32,7 @@ import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
 import { getFirstVisitToVenue } from "./utils"
 import bbox from "@turf/bbox"
-import { User, Venue } from "./api/client"
+import { SingleUserVisit, User, Venue } from "./api/client"
 
 const getVenueFeatureCollection = (
   venues: Venue[],
@@ -77,8 +77,9 @@ const VenueMarker = ({
   }
   const userHasVisitedVenue = !user
     ? false
-    : user.visits.filter((visit) => visit.venue_id === venue.venue_id).length >
-      0
+    : user.visits.filter(
+        (visit: SingleUserVisit) => visit.venue_id === venue.venue_id,
+      ).length > 0
   const pinColour = !user || !userHasVisitedVenue ? "#960000" : "#00a300"
   return (
     <Marker
