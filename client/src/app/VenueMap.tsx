@@ -32,7 +32,7 @@ import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
 import { getFirstVisitToVenue } from "./utils"
 import bbox from "@turf/bbox"
-import { SingleUserVisit, User, Venue } from "./api/client"
+import { SingleUserVisit, User, Venue, VenueVisit } from "./api/client"
 
 const getVenueFeatureCollection = (
   venues: Venue[],
@@ -115,7 +115,10 @@ const CurrentVenueBox = ({
   const averageVenueRating =
     venueVisitCount === 0
       ? 0
-      : venue.visits.reduce((a, b) => a + (b.rating ?? 0), 0) / venueVisitCount
+      : venue.visits.reduce(
+          (a: number, b: VenueVisit) => a + (b.rating ?? 0),
+          0,
+        ) / venueVisitCount
   const onClickDetails = () => {
     router.push(`/venues/${venue.venue_id}`)
   }
