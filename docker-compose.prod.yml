@@ -10,18 +10,12 @@ services:
       dockerfile: Dockerfile.data
       args:
         POETRY_VERSION: 2.3.0
-    depends_on:
-      db:
-        condition: service_healthy
     networks:
       - internal
   codegen:
     build:
       context: codegen
       dockerfile: Dockerfile
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
       OUTPUT_MODULE_NAME: api.db
       WATCH_FILES: 0
