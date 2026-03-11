@@ -57,3 +57,9 @@ export const getDistanceToVenue = (
         position.coords.longitude,
       )
 }
+
+const removeThe = (str: string) =>
+  str.startsWith("The") ? str.substring(4) : str
+
+export const sortByName = (a: string | null, b: string | null) =>
+  !a || !b ? 0 : removeThe(a).localeCompare(removeThe(b))

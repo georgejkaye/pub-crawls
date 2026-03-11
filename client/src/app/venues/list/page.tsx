@@ -9,7 +9,7 @@ import {
 import { VenuesContext } from "@/app/context/venues"
 import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
-import { getAverageRating, getDistanceToVenue } from "@/app/utils"
+import { getAverageRating, getDistanceToVenue, sortByName } from "@/app/utils"
 import { Venue } from "@/app/api/client"
 
 interface VenueCardProps {
@@ -56,9 +56,9 @@ const Page = () => {
   const [sortByValue, setSortByValue] = useState("name-asc")
 
   const nameAscendingSort = (a: Venue, b: Venue) =>
-    a.venue_name && b.venue_name ? a.venue_name.localeCompare(b.venue_name) : 0
+    sortByName(a.venue_name, b.venue_name)
   const nameDescendingSort = (a: Venue, b: Venue) =>
-    a.venue_name && b.venue_name ? b.venue_name.localeCompare(a.venue_name) : 0
+    -sortByName(a.venue_name, b.venue_name)
   const visitsAscendingSort = (a: Venue, b: Venue) =>
     a.visits.length - b.visits.length
   const visitsDescendingSort = (a: Venue, b: Venue) =>
