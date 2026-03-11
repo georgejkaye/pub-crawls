@@ -31,6 +31,8 @@ services:
       - internal
   api:
     depends_on:
+      data:
+        condition: service_completed_successfully
       codegen:
         condition: service_completed_successfully
     build:
@@ -64,6 +66,12 @@ services:
     networks:
       - internal
       - web
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:$$API_PORT/ || exit 1"]
+      interval: 10s
+      timeout: 1s
+      retries: 100
+      start_period: 0s
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.realaletrail_api.rule=Host(`${API_HOST}`)"
@@ -84,6 +92,11 @@ services:
       - ./api/openapi:/app/input
       - ./client/src/app/api:/app/output
   client:
+    depends_on:
+      client:
+        condition: service_healthy
+      openapi:
+        condition: service_completed_successfully
     build:
       context: client
       dockerfile: Dockerfile.prod
