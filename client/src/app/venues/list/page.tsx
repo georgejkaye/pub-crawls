@@ -96,7 +96,7 @@ const Page = () => {
     const getLocation = async () => {
       navigator.geolocation.getCurrentPosition(
         (position) => setLocation(position),
-        (err) => console.error(err),
+        () => setLocation(undefined),
       )
     }
     getLocation()
