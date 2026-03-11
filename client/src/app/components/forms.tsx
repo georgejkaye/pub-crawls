@@ -13,7 +13,7 @@ interface TextInputProps {
   type: string
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void
   placeholder?: string
-  maxLength: number
+  maxLength?: number
 }
 
 export const TextInput = ({
