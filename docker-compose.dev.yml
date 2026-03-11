@@ -39,6 +39,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      DB_NAME: realaletrail
+      DB_USER: realaletrail
+      DB_HOST: db
+      ENV: dev
     networks:
       - internal
   codegen:

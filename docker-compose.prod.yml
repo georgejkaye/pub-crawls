@@ -10,6 +10,11 @@ services:
       dockerfile: Dockerfile.data
       args:
         POETRY_VERSION: 2.3.2
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD_FILE: /run/secrets/db_secret
     networks:
       - internal
   codegen:
