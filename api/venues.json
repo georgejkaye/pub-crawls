@@ -80,30 +80,308 @@
         "name": "The Hanbury Turn",
         "address": "44 Hanbury Road, Stoke Heath, Bromsgrove, B60 4LU",
         "latitude": 52.314252,
-        "longitude": -2.078277
+        "longitude": -2.078277,
+        "pumps": 10
     },
     {
-        "name": "The Wellington",
-        "address": "37 Bennetts Hill, Birmingham B2 5SN",
-        "latitude": 52.480626,
-        "longitude": -1.900479
+        "name": "The Harp",
+        "address": "40 High Street, Albrighton, WV7 3JF",
+        "latitude": 52.633622,
+        "longitude": -2.274908,
+        "pumps": 12
+    },
+    {
+        "name": "The Hollybush",
+        "address": "54 Mitton Street, Stourport-on-Severn, Worcestershire, DY13 9AA",
+        "latitude": 52.339929,
+        "longitude": -2.275785,
+        "pumps": 10
+    },
+    {
+        "name": "The Horse and Jockey",
+        "address": "Market Street, Penkridge, ST19 5DH",
+        "latitude": 52.725509,
+        "longitude": -2.114900,
+        "pumps": 12
+    },
+    {
+        "name": "The Imperial Tavern",
+        "address": "35 St Nicholas Street, Worcester, Worcestershire, WR1 1UW",
+        "latitude": 52.193983,
+        "longitude": -2.219933,
+        "pumps": 12
     },
     {
         "name": "The Jewellers Arms",
         "address": "23 Hockley St, Birmingham B18 6BW",
         "latitude": 52.489556,
-        "longitude": -1.911332
+        "longitude": -1.911332,
+        "pumps": 12
+    },
+    {
+        "name": "The Kings Head",
+        "address": "36 King Street, Leicester, Leicestershire, LE1 6RL",
+        "latitude": 52.630666,
+        "longitude": -1.131755,
+        "pumps": 12
+    },
+    {
+        "name": "The Lawford Arms",
+        "address": "13 Main Street, Long Lawford, Rugby, CV23 9AY",
+        "latitude": 52.379422,
+        "longitude": -1.308510,
+        "pumps": 6
+    },
+    {
+        "name": "The Lych Gate Tavern",
+        "address": "44 Queen Square, Wolverhampton, West Midlands, WV1 1TX",
+        "latitude": 52.586385,
+        "longitude": -2.128327,
+        "pumps": 13
+    },
+    {
+        "name": "The Market Tavern",
+        "address": "Market Square, Tenbury Wells, WR15 8BL",
+        "latitude": 52.310533,
+        "longitude": -2.595343,
+        "pumps": 12
+    },
+    {
+        "name": "The New Inn",
+        "address": "Ludgate Street, Tutbury, Burton-on-Trent, DE13 9NG",
+        "latitude": 52.856627,
+        "longitude": -1.686568,
+        "pumps": 12
+    },
+    {
+        "name": "The Nursery Tavern",
+        "address": "38-39 Lord St, Coventry, Chapel Fields, CV5 8DA",
+        "latitude": 52.407762,
+        "longitude": -1.533585,
+        "pumps": 10
+    },
+    {
+        "name": "The Old Bulls Head",
+        "address": "1 Redhall Road, Lower Gornal, Dudley, West Midlands, DY3 2NU",
+        "latitude": 52.517721,
+        "longitude": -2.126477,
+        "pumps": 11
+    },
+    {
+        "name": "The Old Bush Revived",
+        "address": "44 Powke Lane, Rowley Regis, West Midlands, B65 0AD",
+        "latitude": 52.476270,
+        "longitude": -2.051069,
+        "pumps": 12
+    },
+    {
+        "name": "The Old Bush",
+        "address": "High Street, Wombourne, WV5 9DT",
+        "latitude": 52.536859,
+        "longitude": -2.180765,
+        "pumps": 12
+    },
+    {
+        "name": "The Old Royal Library",
+        "address": "2 Worcester Road, Malvern, Worcestershire, WR14 4QW",
+        "latitude": 52.111949,
+        "longitude": -2.329963,
+        "pumps": 10
+    },
+    {
+        "name": "The Orange Tree",
+        "address": "16 King Street, Hereford, HR4 9BX",
+        "latitude": 52.054532,
+        "longitude": -2.718872,
+        "pumps": 12
+    },
+    {
+        "name": "The Pretty Bricks",
+        "address": "5 John Street, Walsall, West Midlands, WS2 8AF",
+        "latitude": 52.591296,
+        "longitude": -1.985033,
+        "pumps": 12
     },
     {
         "name": "The Prince of Wales",
         "address": "84 Cambridge St, Birmingham B1 2NP",
         "latitude": 52.479488,
-        "longitude": -1.911650
+        "longitude": -1.911650,
+        "pumps": 12
     },
     {
-        "name": "The Craven Arms",
-        "address": "47 Upper Gough St, Birmingham B1 1JL",
-        "latitude": 52.475075,
-        "longitude": -1.903778
+        "name": "The Queens Head",
+        "address": "111 Enville Street, Stourbridge, West Midlands, DY8 3TQ",
+        "latitude": 52.458192,
+        "longitude": -2.154707,
+        "pumps": 12
+    },
+    {
+        "name": "The Queens Head",
+        "address": "128 High Street, Wordsley, West Midlands, DY8 5QS",
+        "latitude": 52.482629,
+        "longitude": -2.162043,
+        "pumps": 10
+    },
+    {
+        "name": "The Raglan Arms",
+        "address": "50 Dunchurch Road, Rugby, Warwickshire, CV22 6AD",
+        "latitude": 52.369202,
+        "longitude": -1.264962,
+        "pumps": 12
+    },
+    {
+        "name": "The Railway Arms",
+        "address": "62 Upper Bar, Newport, TF10 7EJ",
+        "latitude": 52.766182,
+        "longitude": -2.376893,
+        "pumps": 12
+    },
+    {
+        "name": "The Real Ale Tavern",
+        "address": "67 Load Street, Bewdley, Worcestershire, DY12 2AW",
+        "latitude": 52.375903,
+        "longitude": -2.315224,
+        "pumps": 12
+    },
+    {
+        "name": "The Rising Sun",
+        "address": "116 Horseley Road, Tipton, Dudley, West Midlands, DY4 7NH",
+        "latitude": 52.534049,
+        "longitude": -2.040254,
+        "pumps": 14
+    },
+    {
+        "name": "The Robin Hood",
+        "address": "54 The Crescent, Willenhall, West Midlands, WV13 2QR",
+        "latitude": 52.582679,
+        "longitude": -2.039021,
+        "pumps": 13
+    },
+    {
+        "name": "The Royal Oak",
+        "address": "Coton Hill, Shrewsbury, Shropshire, SY1 2DZ",
+        "latitude": 52.715817,
+        "longitude": -2.753462,
+        "pumps": 10
+    },
+    {
+        "name": "The Salmon",
+        "address": "19 Butt Close Lane, Leicester, Leicestershire, LE1 4QA",
+        "latitude": 52.638188,
+        "longitude": -1.135940,
+        "pumps": 12
+    },
+    {
+        "name": "The Saracen's Head",
+        "address": "4 The Tything, Worcester, WR1 1HD",
+        "latitude": 52.197383,
+        "longitude": -2.223168,
+        "pumps": 15
+    },
+    {
+        "name": "The Seven Stars",
+        "address": "Brook Road, Oldswinford, Stourbridge, West Midlands, DY8 1NQ",
+        "latitude": 52.449147,
+        "longitude": -2.135127,
+        "pumps": 25
+    },
+    {
+        "name": "The Shrewsbury Arms",
+        "address": "75-75A Eastgate Street, Stafford, Staffordshire, ST16 2NG",
+        "latitude": 52.806584,
+        "longitude": -2.114444,
+        "pumps": 13
+    },
+    {
+        "name": "The Starving Rascal",
+        "address": "1 Brettell Lane, Stourbridge, Amblecote, DY8 4BN",
+        "latitude": 52.472585,
+        "longitude": -2.144694,
+        "pumps": 12
+    },
+    {
+        "name": "The Swan",
+        "address": "Long Lane, Halesowen, West Midlands, B62 9JY",
+        "latitude": 52.468516,
+        "longitude": -2.031800,
+        "pumps": 17
+    },
+    {
+        "name": "The Swan",
+        "address": "93 Pelsall Road, Walsall, WS8 7DL",
+        "latitude": 52.645770,
+        "longitude": -1.942617,
+        "pumps": 12
+    },
+    {
+        "name": "The Three Horseshoes",
+        "address": "86 Witton Lane, West Bromwich, West Midlands, B71 2AQ",
+        "latitude": 52.540933,
+        "longitude": -2.007118,
+        "pumps": 10
+    },
+    {
+        "name": "The Unicorn",
+        "address": "66 Corve Street, Ludlow, Shropshire, SY8 1DU",
+        "latitude": 52.373164,
+        "longitude": -2.719905,
+        "pumps": 10
+    },
+    {
+        "name": "The Uxbridge Arms",
+        "address": "2 Church Street, Chasetown, WS7 3QL",
+        "latitude": 52.669489,
+        "longitude": -1.934404,
+        "pumps": 16
+    },
+    {
+        "name": "The Vine Inn",
+        "address": "35 Lichfield Road, Wednesfield, Wolverhampton, West Midlands, WV11 1TN",
+        "latitude": 52.602042,
+        "longitude": -2.080413,
+        "pumps": 10
+    },
+    {
+        "name": "The Waggon & Horses",
+        "address": "21 Stourbridge Road, Halesowen, West Midlands, B63 3TU",
+        "latitude": 52.451447,
+        "longitude": -2.054299,
+        "pumps": 18
+    },
+    {
+        "name": "The Wellington",
+        "address": "37 Bennetts Hill, Birmingham B2 5SN",
+        "latitude": 52.480626,
+        "longitude": -1.900479,
+        "pumps": 27
+    },
+    {
+        "name": "The White Hart",
+        "address": "High St, Shifnal, TF11 8BH",
+        "latitude": 52.670861,
+        "longitude": -2.372130,
+        "pumps": 12
+    },
+    {
+        "name": "The Whitley",
+        "address": "211 Stourbridge Road, Halesowen, West Midlands, B63 3QX",
+        "latitude": 52.453713,
+        "longitude": -2.064459,
+        "pumps": 10
+    },
+    {
+        "name": "The Why Not Inn",
+        "address": "Whynot Street, Cradley, Halesowen, B63 2JH",
+        "latitude": 52.454243,
+        "longitude": -2.090632,
+        "pumps": 10
+    },
+    {
+        "name": "The Windmill Inn",
+        "address": "1 North Street, Rugby, Warwickshire, CV21 2AB",
+        "latitude": 52.373271,
+        "longitude": -1.262505,
+        "pumps": 15
     }
 ]
