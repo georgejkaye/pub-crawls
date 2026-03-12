@@ -32,10 +32,14 @@ const UserSummaryVisitCard = ({ visit }: UserSummaryVisitCardProps) => {
           })}
         </div>
       )}
-      <div>
-        <span className="font-bold">Drink:</span> {visit.drink}
-      </div>
-      <div>&apos;{visit.notes}&apos;</div>
+      {visit.drink && visit.drink !== "" && (
+        <div>
+          <span className="font-bold">Drink:</span> {visit.drink}
+        </div>
+      )}
+      {visit.notes && visit.notes !== "" && (
+        <div>&apos;{visit.notes}&apos;</div>
+      )}
       <Rating style={{ maxWidth: 100 }} value={visit.rating ?? 0} readOnly />
     </div>
   )
