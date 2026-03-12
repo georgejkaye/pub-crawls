@@ -30,20 +30,24 @@ services:
       timeout: 1s
       retries: 500
       start_period: 0s
-  data:
+  codegen_init:
     build:
-      context: api
-      dockerfile: Dockerfile.data
-      args:
-        POETRY_VERSION: 2.3.0
+      context: codegen
+      dockerfile: Dockerfile
     depends_on:
       db:
         condition: service_healthy
     environment:
-      DB_NAME: realaletrail
-      DB_USER: realaletrail
+      OUTPUT_MODULE_NAME: api.db
+      WATCH_FILES: 0
+      ROLL_SCRIPTS: 1
       DB_HOST: db
-      ENV: dev
+      DB_USER: realaletrail
+      DB_NAME: realaletrail
+      DB_PASSWORD_FILE: /run/secrets/db_secret
+    volumes:
+      - ./db/code:/app/input
+      - ./api/src/api:/app/output
     networks:
       - internal
   codegen:
@@ -53,6 +57,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      codegen_init:
+        condition: service_completed_successfully
     environment:
       OUTPUT_MODULE_NAME: api.db
       WATCH_FILES: 1
@@ -64,6 +70,24 @@ services:
     volumes:
       - ./db/code:/app/input
       - ./api/src/api:/app/output
+    networks:
+      - internal
+  data:
+    build:
+      context: api
+      dockerfile: Dockerfile.data
+      args:
+        POETRY_VERSION: 2.3.0
+    depends_on:
+      db:
+        condition: service_healthy
+      codegen_init:
+        condition: service_completed_successfully
+    environment:
+      DB_NAME: realaletrail
+      DB_USER: realaletrail
+      DB_HOST: db
+      ENV: dev
     networks:
       - internal
   api:
