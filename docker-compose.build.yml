@@ -1,6 +1,7 @@
 networks:
   internal:
     external: false
+
 services:
   init:
     build:
@@ -128,6 +129,7 @@ services:
       - ${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}
     networks:
       - internal
+
 secrets:
   smtp_secret:
     file: smtp.secret
@@ -135,3 +137,6 @@ secrets:
     file: db.secret
   user_secret:
     file: user.secret
+
+volumes:
+  pgdata:
