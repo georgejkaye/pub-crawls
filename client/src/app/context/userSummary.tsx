@@ -19,9 +19,16 @@ export const UserSummaryProvider = ({
     data: userSummary,
     isLoading: isLoadingUserSummary,
     isError,
-  } = client.useQuery("get", "/users/{user_id}", {
-    params: { path: { user_id: userId } },
-  })
+  } = client.useQuery(
+    "get",
+    "/users/{user_id}",
+    {
+      params: { path: { user_id: userId } },
+    },
+    {
+      retry: (failureCount, error) => error.detail !== "Not Found",
+    },
+  )
   return (
     <UserSummaryContext.Provider
       value={{ userSummary, isLoadingUserSummary, isError }}
