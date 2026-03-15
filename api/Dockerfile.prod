@@ -40,7 +40,9 @@ WORKDIR /app
 ARG ENV
 
 RUN if [ "$ENV" = "build" ]; then \
-    echo "realaletrail" > /app/db.secret; \
+        echo "realaletrail" > /app/db.secret; \
+        echo "user" > /app/user.secret; \
+        echo "smtp" > /app/smtp.secret; \
     fi
 
 ENTRYPOINT ["python", "src/api/main.py"]

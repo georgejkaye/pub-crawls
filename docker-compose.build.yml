@@ -56,14 +56,10 @@ services:
       SMTP_SERVER: smtp.realaletrail.com
       SMTP_PORT: 587
       SMTP_USER: realaletrail@realaletrail.com
-      SMTP_PASSWORD: /run/secrets/smtp_secret
-      USER_SECRET: /run/secrets/user_secret
+      SMTP_PASSWORD: /app/smtp_secret
+      USER_SECRET: /app/user_secret
     volumes:
       - ./api/src:/app/src
-    secrets:
-      - db_secret
-      - user_secret
-      - smtp_secret
     networks:
       - internal
     healthcheck:
@@ -94,14 +90,6 @@ services:
       timeout: 1s
       retries: 100
       start_period: 0s
-
-secrets:
-  smtp_secret:
-    file: smtp.secret
-  db_secret:
-    file: db.secret
-  user_secret:
-    file: user.secret
 
 volumes:
   pgdata:
