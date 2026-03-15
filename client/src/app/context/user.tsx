@@ -33,6 +33,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
     isLoading,
     refetch: fetchUser,
     isRefetching,
+    error,
   } = client.useQuery(
     "get",
     "/auth/me",
@@ -52,6 +53,10 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
     setToken(localStorage.getItem("token") ?? undefined)
     setRetrievingFromStorage(false)
   }, [])
+
+  useEffect(() => {
+    setToken("")
+  }, [error])
 
   return (
     <UserContext.Provider
