@@ -48,7 +48,17 @@ async def get_users() -> list[UserCountData]:
     return select_user_counts_fetchall(get_db_connection())
 
 
-@app.get("/users/{user_id}", summary="Get a user and their visits", tags=["user"])
+@dataclass
+class NotFoundResponse:
+    detail: str
+
+
+@app.get(
+    "/users/{user_id}",
+    summary="Get a user and their visits",
+    tags=["user"],
+    responses={404: {"model": NotFoundResponse}},
+)
 async def get_user_by_user_id(user_id: int) -> UserSummaryData:
     summary = select_user_summary_fetchone(get_db_connection(), user_id)
     if summary is None:
@@ -61,7 +71,12 @@ async def get_venues() -> list[VenueData]:
     return select_venues_fetchall(get_db_connection())
 
 
-@app.get("/venues/{venue_id}", summary="Get a venue and its visits", tags=["venue"])
+@app.get(
+    "/venues/{venue_id}",
+    summary="Get a venue and its visits",
+    tags=["venue"],
+    responses={404: {"model": NotFoundResponse}},
+)
 async def get_venue_by_id(venue_id: int) -> VenueData:
     venue = select_venue_by_venue_id_fetchone(get_db_connection(), venue_id)
     if venue is None:
