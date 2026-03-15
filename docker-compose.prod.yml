@@ -50,8 +50,6 @@ services:
       SMTP_USER: ${SMTP_USER}
       SMTP_PASSWORD: /run/secrets/smtp_secret
       USER_SECRET: /run/secrets/user_secret
-    volumes:
-      - ./api/src:/app/src
     secrets:
       - db_secret
       - user_secret

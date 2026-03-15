@@ -58,8 +58,6 @@ services:
       SMTP_USER: realaletrail@realaletrail.com
       SMTP_PASSWORD: /app/smtp_secret
       USER_SECRET: /app/user_secret
-    volumes:
-      - ./api/src:/app/src
     networks:
       - internal
     healthcheck:
