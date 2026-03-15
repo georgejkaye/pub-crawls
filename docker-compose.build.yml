@@ -36,8 +36,8 @@ services:
       db:
         condition: service_healthy
     build:
-      context: api
-      dockerfile: Dockerfile.prod
+      context: .
+      dockerfile: api/Dockerfile.prod
       args:
         POETRY_VERSION: 2.3.2
         ENV: build

@@ -4,25 +4,6 @@ networks:
   internal:
     external: false
 services:
-  codegen:
-    build:
-      context: codegen
-      dockerfile: Dockerfile
-    environment:
-      OUTPUT_MODULE_NAME: api.db
-      WATCH_FILES: 0
-      ROLL_SCRIPTS: 1
-      DB_HOST: ${DB_HOST}
-      DB_USER: ${DB_USER}
-      DB_NAME: ${DB_NAME}
-      DB_PASSWORD_FILE: /run/secrets/db_secret
-    volumes:
-      - ./db/code:/app/input
-      - ./api/src/api:/app/output
-    networks:
-      - internal
-    secrets:
-      - db_secret
   data:
     depends_on:
       codegen:
@@ -48,8 +29,8 @@ services:
       codegen:
         condition: service_completed_successfully
     build:
-      context: api
-      dockerfile: Dockerfile.prod
+      context: .
+      dockerfile: api/Dockerfile.prod
       args:
         POETRY_VERSION: 2.3.2
     ports:
