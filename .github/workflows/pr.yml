@@ -16,6 +16,9 @@ jobs:
       - name: Create smtp secret
         run: echo "smtp" > smtp.secret
       - name: Build docker containers
-        run: docker compose -f docker-compose.build.yml up --build
+        run: docker compose -f docker-compose.build.yml up --build --wait
+      - name: Print logs on errro
+        if: error()
+        run: docker compose -docker-compose.build.yml logs
       - name: Down docker containers
         run: docker compose down
