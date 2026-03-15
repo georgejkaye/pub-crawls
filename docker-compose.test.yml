@@ -78,6 +78,8 @@ services:
         API_PROTOCOL: ${API_PROTOCOL:-https}
         API_HOST: api
         POETRY_VERSION: 2.3.2
+    environment:
+      CLIENT_PORT: ${CLIENT_PORT:-3000}
     ports:
       - ${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}
     networks:
