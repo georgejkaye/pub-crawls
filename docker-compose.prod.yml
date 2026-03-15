@@ -4,6 +4,16 @@ networks:
   internal:
     external: false
 services:
+  db:
+    image: georgejkaye/postgres-codegen
+    environment:
+      WATCH_FILES: 0
+      ROLL_SCRIPTS: 1
+      OUTPUT_MODULE_NAME: api.db
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD_FILE: /run/secrets/db_secret
   data:
     build:
       context: api
