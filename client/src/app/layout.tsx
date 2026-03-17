@@ -45,7 +45,6 @@ export default function RootLayout({
         href="/apple-touch-icon.png"
       />
       <meta name="apple-mobile-web-app-title" content="RealAleTrail" />
-      <link rel="manifest" href="/site.webmanifest" />
     </html>
   )
 }
