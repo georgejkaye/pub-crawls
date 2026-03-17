@@ -28,7 +28,7 @@ const VenueCard = ({ venue, location }: VenueCardProps) => {
     : undefined
   return (
     <Link href={`/venues/${venue.venue_id}`}>
-      <div className="p-4 flex md:flex-row items-end gap-4 bg-accent text-accentfg rounded-lg shadow hover:bg-accenthover">
+      <div className="p-4 flex md:flex-row items-end gap-4 bg-accent text-accentfg rounded-lg shadow hover:bg-accentlight">
         <div className="flex flex-col flex-1 gap-2">
           <div className="text-2xl font-bold">{venue.venue_name}</div>
           <div>{venue.venue_address}</div>
