@@ -155,7 +155,7 @@ const Page = () => {
       )
 
   return (
-    <div className="md:w-2/3 lg:w-1/3 flex flex-col items-center md:mx-auto p-4">
+    <div className="md:w-2/3 lg:w-1/2 flex flex-col items-center md:mx-auto p-4">
       {isLoadingUserSummary ? (
         <Loader />
       ) : !userSummary || isError ? (
