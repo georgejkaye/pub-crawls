@@ -6,6 +6,7 @@ import { VenuesProvider } from "./context/venues"
 import "maplibre-gl/dist/maplibre-gl.css"
 import "@smastrom/react-rating/style.css"
 import { ReactQueryClientProvider } from "./api/ReactQueryClientProvider"
+import BottomBar from "./BottomBar"
 
 export const metadata: Metadata = {
   title: "Real Ale Trail Tracker",
@@ -26,6 +27,7 @@ export default function RootLayout({
               <div className="flex flex-col">
                 <TopBar />
                 {children}
+                <BottomBar />
               </div>
             </VenuesProvider>
           </UserProvider>

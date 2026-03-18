@@ -177,6 +177,7 @@ interface MapComponentProps {
   featureCollection: GeoJSON<Geometry, GeoJsonProperties>
   currentVenue: Venue | undefined
   setCurrentVenue: Dispatch<SetStateAction<Venue | undefined>>
+  height: number | string
 }
 
 const MapComponent = ({
@@ -185,6 +186,7 @@ const MapComponent = ({
   featureCollection,
   currentVenue,
   setCurrentVenue,
+  height,
 }: MapComponentProps) => {
   const [minLng, minLat, maxLng, maxLat] = bbox(featureCollection)
   const [mapViewState, setMapViewState] = useState<InitMapViewProps>({
@@ -220,7 +222,7 @@ const MapComponent = ({
       {...mapViewState}
       onMove={(evt) => setMapViewState(evt.viewState)}
       ref={mapRef}
-      style={{ width: "100%", height: "calc(100vh - 60px)" }}
+      style={{ width: "100%", height }}
       mapStyle={"https://tiles.openfreemap.org/styles/bright"}
     >
       <FullscreenControl position="top-left" />
@@ -273,13 +275,28 @@ export const VenueMap = ({
   const venueFeatureCollection = getVenueFeatureCollection(venues)
   return (
     venues.length > 0 && (
-      <MapComponent
-        user={user}
-        venues={venues}
-        featureCollection={venueFeatureCollection}
-        currentVenue={currentVenue}
-        setCurrentVenue={setCurrentVenue}
-      />
+      <div>
+        <div className="hidden md:flex">
+          <MapComponent
+            user={user}
+            venues={venues}
+            featureCollection={venueFeatureCollection}
+            currentVenue={currentVenue}
+            setCurrentVenue={setCurrentVenue}
+            height={"calc(100vh - 60px)"}
+          />
+        </div>
+        <div className="md:hidden">
+          <MapComponent
+            user={user}
+            venues={venues}
+            featureCollection={venueFeatureCollection}
+            currentVenue={currentVenue}
+            setCurrentVenue={setCurrentVenue}
+            height={"calc(100vh - 120px)"}
+          />
+        </div>
+      </div>
     )
   )
 }
