@@ -4,6 +4,22 @@ import { useContext } from "react"
 import { UserContext } from "./context/user"
 import { Loader } from "./components/Loader"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
+
+interface BottomBarLinkProps {
+  href: string
+  label: string
+}
+
+const BottomBarLink = ({ href, label }: BottomBarLinkProps) => {
+  const pathname = usePathname()
+  const linkStyle = `hover:underline cursor-pointer ${href == pathname ? "bg-accentlighter p-2 px-4 rounded-xl" : ""}`
+  return (
+    <Link className={linkStyle} href={href}>
+      {label}
+    </Link>
+  )
+}
 
 const BottomBar = () => {
   const { user, isLoadingUser } = useContext(UserContext)
@@ -16,19 +32,22 @@ const BottomBar = () => {
         ) : (
           <div className="flex flex-row items-center text-center py-4">
             <div className="w-1/4">
-              <Link href="/venues/list">Venues</Link>
+              <BottomBarLink href="/" label="Map" />
             </div>
             <div className="w-1/4">
-              <Link href="/">Map</Link>
+              <BottomBarLink href="/venues/list" label="Venues" />
             </div>
             <div className="w-1/4">
-              <Link href="/users">Users</Link>
+              <BottomBarLink href="/users" label="Users" />
             </div>
             <div className="w-1/4">
               {user ? (
-                <Link href={`/users/${user.user_id}`}>{user.display_name}</Link>
+                <BottomBarLink
+                  href={`/users/${user.user_id}`}
+                  label={user.display_name}
+                />
               ) : (
-                <Link href="/login">Login</Link>
+                <BottomBarLink href="/login" label="Login" />
               )}
             </div>
           </div>
