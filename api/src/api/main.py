@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
 
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException
@@ -7,16 +8,22 @@ from fastapi_users import FastAPIUsers
 
 from api.db.functions.all import (
     insert_visit_fetchone,
+    select_crawls_fetchall,
     select_user_counts_fetchall,
     select_user_summary_fetchone,
     select_venue_by_venue_id_fetchone,
+    select_venues_by_crawl_id_fetchall,
     select_venues_fetchall,
     select_visit_fetchone,
+    select_visits_by_crawl_id_fetchall,
     select_visits_fetchall,
     update_user_display_name,
     update_visit,
 )
 from api.db.types.all import (
+    CrawlVenueData,
+    CrawlVenueShortData,
+    CrawlVisitData,
     SingleUserVisitData,
     UserCountData,
     UserSummaryData,
@@ -87,6 +94,48 @@ async def get_venue_by_id(venue_id: int) -> VenueData:
     return venue
 
 
+@dataclass
+class CrawlOutputData:
+    crawl_id: int
+    crawl_name: str
+    crawl_start: Optional[datetime]
+    crawl_end: Optional[datetime]
+    is_public: bool
+    crawl_bg: Optional[str]
+    crawl_fg: Optional[str]
+    venues: list[CrawlVenueShortData]
+
+
+@app.get(
+    "/crawls",
+    summary="Get a list of crawls and their venues",
+    tags=["crawl"],
+)
+async def get_crawl() -> list[CrawlOutputData]:
+    return [
+        CrawlOutputData(
+            crawl.crawl_id,
+            crawl.crawl_name,
+            crawl.crawl_dates.lower,
+            crawl.crawl_dates.upper,
+            crawl.is_public,
+            crawl.crawl_bg,
+            crawl.crawl_fg,
+            crawl.venues,
+        )
+        for crawl in select_crawls_fetchall(get_db_connection())
+    ]
+
+
+@app.get(
+    "/crawls/{crawl_id}/venues",
+    summary="Get a list of venues and their visits in a given crawl",
+    tags=["crawl"],
+)
+async def get_crawl_venues(crawl_id: int) -> list[CrawlVenueData]:
+    return select_venues_by_crawl_id_fetchall(get_db_connection(), crawl_id)
+
+
 @app.get("/visits", summary="Get all the visits", tags=["visit"])
 async def get_visits() -> list[UserVisitData]:
     return select_visits_fetchall(get_db_connection())
@@ -103,6 +152,15 @@ async def get_visit(visit_id: int) -> VisitData:
     if visit is None:
         raise HTTPException(status_code=404)
     return visit
+
+
+@app.get(
+    "/crawls/{crawl_id}/visits",
+    summary="Get a list of visits in a given crawl",
+    tags=["crawl"],
+)
+async def get_crawl_visits(crawl_id: int) -> list[CrawlVisitData]:
+    return select_visits_by_crawl_id_fetchall(get_db_connection(), crawl_id)
 
 
 @app.post("/visit", summary="Log a visit", tags=["visit"])
