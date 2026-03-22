@@ -61,9 +61,9 @@ const Page = () => {
   const visitsDescendingSort = (a: Venue, b: Venue) =>
     b.visits.length - a.visits.length
   const ratingAscendingSort = (a: Venue, b: Venue) =>
-    getAverageRating(a) - getAverageRating(b)
+    getAverageRating(a.visits) - getAverageRating(b.visits)
   const ratingDescendingSort = (a: Venue, b: Venue) =>
-    getAverageRating(b) - getAverageRating(a)
+    getAverageRating(b.visits) - getAverageRating(a.visits)
   const distanceAscendingSort = useCallback(
     (a: Venue, b: Venue) => {
       if (!location) {
