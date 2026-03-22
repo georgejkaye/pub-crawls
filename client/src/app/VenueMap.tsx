@@ -138,7 +138,7 @@ const CurrentVenueBox = ({
       closeButton={false}
       offset={47}
       maxWidth="60"
-      className="w-3/4 md:w-1/2 lg:w-1/8 bg-back"
+      className="w-3/4 md:w-1/2 lg:w-72 bg-back"
     >
       <div className="flex flex-col gap-2">
         <div className="font-bold text-xl">
