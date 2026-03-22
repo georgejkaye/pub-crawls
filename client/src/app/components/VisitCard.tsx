@@ -112,6 +112,7 @@ const VisitCard = ({
           "/visits",
           "/auth/me",
           "/users/{user_id}",
+          "/users",
           "/venues/{venue_id}",
         )
       },
