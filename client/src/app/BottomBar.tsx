@@ -26,7 +26,7 @@ const BottomBar = () => {
   return (
     <div>
       <div className="h-[60px]" />
-      <div className="fixed bottom-0 w-full md:hidden h-[60px] bg-accent text-accentfg font-bold">
+      <div className="fixed bottom-0 w-full md:hidden h-[60px] bg-accent text-accentfg font-bold border-accentlighter border-t-2">
         {isLoadingUser ? (
           <Loader />
         ) : (
