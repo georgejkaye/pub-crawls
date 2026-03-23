@@ -52,7 +52,12 @@ export const VisitCardCore = ({
     <div className="flex flex-col gap-2">
       {visitDate && (
         <div className="">
-          {visitDate.toLocaleDateString()}{" "}
+          {visitDate.toLocaleDateString("en-UK", {
+            weekday: "long",
+            day: "2-digit",
+            month: "long",
+          })}
+          {", "}
           {visitDate.toLocaleTimeString("en-UK", {
             hour: "2-digit",
             minute: "2-digit",
