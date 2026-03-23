@@ -38,7 +38,7 @@ interface VisitCardCoreProps {
   deleteVisit: () => void
 }
 
-const VisitCardCore = ({
+export const VisitCardCore = ({
   visitUserId,
   review,
   deleteVisit,
