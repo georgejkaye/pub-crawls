@@ -4,7 +4,6 @@ DROP TYPE IF EXISTS venue_input_data CASCADE;
 DROP TYPE IF EXISTS venue_data CASCADE;
 DROP TYPE IF EXISTS venue_visit_data CASCADE;
 DROP TYPE IF EXISTS user_summary_data CASCADE;
-DROP TYPE IF EXISTS user_visit_data CASCADE;
 DROP TYPE IF EXISTS single_user_visit_data CASCADE;
 DROP TYPE IF EXISTS user_follow_data CASCADE;
 DROP TYPE IF EXISTS user_high_level_summary_data CASCADE;
@@ -48,18 +47,6 @@ CREATE TYPE venue_data AS (
     visits venue_visit_data[]
 );
 
-CREATE TYPE user_visit_data AS (
-    visit_id INTEGER_NOTNULL,
-    user_id INTEGER_NOTNULL,
-    user_display_name TEXT_NOTNULL,
-    venue_id INTEGER_NOTNULL,
-    venue_name TEXT_NOTNULL,
-    visit_date TIMESTAMP_NOTNULL,
-    notes TEXT,
-    rating INTEGER,
-    drink TEXT
-);
-
 CREATE TYPE single_user_visit_data AS (
     visit_id INTEGER_NOTNULL,
     venue_id INTEGER_NOTNULL,
@@ -91,6 +78,7 @@ CREATE TYPE insert_visit_result AS (
 CREATE TYPE visit_data AS (
     visit_id INTEGER_NOTNULL,
     user_id INTEGER_NOTNULL,
+    user_display_name TEXT_NOTNULL,
     venue_id INTEGER_NOTNULL,
     venue_name TEXT_NOTNULL,
     visit_date TIMESTAMP_NOTNULL,
