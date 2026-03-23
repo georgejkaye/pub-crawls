@@ -447,7 +447,8 @@ SELECT
     app_user.display_name,
     COALESCE(visit_count_table.visit_count, 0),
     COALESCE(visit_count_table.unique_visit_count, 0),
-    user_favourite.venue_name
+    user_favourite.venue_name,
+    user_favourite.venue_id
 FROM app_user
 LEFT JOIN (
     SELECT
