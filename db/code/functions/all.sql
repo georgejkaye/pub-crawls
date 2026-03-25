@@ -387,7 +387,7 @@ $$
 SELECT
     visit_view.visit_id,
     visit_view.user_id,
-    visit_view.display_name,
+    visit_view.display_name AS user_display_name,
     visit_view.venue_id,
     visit_view.venue_name,
     visit_view.visit_date,
@@ -410,7 +410,7 @@ $$
 SELECT
     visit_view.visit_id,
     visit_view.user_id,
-    visit_view.display_name AS user_display_name
+    visit_view.display_name AS user_display_name,
     visit_view.venue_id,
     visit_view.venue_name,
     visit_view.visit_date,
@@ -419,7 +419,7 @@ SELECT
     visit_view.drink,
     visit_view.crawls
 FROM visit_view
-WEHRE visit-view.visit_id = p_visit_id
+WHERE visit_view.visit_id = p_visit_id
 $$;
 
 CREATE OR REPLACE FUNCTION select_user_summary (
