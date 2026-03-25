@@ -163,6 +163,7 @@ CREATE TYPE insert_visit_result AS (
 CREATE TYPE visit_data AS (
     visit_id INTEGER_NOTNULL,
     user_id INTEGER_NOTNULL,
+    user_display_name TEXT_NOTNULL,
     venue_id INTEGER_NOTNULL,
     venue_name TEXT_NOTNULL,
     visit_date TIMESTAMP_NOTNULL,

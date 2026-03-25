@@ -19,12 +19,7 @@ interface VenueCardProps {
 
 const VenueCard = ({ venue, location }: VenueCardProps) => {
   const visitCount = venue.visits.length
-  const venueAverageRating =
-    visitCount === 0
-      ? 0
-      : !venue.visits
-        ? 0
-        : venue.visits.reduce((a, b) => a + (b.rating ?? 0), 0) / visitCount
+  const venueAverageRating = getAverageRating(venue.visits)
   const distanceToVenue = location
     ? getDistanceToVenue(venue, location)
     : undefined
@@ -66,9 +61,9 @@ const Page = () => {
   const visitsDescendingSort = (a: Venue, b: Venue) =>
     b.visits.length - a.visits.length
   const ratingAscendingSort = (a: Venue, b: Venue) =>
-    getAverageRating(a) - getAverageRating(b)
+    getAverageRating(a.visits) - getAverageRating(b.visits)
   const ratingDescendingSort = (a: Venue, b: Venue) =>
-    getAverageRating(b) - getAverageRating(a)
+    getAverageRating(b.visits) - getAverageRating(a.visits)
   const distanceAscendingSort = useCallback(
     (a: Venue, b: Venue) => {
       if (!location) {

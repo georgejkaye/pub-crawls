@@ -23,7 +23,13 @@ const Page = () => {
     client.useMutation("post", "/visit", {
       onSuccess: () => {
         router.push("/")
-        return client.invalidateQueries("/venues", "/auth/me")
+        return client.invalidateQueries(
+          "/auth/me",
+          "/users/{user_id}",
+          "/venues",
+          "/venues/{venue_id}",
+          "/visits",
+        )
       },
       onError: (error) => {
         setErrorText(`Could not submit visit: ${error.detail}`)
@@ -36,9 +42,9 @@ const Page = () => {
         query: {
           venue_id: venue.venue_id,
           visit_date: new Date(Date.now()).toISOString(),
-          notes: notesText,
-          rating: ratingValue,
-          drink: drinkText,
+          notes: notesText === "" ? null : notesText,
+          rating: ratingValue === 0 ? null : ratingValue,
+          drink: drinkText === "" ? null : drinkText,
         },
       }
       postVisit({ params, headers: { Authorization: `Bearer ${token}` } })

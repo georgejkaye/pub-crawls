@@ -6,6 +6,7 @@ import uvicorn
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi_users import FastAPIUsers
 
+import api.db.functions.all as db
 from api.db.functions.all import (
     insert_visit_fetchone,
     select_crawls_fetchall,
@@ -27,7 +28,6 @@ from api.db.types.all import (
     SingleUserVisitData,
     UserCountData,
     UserSummaryData,
-    UserVisitData,
     VenueData,
     VisitData,
 )
@@ -137,7 +137,7 @@ async def get_crawl_venues(crawl_id: int) -> list[CrawlVenueData]:
 
 
 @app.get("/visits", summary="Get all the visits", tags=["visit"])
-async def get_visits() -> list[UserVisitData]:
+async def get_visits() -> list[VisitData]:
     return select_visits_fetchall(get_db_connection())
 
 
@@ -167,9 +167,9 @@ async def get_crawl_visits(crawl_id: int) -> list[CrawlVisitData]:
 async def post_visit(
     venue_id: int,
     visit_date: datetime,
-    notes: str,
-    rating: int,
-    drink: str,
+    notes: Optional[str],
+    rating: Optional[int],
+    drink: Optional[str],
     user: FastApiUser = Depends(current_user),
 ) -> None:
     insert_visit_fetchone(
@@ -186,6 +186,14 @@ async def patch_visit(
     user: FastApiUser = Depends(current_user),
 ) -> None:
     update_visit(get_db_connection(), user.id, visit_id, notes, rating, drink)
+
+
+@app.delete("/visit/{visit_id}", summary="Delete a visit", tags=["visit"])
+async def delete_visit(
+    visit_id: int,
+    user: FastApiUser = Depends(current_user),
+) -> None:
+    db.delete_visit(get_db_connection(), user.id, visit_id)
 
 
 app.include_router(

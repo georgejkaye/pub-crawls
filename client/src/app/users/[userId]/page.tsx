@@ -1,12 +1,9 @@
 "use client"
 import { UserSummaryContext } from "@/app/context/userSummary"
 import { Loader } from "@/app/components/Loader"
-import { Rating } from "@smastrom/react-rating"
-import Link from "next/link"
 import { useContext, useMemo, useState } from "react"
-import { SingleUserVisit, Venue } from "@/app/api/client"
+import { Venue } from "@/app/api/client"
 import { notFound } from "next/navigation"
-import { UserContext } from "@/app/context/user"
 import { GeoJSON, Feature, GeoJsonProperties, Geometry } from "geojson"
 import { VenuesContext } from "@/app/context/venues"
 import bbox from "@turf/bbox"
@@ -20,6 +17,7 @@ import {
   ViewState,
 } from "@vis.gl/react-maplibre"
 import Pin from "@/app/components/Pin"
+import VisitCard from "@/app/components/VisitCard"
 
 type InitMapViewProps = Partial<ViewState> & {
   bounds?: LngLatBoundsLike
@@ -91,55 +89,6 @@ const VenueMap = ({ venues, userVenueVisitIds }: VenueMapProps) => {
   )
 }
 
-interface UserSummaryVisitCardProps {
-  visit: SingleUserVisit
-}
-
-const UserSummaryVisitCard = ({ visit }: UserSummaryVisitCardProps) => {
-  const { user } = useContext(UserContext)
-  const { userSummary } = useContext(UserSummaryContext)
-
-  const visitDate = new Date(Date.parse(visit.visit_date))
-  const isCurrentUser = user?.user_id == userSummary?.user_id
-
-  return (
-    <div className="rounded-xl bg-accentlight text-accentfg p-4 flex flex-col gap-2">
-      <Link
-        href={`/venues/${visit.venue_id}`}
-        className="font-bold text-xl hover:underline"
-      >
-        {visit.venue_name}
-      </Link>
-      {visitDate && (
-        <div className="">
-          {visitDate.toLocaleDateString()}{" "}
-          {visitDate.toLocaleTimeString("en-UK", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </div>
-      )}
-      {visit.drink && visit.drink !== "" && (
-        <div>
-          <span className="font-bold">Drink:</span> {visit.drink}
-        </div>
-      )}
-      {visit.notes && visit.notes !== "" && (
-        <div>&apos;{visit.notes}&apos;</div>
-      )}
-      <Rating style={{ maxWidth: 100 }} value={visit.rating ?? 0} readOnly />
-      {isCurrentUser && (
-        <Link
-          href={`/users/${user?.user_id}/visits/${visit.visit_id}/edit`}
-          className="font-bold hover:underline"
-        >
-          Edit
-        </Link>
-      )}
-    </div>
-  )
-}
-
 const Page = () => {
   const { userSummary, isLoadingUserSummary, isError } =
     useContext(UserSummaryContext)
@@ -163,9 +112,20 @@ const Page = () => {
       ) : (
         <div className="w-full flex flex-col gap-4">
           <h2 className="font-bold text-2xl">{userSummary.display_name}</h2>
-          <div>
-            {userSummary.visits.length}{" "}
-            {userSummary.visits.length === 1 ? "venue" : "venues"} visited
+          <div className="flex flex-row gap-4">
+            <div>
+              <span className="font-bold text-xl">
+                {userVenueVisitIds.length}
+              </span>{" "}
+              venue
+              {userVenueVisitIds.length === 1 ? "" : "s"}
+            </div>
+            <div>
+              <span className="font-bold text-xl">
+                {userSummary.visits.length}
+              </span>{" "}
+              visit{userSummary.visits.length === 1 ? "" : "s"}
+            </div>
           </div>
           {venues && venues.length > 0 && (
             <VenueMap venues={venues} userVenueVisitIds={userVenueVisitIds} />
@@ -178,7 +138,13 @@ const Page = () => {
                   : Date.parse(b.visit_date) - Date.parse(a.visit_date),
               )
               .map((visit) => (
-                <UserSummaryVisitCard key={visit.visit_id} visit={visit} />
+                <VisitCard
+                  key={visit.visit_id}
+                  title={visit.venue_name}
+                  titleHref={`/venues/${visit.venue_id}`}
+                  review={visit}
+                  visitUserId={userSummary.user_id}
+                />
               ))}
           </div>
         </div>

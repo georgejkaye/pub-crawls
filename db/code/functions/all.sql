@@ -155,6 +155,19 @@ WHERE visit_id = p_visit_id
 AND user_id = p_user_id;
 $$;
 
+CREATE OR REPLACE FUNCTION delete_visit (
+    p_user_id INTEGER_NOTNULL,
+    p_visit_id INTEGER_NOTNULL
+)
+RETURNS VOID
+LANGUAGE sql
+AS
+$$
+DELETE FROM visit
+WHERE user_id = p_user_id
+AND visit_id = p_visit_id;
+$$;
+
 CREATE OR REPLACE FUNCTION select_user_by_user_id (
     p_user_id INTEGER
 )
@@ -346,14 +359,14 @@ ON venue.venue_id = venue_visit.venue_id;
 $$;
 
 CREATE OR REPLACE FUNCTION select_visits ()
-RETURNS SETOF user_visit_data
+RETURNS SETOF visit_data
 LANGUAGE sql
 AS
 $$
 SELECT
     visit_view.visit_id,
     visit_view.user_id,
-    visit_view.display_name,
+    visit_view.display_name AS user_display_name,
     visit_view.venue_id,
     visit_view.venue_name,
     visit_view.visit_date,
@@ -397,6 +410,7 @@ $$
 SELECT
     visit_view.visit_id,
     visit_view.user_id,
+    visit_view.display_name AS user_display_name
     visit_view.venue_id,
     visit_view.venue_name,
     visit_view.visit_date,
@@ -405,6 +419,7 @@ SELECT
     visit_view.drink,
     visit_view.crawls
 FROM visit_view
+WEHRE visit-view.visit_id = p_visit_id
 $$;
 
 CREATE OR REPLACE FUNCTION select_user_summary (
