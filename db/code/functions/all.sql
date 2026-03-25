@@ -51,11 +51,47 @@ RETURNING (
     last_verify_request)
 $$;
 
+CREATE OR REPLACE FUNCTION insert_crawl (
+    p_crawl_id INTEGER_NOTNULL,
+    p_crawl_name TEXT_NOTNULL,
+    p_start_date TIMESTAMP_NOTNULL,
+    p_end_date TIMESTAMP_NOTNULL,
+    p_is_public BOOLEAN_NOTNULL,
+    p_end_data TIMESTAMP_NOTNULL,
+    p_crawl_bg TEXT,
+    p_crawl_fg TEXT
+)
+RETURNS VOID
+LANGUAGE sql
+AS
+$$
+INSERT INTO crawl (
+    crawl_id,
+    crawl_name,
+    crawl_dates,
+    is_public,
+    crawl_bg,
+    crawl_fg
+)
+VALUES (
+    p_crawl_id,
+    p_crawl_name,
+    p_is_public,
+    DATERANGE(
+        DATE_TRUNC("day", p_start_date),
+        DATE_TRUNC("day", p_end_date)
+    ),
+    p_is_public,
+    p_crawl_bg,
+    p_crawl_fg
+);
+
 CREATE OR REPLACE FUNCTION insert_venue (
     p_venue_name TEXT,
     p_address TEXT,
     p_latitude DECIMAL,
     p_longitude DECIMAL
+    p_crawl_ids INTEGER_NOTNULL[]
 )
 RETURNS INTEGER
 LANGUAGE sql
