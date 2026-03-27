@@ -85,6 +85,7 @@ VALUES (
     p_crawl_bg,
     p_crawl_fg
 );
+$$;
 
 CREATE OR REPLACE FUNCTION insert_venue (
     p_venue_name TEXT,
@@ -122,22 +123,54 @@ CREATE OR REPLACE FUNCTION insert_venues (
     p_venues venue_input_data[]
 )
 RETURNS VOID
-LANGUAGE sql
+LANGUAGE plsql
 AS
 $$
-INSERT INTO venue (
-    venue_name,
-    venue_address,
-    latitude,
-    longitude
-)
-SELECT
-    v_venue.venue_name,
-    v_venue.venue_address,
-    v_venue.latitude,
-    v_venue.longitude
-FROM UNNEST(p_venues) AS v_venue
-ON CONFLICT (venue_name, venue_address) DO NOTHING
+DECLARE
+    v_venue_id INTEGER_NOTNULL := -1;
+BEGIN
+    INSERT INTO venue (
+        venue_name,
+        venue_address,
+        latitude,
+        longitude
+    )
+    SELECT
+        v_venue.venue_name,
+        v_venue.venue_address,
+        v_venue.latitude,
+        v_venue.longitude
+    FROM UNNEST(p_venues) AS v_venue
+    ON CONFLICT (venue_name, venue_address) DO NOTHING
+    RETURNING venue_id INTO v_venue_id;
+
+    FOR i IN 1 .. p_venues.COUNT LOOP
+        INSERT INTO venue (
+            venue_name,
+            venue_address,
+            latitude,
+            longitude
+        )
+        VALUES (
+            p_venues(i).venue_name,
+            p_venues(i).venue_address,
+            p_venues(i).latitude,
+            p_venues(i).longitude
+        )
+        ON CONFLICT (venue_name, venue_address) DO NOTHING
+        RETURNING venue_id INTO v_venue_id;
+
+        INSERT INTO crawl_venue (
+            crawl_id,
+            venue_id
+        )
+        SELECT
+            v_crawl_id,
+            v_venue_id
+        FROM UNNEST(p_venues(i).crawl_ids)
+        AS v_crawl_id;
+    END LOOP;
+END;
 $$;
 
 CREATE OR REPLACE FUNCTION insert_visit (

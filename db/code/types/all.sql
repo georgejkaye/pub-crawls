@@ -61,7 +61,8 @@ CREATE TYPE venue_input_data AS (
     venue_name TEXT_NOTNULL,
     venue_address TEXT_NOTNULL,
     latitude DECIMAL_NOTNULL,
-    longitude DECIMAL_NOTNULL
+    longitude DECIMAL_NOTNULL,
+    crawl_ids INTEGER_NOTNULL[]
 );
 
 CREATE TYPE venue_data AS (
