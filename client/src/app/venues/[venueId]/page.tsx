@@ -1,6 +1,6 @@
 "use client"
 
-import { LinkButton, SubmitButton } from "@/app/components/forms"
+import { LinkButton } from "@/app/components/forms"
 import { UserContext } from "@/app/context/user"
 import { VenueContext } from "@/app/context/venue"
 import Pin from "@/app/components/Pin"
@@ -13,13 +13,74 @@ import {
   Source,
 } from "@vis.gl/react-maplibre"
 import { Feature } from "geojson"
-import Link from "next/link"
 import { notFound, useRouter } from "next/navigation"
 import { useContext, useRef } from "react"
-import { Loader } from "@/app/components/Loader"
-import { VenueVisit } from "@/app/api/client"
+import { VenueCrawl, VenueVisit } from "@/app/api/client"
 import VisitCard from "@/app/components/VisitCard"
 import { getAverageRating } from "@/app/utils"
+
+interface VenueCrawlCardProps {
+  crawl: VenueCrawl
+}
+
+const VenueCrawlCard = ({ crawl }: VenueCrawlCardProps) => {
+  const crawlStart = !crawl.crawl_start
+    ? undefined
+    : new Date(Date.parse(crawl.crawl_start))
+  const crawlStartString = !crawlStart
+    ? ""
+    : crawlStart.toLocaleDateString("en-UK", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+      })
+  const crawlEnd = !crawl.crawl_end
+    ? undefined
+    : new Date(Date.parse(crawl.crawl_end))
+  if (crawlEnd) {
+    crawlEnd.setDate(crawlEnd.getDate() - 1)
+  }
+  const crawlEndString = !crawlEnd
+    ? ""
+    : crawlEnd.toLocaleDateString("en-UK", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+      })
+  const isUpcoming = crawlStart && new Date() < crawlStart
+  const isPassed = crawlEnd && new Date() > crawlEnd
+  return (
+    <div
+      className="rounded-xl p-4 flex flex-row"
+      style={{
+        backgroundColor: crawl.crawl_fg ?? "#ffffff",
+        color: crawl.crawl_bg ?? "#130067",
+      }}
+    >
+      <div className="flex flex-col flex-1">
+        <div className="text-lg font-bold">{crawl.crawl_name}</div>
+        <div className="">
+          {crawlStartString} - {crawlEndString}
+        </div>
+      </div>
+      <div>{isUpcoming ? "Upcoming" : isPassed ? "Passed" : "Ongoing"}</div>
+    </div>
+  )
+}
+
+interface VenueCrawlsListProps {
+  crawls: VenueCrawl[]
+}
+
+const VenueCrawlsList = ({ crawls }: VenueCrawlsListProps) => {
+  return (
+    <div className="flex flex-col gap-2">
+      {crawls.map((crawl) => (
+        <VenueCrawlCard key={crawl.crawl_id} crawl={crawl} />
+      ))}
+    </div>
+  )
+}
 
 interface VenueMapProps {
   venueId: number
@@ -78,6 +139,7 @@ interface VenueDetailsProps {
   visits: VenueVisit[]
   longitude: number
   latitude: number
+  crawls: VenueCrawl[]
 }
 
 const VenueDetails = ({
@@ -87,6 +149,7 @@ const VenueDetails = ({
   visits,
   longitude,
   latitude,
+  crawls,
 }: VenueDetailsProps) => {
   const venueVisitCount = visits.length
   const averageVenueRating = getAverageRating(visits)
@@ -108,6 +171,7 @@ const VenueDetails = ({
         />
       </div>
       <VenueMap venueId={venueId} latitude={latitude} longitude={longitude} />
+      <VenueCrawlsList crawls={crawls} />
     </div>
   )
 }
@@ -123,12 +187,7 @@ const Page = () => {
     <div className="flex flex-col md:w-2/3 lg:w-1/2 p-4 md:mx-auto">
       {isError
         ? notFound()
-        : venue &&
-          venue.venue_id &&
-          venue.venue_name &&
-          venue.venue_address &&
-          venue.latitude &&
-          venue.longitude && (
+        : venue && (
             <div className="flex flex-col gap-4">
               <VenueDetails
                 venueId={venue.venue_id}
@@ -137,6 +196,7 @@ const Page = () => {
                 visits={venue.visits}
                 latitude={Number(venue.latitude)}
                 longitude={Number(venue.longitude)}
+                crawls={venue.crawls}
               />
               {user && (
                 <LinkButton label="Record visit" onClick={onClickRecordVisit} />
