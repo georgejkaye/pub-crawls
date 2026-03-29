@@ -18,8 +18,9 @@ interface VenueCardProps {
 }
 
 const VenueCard = ({ venue, location }: VenueCardProps) => {
-  const visitCount = venue.visits.length
-  const venueAverageRating = getAverageRating(venue.visits)
+  const visitCount = venue.total_visits
+  const userCount = venue.users_visited
+  const venueAverageRating = venue.average_rating
   const distanceToVenue = location
     ? getDistanceToVenue(venue, location)
     : undefined
@@ -30,10 +31,17 @@ const VenueCard = ({ venue, location }: VenueCardProps) => {
           <div className="text-2xl font-bold">{venue.venue_name}</div>
           <div>{venue.venue_address}</div>
           {distanceToVenue && <div>{distanceToVenue.toFixed(2)}km away</div>}
-          <div>{visitCount} visits</div>
+          <div className="flex flex-row gap-4">
+            <div>
+              {visitCount} {visitCount === 1 ? "visit" : "visits"}
+            </div>
+            <div>
+              {userCount} {userCount === 1 ? "user" : "users"} visited
+            </div>
+          </div>
           <Rating
             style={{ maxWidth: 100 }}
-            value={venueAverageRating}
+            value={venueAverageRating ?? 0}
             readOnly
           />
         </div>

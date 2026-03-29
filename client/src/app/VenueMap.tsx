@@ -111,8 +111,9 @@ const CurrentVenueBox = ({
   setCurrentVenue,
 }: CurrentVenueBoxProps) => {
   const router = useRouter()
-  const venueVisitCount = venue.visits.length
-  const averageVenueRating = getAverageRating(venue.visits)
+  const venueVisitCount = venue.total_visits
+  const venueUserCount = venue.users_visited
+  const averageVenueRating = venue.average_rating
   const onClickDetails = () => {
     router.push(`/venues/${venue.venue_id}`)
   }
@@ -138,16 +139,21 @@ const CurrentVenueBox = ({
         <div className="font-bold text-xl">
           <Link href={`/venues/${venue.venue_id}`}>{venue.venue_name}</Link>
         </div>
-        <div className="flex flex-row gap-2 h-5">
-          <div>
-            {venueVisitCount} {venueVisitCount === 1 ? "visit" : "visits"}
+        <div className="flex flex-row gap-4">
+          <div className="flex flex-row gap-1 items-end">
+            <span className="font-bold text-lg">{venueVisitCount}</span>
+            {venueVisitCount === 1 ? "visit" : "visits"}
           </div>
-          <Rating
-            style={{ maxWidth: 100 }}
-            value={averageVenueRating}
-            readOnly={true}
-          />
+          <div className="flex flex-row gap-1 items-end">
+            <span className="font-bold text-lg">{venueUserCount}</span>
+            {venueUserCount === 1 ? "user" : "users"} visited
+          </div>
         </div>
+        <Rating
+          style={{ maxWidth: 100 }}
+          value={averageVenueRating ?? 0}
+          readOnly={true}
+        />
         {firstVisitToVenue && firstVisitToVenue.visit_date && (
           <div>
             You visited on{" "}
