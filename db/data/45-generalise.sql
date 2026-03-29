@@ -50,6 +50,24 @@ SELECT
     venue_id
 FROM venue;
 
+CREATE TABLE IF NOT EXISTS crawl_user (
+    crawl_user_id SERIAL PRIMARY KEY,
+    crawl_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (crawl_id) REFERENCES crawl(crawl_id),
+    FOREIGN KEY (user_id) REFERENCES app_user(user_id),
+    UNIQUE (crawl_id, user_id)
+);
+
+INSERT INTO crawl_user (
+    crawl_id,
+    user_id
+)
+SELECT
+    1,
+    app_user.user_id
+FROM app_user;
+
 CREATE TABLE IF NOT EXISTS venue_fact (
     venue_fact_id SERIAL PRIMARY KEY,
     venue_id INTEGER NOT NULL,

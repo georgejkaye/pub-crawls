@@ -36,6 +36,7 @@ CREATE TABLE venue (
 );
 
 CREATE TABLE crawl_venue (
+    crawl_venue_id SERIAL PRIMARY KEY,
     crawl_id INTEGER NOT NULL,
     venue_id INTEGER NOT NULL,
     crawl_special_venue_type_id INTEGER,
@@ -44,6 +45,15 @@ CREATE TABLE crawl_venue (
     FOREIGN KEY (crawl_special_venue_type_id)
         REFERENCES crawl_special_venue_type(crawl_special_venue_type_id),
     UNIQUE (crawl_id, venue_id)
+);
+
+CREATE TABLE crawl_user (
+    crawl_user_id SERIAL PRIMARY KEY,
+    crawl_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (crawl_id) REFERENCES crawl(crawl_id),
+    FOREIGN KEY (user_id) REFERENCES app_user(user_id),
+    UNIQUE (crawl_id, user_id)
 );
 
 CREATE TABLE visit (
