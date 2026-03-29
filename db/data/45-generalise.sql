@@ -37,7 +37,8 @@ CREATE TABLE IF NOT EXISTS crawl_venue (
     FOREIGN KEY (crawl_id) REFERENCES crawl(crawl_id),
     FOREIGN KEY (venue_id) REFERENCES venue(venue_id),
     FOREIGN KEY (crawl_special_venue_type_id)
-        REFERENCES crawl_special_venue_type(crawl_special_venue_type_id)
+        REFERENCES crawl_special_venue_type(crawl_special_venue_type_id),
+    UNIQUE (crawl_id, venue_id)
 );
 
 INSERT INTO crawl_venue (
@@ -54,5 +55,6 @@ CREATE TABLE IF NOT EXISTS venue_fact (
     venue_id INTEGER NOT NULL,
     fact_key TEXT NOT NULL,
     fact_value TEXT NOT NULL,
-    FOREIGN KEY (venue_id) REFERENCES venue(venue_id)
+    FOREIGN KEY (venue_id) REFERENCES venue(venue_id),
+    UNIQUE (venue_id, fact_key)
 );
