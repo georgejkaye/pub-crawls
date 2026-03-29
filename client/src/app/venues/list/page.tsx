@@ -185,7 +185,7 @@ const Page = () => {
         <div className="flex flex-row gap-2 items-center">
           <label htmlFor="sort-by">Sort by</label>
           <select
-            className="border-1 rounded p-2"
+            className="border-1 rounded p-2 bg-white"
             name="sort-by"
             value={sortByValue}
             onChange={onChangeSortBy}
