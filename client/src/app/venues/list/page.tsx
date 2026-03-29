@@ -173,7 +173,7 @@ const Page = () => {
         onChange={(e) => setSearchValue(e.target.value)}
       />
       <div className="flex flex-row gap-8">
-        <div className="flex flex-row gap-2 items-center">
+        {/* <div className="flex flex-row gap-2 items-center">
           <label htmlFor="group-by-area">Group by area</label>
           <input
             id="group-by-area"
@@ -181,7 +181,7 @@ const Page = () => {
             checked={groupByArea}
             onChange={onChangeGroupByArea}
           />
-        </div>
+        </div> */}
         <div className="flex flex-row gap-2 items-center">
           <label htmlFor="sort-by">Sort by</label>
           <select
