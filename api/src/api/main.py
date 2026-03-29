@@ -22,8 +22,8 @@ from api.db.functions.all import (
     update_visit,
 )
 from api.db.types.all import (
+    CrawlData,
     CrawlVenueData,
-    CrawlVenueShortData,
     CrawlVisitData,
     SingleUserVisitData,
     UserCountData,
@@ -77,8 +77,8 @@ async def get_user_by_user_id(user_id: int) -> UserSummaryData:
 
 
 @app.get("/venues", summary="Get a list of venues and their visits", tags=["venue"])
-async def get_venues() -> list[VenueData]:
-    return select_venues_fetchall(get_db_connection())
+async def get_venues(user_id: Optional[int] = None) -> list[VenueData]:
+    return select_venues_fetchall(get_db_connection(), user_id)
 
 
 @app.get(
@@ -87,23 +87,11 @@ async def get_venues() -> list[VenueData]:
     tags=["venue"],
     responses={404: {"model": NotFoundResponse}},
 )
-async def get_venue_by_id(venue_id: int) -> VenueData:
-    venue = select_venue_by_venue_id_fetchone(get_db_connection(), venue_id)
+async def get_venue_by_id(venue_id: int, user_id: Optional[int] = None) -> VenueData:
+    venue = select_venue_by_venue_id_fetchone(get_db_connection(), user_id, venue_id)
     if venue is None:
         raise HTTPException(status_code=404)
     return venue
-
-
-@dataclass
-class CrawlOutputData:
-    crawl_id: int
-    crawl_name: str
-    crawl_start: Optional[datetime]
-    crawl_end: Optional[datetime]
-    is_public: bool
-    crawl_bg: Optional[str]
-    crawl_fg: Optional[str]
-    venues: list[CrawlVenueShortData]
 
 
 @app.get(
@@ -111,20 +99,8 @@ class CrawlOutputData:
     summary="Get a list of crawls and their venues",
     tags=["crawl"],
 )
-async def get_crawl() -> list[CrawlOutputData]:
-    return [
-        CrawlOutputData(
-            crawl.crawl_id,
-            crawl.crawl_name,
-            crawl.crawl_dates.lower,
-            crawl.crawl_dates.upper,
-            crawl.is_public,
-            crawl.crawl_bg,
-            crawl.crawl_fg,
-            crawl.venues,
-        )
-        for crawl in select_crawls_fetchall(get_db_connection())
-    ]
+async def get_crawl() -> list[CrawlData]:
+    return select_crawls_fetchall(get_db_connection())
 
 
 @app.get(
