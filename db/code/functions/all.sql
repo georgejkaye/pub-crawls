@@ -76,10 +76,9 @@ INSERT INTO crawl (
 VALUES (
     p_crawl_id,
     p_crawl_name,
-    p_is_public,
     DATERANGE(
-        DATE_TRUNC("day", p_start_date),
-        DATE_TRUNC("day", p_end_date)
+        DATE_TRUNC('day', p_start_date)::date,
+        DATE_TRUNC('day', p_end_date)::date
     ),
     p_is_public,
     p_crawl_bg,
@@ -152,10 +151,10 @@ BEGIN
             longitude
         )
         VALUES (
-            p_venues(i).venue_name,
-            p_venues(i).venue_address,
-            p_venues(i).latitude,
-            p_venues(i).longitude
+            (p_venues(i)).venue_name,
+            (p_venues(i)).venue_address,
+            (p_venues(i)).latitude,
+            (p_venues(i)).longitude
         )
         ON CONFLICT (venue_name, venue_address) DO NOTHING
         RETURNING venue_id INTO v_venue_id;
@@ -167,7 +166,7 @@ BEGIN
         SELECT
             v_crawl_id,
             v_venue_id
-        FROM UNNEST(p_venues(i).crawl_ids)
+        FROM UNNEST((p_venues(i)).crawl_ids)
         AS v_crawl_id;
     END LOOP;
 END;
