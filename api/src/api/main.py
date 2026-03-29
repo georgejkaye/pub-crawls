@@ -26,6 +26,7 @@ from api.db.types.all import (
     CrawlVenueData,
     CrawlVisitData,
     SingleUserVisitData,
+    SingleVenueData,
     UserCountData,
     UserSummaryData,
     VenueData,
@@ -87,7 +88,9 @@ async def get_venues(user_id: Optional[int] = None) -> list[VenueData]:
     tags=["venue"],
     responses={404: {"model": NotFoundResponse}},
 )
-async def get_venue_by_id(venue_id: int, user_id: Optional[int] = None) -> VenueData:
+async def get_venue_by_id(
+    venue_id: int, user_id: Optional[int] = None
+) -> SingleVenueData:
     venue = select_venue_by_venue_id_fetchone(get_db_connection(), user_id, venue_id)
     if venue is None:
         raise HTTPException(status_code=404)
