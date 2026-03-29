@@ -21,7 +21,7 @@ CREATE OR REPLACE FUNCTION insert_user (
     p_hashed_password TEXT
 )
 RETURNS user_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 INSERT INTO app_user (
@@ -62,7 +62,7 @@ CREATE OR REPLACE FUNCTION insert_crawl (
     p_crawl_fg TEXT
 )
 RETURNS VOID
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 INSERT INTO crawl (
@@ -91,11 +91,11 @@ CREATE OR REPLACE FUNCTION insert_venue (
     p_venue_name TEXT,
     p_address TEXT,
     p_latitude DECIMAL,
-    p_longitude DECIMAL
+    p_longitude DECIMAL,
     p_crawl_ids INTEGER_NOTNULL[]
 )
 RETURNS INTEGER
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 INSERT INTO venue (
@@ -123,7 +123,7 @@ CREATE OR REPLACE FUNCTION insert_venues (
     p_venues venue_input_data[]
 )
 RETURNS VOID
-LANGUAGE plsql
+LANGUAGE PLPGSQL
 AS
 $$
 DECLARE
@@ -182,7 +182,7 @@ CREATE OR REPLACE FUNCTION insert_visit (
     p_drink TEXT
 )
 RETURNS insert_visit_result
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 INSERT INTO visit (
@@ -212,7 +212,7 @@ CREATE OR REPLACE FUNCTION update_visit (
     p_drink TEXT
 )
 RETURNS VOID
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 UPDATE visit
@@ -229,7 +229,7 @@ CREATE OR REPLACE FUNCTION delete_visit (
     p_visit_id INTEGER_NOTNULL
 )
 RETURNS VOID
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 DELETE FROM visit
@@ -241,7 +241,7 @@ CREATE OR REPLACE FUNCTION select_user_by_user_id (
     p_user_id INTEGER
 )
 RETURNS SETOF user_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -261,7 +261,7 @@ CREATE OR REPLACE FUNCTION select_user_by_email (
     p_email TEXT
 )
 RETURNS SETOF user_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -279,7 +279,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION select_venues ()
 RETURNS SETOF venue_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -316,7 +316,7 @@ CREATE OR REPLACE FUNCTION select_venues_by_crawl_id (
     p_crawl_id INTEGER_NOTNULL
 )
 RETURNS SETOF crawl_venue_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -359,7 +359,7 @@ CREATE OR REPLACE FUNCTION select_venue_by_venue_id (
     p_venue_id INTEGER_NOTNULL
 )
 RETURNS SETOF venue_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -396,7 +396,7 @@ CREATE OR REPLACE FUNCTION select_venues_by_user (
     p_user_id INTEGER_NOTNULL
 )
 RETURNS SETOF user_venue_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -429,7 +429,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION select_visits ()
 RETURNS SETOF visit_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -450,7 +450,7 @@ CREATE OR REPLACE FUNCTION select_visits_by_crawl_id (
     p_crawl_id INTEGER_NOTNULL
 )
 RETURNS SETOF crawl_visit_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -473,7 +473,7 @@ CREATE OR REPLACE FUNCTION select_visit (
     p_visit_id INTEGER_NOTNULL
 )
 RETURNS SETOF visit_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -495,7 +495,7 @@ CREATE OR REPLACE FUNCTION select_user_summary (
     p_user_id INTEGER
 )
 RETURNS SETOF user_summary_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -546,7 +546,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION select_user_counts ()
 RETURNS SETOF user_count_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -597,7 +597,7 @@ $$;
 
 CREATE OR REPLACE FUNCTION select_crawls ()
 RETURNS SETOF crawl_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 SELECT
@@ -637,7 +637,7 @@ CREATE OR REPLACE FUNCTION update_user (
     p_last_verify_request TIMESTAMP WITH TIME ZONE
 )
 RETURNS SETOF user_data
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 UPDATE app_user
@@ -666,7 +666,7 @@ CREATE OR REPLACE FUNCTION update_user_display_name (
     p_new_display_name TEXT
 )
 RETURNS VOID
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 UPDATE app_user
@@ -679,7 +679,7 @@ CREATE OR REPLACE FUNCTION update_user_last_verify_request (
     p_new_last_verify_request TIMESTAMP WITH TIME ZONE
 )
 RETURNS VOID
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 UPDATE app_user
@@ -691,7 +691,7 @@ CREATE OR REPLACE FUNCTION delete_user (
     p_user_id INTEGER
 )
 RETURNS VOID
-LANGUAGE sql
+LANGUAGE SQL
 AS
 $$
 DELETE FROM app_user
