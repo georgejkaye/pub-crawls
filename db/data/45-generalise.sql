@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS crawl (
 );
 
 INSERT INTO crawl (
-    crawl_id,
     crawl_name,
     crawl_dates,
     is_public,
@@ -16,7 +15,6 @@ INSERT INTO crawl (
     crawl_fg
 )
 VALUES (
-    1,
     'Real Ale Trail 2026',
     '[2026-03-01,2026-05-31]',
     't',
