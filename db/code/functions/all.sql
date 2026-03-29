@@ -131,31 +131,67 @@ CREATE OR REPLACE FUNCTION insert_venue (
     p_address TEXT,
     p_latitude DECIMAL,
     p_longitude DECIMAL,
-    p_crawl_ids INTEGER_NOTNULL[]
+    p_crawl_ids INTEGER_NOTNULL[],
+    p_facts venue_fact_data_notnull[]
 )
-RETURNS INTEGER
-LANGUAGE SQL
+RETURNS SETOF insert_venue_result
+LANGUAGE PLPGSQL
 AS
 $$
-INSERT INTO venue (
-    venue_name,
-    venue_address,
-    latitude,
-    longitude
-)
-VALUES (
-    p_venue_name,
-    p_address,
-    p_latitude,
-    p_longitude
-)
-ON CONFLICT (venue_name, venue_address) DO UPDATE
-SET
-    venue_name = p_venue_name,
-    venue_address = p_address,
-    latitude = p_latitude,
-    longitude = p_longitude
-RETURNING venue_id;
+DECLARE
+    v_venue_id INTEGER_NOTNULL := -1;
+BEGIN
+    IF EXISTS (
+        SELECT * FROM venue
+        WHERE venue_name = p_venue_name
+        AND venue_address = p_address
+    ) THEN
+        SELECT venue_id
+        INTO v_venue_id
+        FROM venue;
+    ELSE
+        INSERT INTO venue (
+            venue_name,
+            venue_address,
+            latitude,
+            longitude
+        )
+        VALUES (
+            p_venue_name,
+            p_address,
+            p_latitude,
+            p_longitude
+        )
+        ON CONFLICT (venue_name, venue_address) DO NOTHING
+        RETURNING venue_id INTO v_venue_id;
+    END IF;
+
+    INSERT INTO crawl_venue (
+        crawl_id,
+        venue_id
+    )
+    SELECT
+        v_crawl_id,
+        v_venue_id
+    FROM UNNEST(p_crawl_ids)
+    AS v_crawl_id
+    ON CONFLICT DO NOTHING;
+
+    INSERT INTO venue_fact (
+        venue_id,
+        fact_key,
+        fact_value
+    )
+    SELECT
+        v_venue_id,
+        v_fact.fact_key,
+        v_fact.fact_value
+    FROM UNNEST(p_facts)
+    AS v_fact
+    ON CONFLICT DO NOTHING;
+
+    RETURN QUERY SELECT v_venue_id;
+END;
 $$;
 
 CREATE OR REPLACE FUNCTION insert_venues (
@@ -169,30 +205,14 @@ DECLARE
     v_venue_id INTEGER_NOTNULL := -1;
 BEGIN
     FOR i IN 1 .. CARDINALITY(p_venues) LOOP
-        INSERT INTO venue (
-            venue_name,
-            venue_address,
-            latitude,
-            longitude
-        )
-        VALUES (
-            (p_venues[i]).venue_name,
-            (p_venues[i]).venue_address,
-            (p_venues[i]).latitude,
-            (p_venues[i]).longitude
-        )
-        ON CONFLICT (venue_name, venue_address) DO NOTHING
-        RETURNING venue_id INTO v_venue_id;
-
-        INSERT INTO crawl_venue (
-            crawl_id,
-            venue_id
-        )
-        SELECT
-            v_crawl_id,
-            v_venue_id
-        FROM UNNEST((p_venues[i]).crawl_ids)
-        AS v_crawl_id;
+        PERFORM insert_venue(
+            p_venues[i].venue_name,
+            p_venues[i].venue_address,
+            p_venues[i].latitude,
+            p_venues[i].longitude,
+            p_venues[i].crawl_ids,
+            p_venues[i].facts
+        );
     END LOOP;
 END;
 $$;

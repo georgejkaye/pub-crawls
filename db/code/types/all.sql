@@ -3,6 +3,8 @@ DROP TYPE IF EXISTS visit_crawl_data CASCADE;
 DROP TYPE IF EXISTS user_crawl_count_data CASCADE;
 DROP TYPE IF EXISTS user_count_data CASCADE;
 DROP TYPE IF EXISTS crawl_input_data CASCADE;
+DROP TYPE IF EXISTS venue_fact_data CASCADE;
+DROP DOMAIN IF EXISTS venue_fact_data_notnull CASCADE;
 DROP TYPE IF EXISTS venue_input_data CASCADE;
 DROP TYPE IF EXISTS venue_data CASCADE;
 DROP TYPE IF EXISTS crawl_venue_data CASCADE;
@@ -16,6 +18,7 @@ DROP TYPE IF EXISTS user_venue_data CASCADE;
 DROP TYPE IF EXISTS single_user_visit_data CASCADE;
 DROP TYPE IF EXISTS user_follow_data CASCADE;
 DROP TYPE IF EXISTS user_high_level_summary_data CASCADE;
+DROP TYPE IF EXISTS insert_venue_result CASCADE;
 DROP TYPE IF EXISTS insert_crawl_result CASCADE;
 DROP TYPE IF EXISTS insert_visit_result CASCADE;
 DROP TYPE IF EXISTS visit_data CASCADE;
@@ -68,12 +71,21 @@ CREATE TYPE crawl_input_data AS (
     crawl_fg TEXT
 );
 
+CREATE TYPE venue_fact_data AS (
+    fact_key TEXT_NOTNULL,
+    fact_value TEXT_NOTNULL
+);
+
+CREATE DOMAIN venue_fact_data_notnull
+AS venue_fact_data NOT NULL;
+
 CREATE TYPE venue_input_data AS (
     venue_name TEXT_NOTNULL,
     venue_address TEXT_NOTNULL,
     latitude DECIMAL_NOTNULL,
     longitude DECIMAL_NOTNULL,
-    crawl_ids INTEGER_NOTNULL[]
+    crawl_ids INTEGER_NOTNULL[],
+    facts venue_fact_data_notnull[]
 );
 
 CREATE TYPE venue_data AS (
@@ -166,6 +178,10 @@ CREATE TYPE user_count_data AS (
     user_id INTEGER_NOTNULL,
     display_name TEXT_NOTNULL,
     crawls user_crawl_count_data[]
+);
+
+CREATE TYPE insert_venue_result AS (
+    venue_id INTEGER_NOTNULL
 );
 
 CREATE TYPE insert_crawl_result AS (
