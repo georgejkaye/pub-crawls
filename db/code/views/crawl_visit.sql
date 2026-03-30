@@ -6,7 +6,14 @@ SELECT
     visit.user_id,
     visit.venue_id,
     visit.rating,
-    visit.visit_date
+    visit.visit_date,
+    row_number() OVER (
+        PARTITION BY
+            visit.user_id,
+            visit.venue_id,
+            crawl.crawl_id
+        ORDER BY visit_date
+    ) AS visit_no
 FROM crawl
 INNER JOIN crawl_venue
 ON crawl.crawl_id = crawl_venue.crawl_id

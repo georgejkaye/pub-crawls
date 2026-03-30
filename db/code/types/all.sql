@@ -6,6 +6,7 @@ DROP DOMAIN IF EXISTS user_venue_visit_data_notnull CASCADE;
 DROP DOMAIN IF EXISTS crawl_venue_short_data_notnull CASCADE;
 
 DROP TYPE IF EXISTS user_data CASCADE;
+DROP TYPE IF EXISTS user_visit_crawl_data CASCADE;
 DROP TYPE IF EXISTS visit_crawl_data CASCADE;
 DROP TYPE IF EXISTS venue_visit_data CASCADE;
 DROP TYPE IF EXISTS crawl_venue_visit_data CASCADE;
@@ -46,7 +47,8 @@ CREATE TYPE visit_crawl_data AS (
     crawl_id INTEGER_NOTNULL,
     crawl_name TEXT_NOTNULL,
     crawl_bg TEXT,
-    crawl_fg TEXT
+    crawl_fg TEXT,
+    visit_no INTEGER_NOTNULL
 );
 
 CREATE DOMAIN visit_crawl_data_notnull

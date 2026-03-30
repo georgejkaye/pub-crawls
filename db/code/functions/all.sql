@@ -672,7 +672,10 @@ LEFT JOIN (
             ARRAY_AGG(
                 (
                     crawl_visit.crawl_id,
-                    crawl.crawl_name
+                    crawl.crawl_name,
+                    crawl.crawl_bg,
+                    crawl.crawl_fg,
+                    crawl_visit.visit_no
                 )::visit_crawl_data
                 ORDER BY crawl_visit.crawl_id
             ) AS crawls

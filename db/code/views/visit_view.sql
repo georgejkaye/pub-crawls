@@ -18,21 +18,37 @@ INNER JOIN venue
 ON visit.venue_id = venue.venue_id
 INNER JOIN (
     SELECT
-        visit.visit_id,
+        crawl_detail.visit_id,
         ARRAY_AGG(
             (
-                crawl.crawl_id,
-                crawl.crawl_name,
-                crawl.crawl_bg,
-                crawl.crawl_fg
+                crawl_detail.crawl_id,
+                crawl_detail.crawl_name,
+                crawl_detail.crawl_bg,
+                crawl_detail.crawl_fg,
+                crawl_detail.visit_no
             )::visit_crawl_data
         ) AS crawls
-    FROM crawl
-    INNER JOIN crawl_venue
-    ON crawl.crawl_id = crawl_venue.crawl_id
-    INNER JOIN visit
-    ON visit.venue_id = crawl_venue.venue_id
-    AND visit.visit_date::date <@ crawl.crawl_dates
-    GROUP BY visit.visit_id
+    FROM (
+        SELECT
+            visit.visit_id,
+            crawl.crawl_id,
+            crawl.crawl_name,
+            crawl.crawl_bg,
+            crawl.crawl_fg,
+            ROW_NUMBER() OVER (
+                PARTITION BY
+                    visit.user_id,
+                    visit.venue_id,
+                    crawl.crawl_id
+                ORDER BY visit_date
+            ) AS visit_no
+        FROM crawl
+        INNER JOIN crawl_venue
+        ON crawl.crawl_id = crawl_venue.crawl_id
+        INNER JOIN visit
+        ON visit.venue_id = crawl_venue.venue_id
+        AND visit.visit_date::date <@ crawl.crawl_dates
+    ) crawl_detail
+    GROUP BY crawl_detail.visit_id
 ) visit_crawls
 ON visit.visit_id = visit_crawls.visit_id;
