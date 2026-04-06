@@ -9,6 +9,7 @@ from fastapi_users import FastAPIUsers
 import api.db.functions.all as db
 from api.db.functions.all import (
     insert_visit_fetchone,
+    select_crawl_by_crawl_id_fetchone,
     select_crawls_fetchall,
     select_user_counts_fetchall,
     select_user_summary_fetchone,
@@ -23,6 +24,7 @@ from api.db.functions.all import (
 )
 from api.db.types.all import (
     CrawlData,
+    CrawlSummaryData,
     CrawlVenueData,
     CrawlVisitData,
     SingleUserVisitData,
@@ -99,11 +101,23 @@ async def get_venue_by_id(
 
 @app.get(
     "/crawls",
-    summary="Get a list of crawls and their venues",
+    summary="Get a list of crawls",
     tags=["crawl"],
 )
-async def get_crawl() -> list[CrawlData]:
+async def get_crawls() -> list[CrawlSummaryData]:
     return select_crawls_fetchall(get_db_connection())
+
+
+@app.get(
+    "/crawls/{crawl_id}",
+    summary="Get details about a crawl",
+    tags=["crawl"],
+)
+async def get_crawl(crawl_id: int) -> CrawlData:
+    crawl = select_crawl_by_crawl_id_fetchone(get_db_connection(), crawl_id)
+    if crawl is None:
+        raise HTTPException(status_code=404)
+    return crawl
 
 
 @app.get(
