@@ -27,20 +27,22 @@ const UserCard = ({ user }: UserCardProps) => {
               <FaStar />
               <Link
                 className="hover:underline"
-                href={`/venues/${user.favourite_venue_id}`}
+                href={`/venues/${user.favourite_venue.venue_id}`}
               >
-                {user.favourite_venue}
+                {user.favourite_venue.venue_name}
               </Link>
             </div>
           )}
         </div>
         <div className="flex flex-row items-center gap-4">
           <div>
-            <span className="text-lg font-bold">{user.unique_visit_count}</span>{" "}
-            venues
+            <span className="text-lg font-bold">{user.venue_count}</span> venues
           </div>
           <div>
             <span className="text-lg font-bold">{user.visit_count}</span> visits
+          </div>
+          <div>
+            <span className="text-lg font-bold">{user.crawl_count}</span> crawls
           </div>
         </div>
       </div>
@@ -61,7 +63,7 @@ const Page = () => {
     <div className="w-full md:w-2/3 lg:w-1/2 p-4 flex flex-col gap-4 mx-auto">
       <h2 className="text-2xl font-bold">Users</h2>
       {users
-        .sort((a, b) => b.unique_visit_count - a.unique_visit_count)
+        .sort((a, b) => b.venue_count - a.venue_count)
         .map((user) => (
           <UserCard key={user.user_id} user={user} />
         ))}
