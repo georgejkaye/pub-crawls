@@ -11,15 +11,19 @@ import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
 import { getAverageRating, getDistanceToVenue, sortByName } from "@/app/utils"
 import { Venue } from "@/app/api/client"
+import { ClientContext } from "@/app/api/ReactQueryClientProvider"
+import { Loader } from "@/app/components/Loader"
 
 interface VenueCardProps {
   venue: Venue
   location: GeolocationPosition | undefined
+  filterCrawl: number | undefined
 }
 
-const VenueCard = ({ venue, location }: VenueCardProps) => {
-  const visitCount = venue.total_visits
-  const userCount = venue.users_visited
+const VenueCard = ({ venue, location, filterCrawl }: VenueCardProps) => {
+  const crawl = venue.crawls.find((crawl) => crawl.crawl_id === filterCrawl)
+  const visitCount = crawl ? crawl.visit_count : venue.total_visits
+  const userCount = crawl ? crawl.user_visit_count : venue.users_visited
   const venueAverageRating = venue.average_rating
   const distanceToVenue = location
     ? getDistanceToVenue(venue, location)
@@ -52,13 +56,19 @@ const VenueCard = ({ venue, location }: VenueCardProps) => {
 
 const Page = () => {
   const { venues } = useContext(VenuesContext)
+  const { client } = useContext(ClientContext)
+
+  const { data: crawls, isLoading: isLoadingCrawls } = client.useQuery(
+    "get",
+    "/crawls",
+  )
+
   const [location, setLocation] = useState<GeolocationPosition | undefined>(
     undefined,
   )
-  const [groupByArea, setGroupByArea] = useState(true)
-  const [filteredVenues, setFilteredVenues] = useState([...venues])
   const [searchValue, setSearchValue] = useState("")
   const [sortByValue, setSortByValue] = useState("name-asc")
+  const [filterCrawl, setFilterCrawl] = useState<number | undefined>(undefined)
 
   const nameAscendingSort = (a: Venue, b: Venue) =>
     sortByName(a.venue_name, b.venue_name)
@@ -114,56 +124,53 @@ const Page = () => {
     }
     getLocation()
   }, [])
-  useEffect(() => {
-    const getSortByFunction = () =>
-      sortByValue === "name-asc"
-        ? nameAscendingSort
-        : sortByValue === "name-desc"
-          ? nameDescendingSort
-          : sortByValue === "visits-asc"
-            ? visitsAscendingSort
-            : sortByValue === "visits-desc"
-              ? visitsDescendingSort
-              : sortByValue === "users-asc"
-                ? usersAscendingSort
-                : sortByValue === "users-desc"
-                  ? usersDescendingSort
-                  : sortByValue === "rating-asc"
-                    ? ratingAscendingSort
-                    : sortByValue === "rating-desc"
-                      ? ratingDescendingSort
-                      : sortByValue === "distance-asc"
-                        ? distanceAscendingSort
-                        : distanceDescendingSort
-    const filterAndSortVenues = (venueArray: Venue[]) =>
-      venueArray
-        .filter(
-          (venue) =>
-            (venue.venue_name &&
-              venue.venue_name
-                .toLowerCase()
-                .includes(searchValue.toLowerCase())) ||
-            (venue.venue_address &&
-              venue.venue_address
-                .toLowerCase()
-                .includes(searchValue.toLowerCase())),
-        )
-        .sort(getSortByFunction())
-    setFilteredVenues(filterAndSortVenues(venues))
-  }, [
-    searchValue,
-    venues,
-    sortByValue,
-    distanceAscendingSort,
-    distanceDescendingSort,
-  ])
-  const onChangeGroupByArea = (e: ChangeEvent<HTMLInputElement>) => {
-    setGroupByArea(e.target.checked)
-  }
+
+  const getSortByFunction = () =>
+    sortByValue === "name-asc"
+      ? nameAscendingSort
+      : sortByValue === "name-desc"
+        ? nameDescendingSort
+        : sortByValue === "visits-asc"
+          ? visitsAscendingSort
+          : sortByValue === "visits-desc"
+            ? visitsDescendingSort
+            : sortByValue === "users-asc"
+              ? usersAscendingSort
+              : sortByValue === "users-desc"
+                ? usersDescendingSort
+                : sortByValue === "rating-asc"
+                  ? ratingAscendingSort
+                  : sortByValue === "rating-desc"
+                    ? ratingDescendingSort
+                    : sortByValue === "distance-asc"
+                      ? distanceAscendingSort
+                      : distanceDescendingSort
+
+  const filteredVenues = venues
+    .filter(
+      (venue) =>
+        (!filterCrawl ||
+          venue.crawls.find((crawl) => crawl.crawl_id === filterCrawl) !==
+            undefined) &&
+        ((venue.venue_name &&
+          venue.venue_name.toLowerCase().includes(searchValue.toLowerCase())) ||
+          (venue.venue_address &&
+            venue.venue_address
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()))),
+    )
+    .sort(getSortByFunction())
+
   const onChangeSortBy = (e: ChangeEvent<HTMLSelectElement>) => {
     setSortByValue(e.target.value)
   }
-  return (
+  const onChangeFilterCrawl = (e: ChangeEvent<HTMLSelectElement>) => {
+    setFilterCrawl(e.target.value === "" ? undefined : Number(e.target.value))
+  }
+
+  return isLoadingCrawls ? (
+    <Loader />
+  ) : (
     <div className="flex flex-col gap-4 w-full md:w-2/3 lg:w-1/2 mx-auto p-4">
       <input
         type="text"
@@ -173,38 +180,51 @@ const Page = () => {
         onChange={(e) => setSearchValue(e.target.value)}
       />
       <div className="flex flex-row gap-8">
-        {/* <div className="flex flex-row gap-2 items-center">
-          <label htmlFor="group-by-area">Group by area</label>
-          <input
-            id="group-by-area"
-            type="checkbox"
-            checked={groupByArea}
-            onChange={onChangeGroupByArea}
-          />
-        </div> */}
-        <div className="flex flex-row gap-2 items-center">
-          <label htmlFor="sort-by">Sort by</label>
-          <select
-            className="border-1 rounded p-2 bg-white border-gray-400"
-            name="sort-by"
-            value={sortByValue}
-            onChange={onChangeSortBy}
-          >
-            <option value="name-asc">A-Z</option>
-            <option value="name-desc">Z-A</option>
-            <option value="visits-desc">Visits (high-low)</option>
-            <option value="visits-asc">Visits (low-high)</option>
-            <option value="users-desc">Users (high-low)</option>
-            <option value="users-asc">Users (low-high)</option>
-            <option value="rating-desc">Rating (high-low)</option>
-            <option value="rating-asc">Rating (low-high)</option>
-            {location && (
-              <>
-                <option value="distance-desc">Distance (high-low)</option>
-                <option value="distance-asc">Distance (low-high)</option>
-              </>
-            )}
-          </select>
+        <div className="flex flex-col md:flex-row gap-2">
+          <div className="flex flex-row items-center gap-2">
+            <label htmlFor="sort-by">Sort by</label>
+            <select
+              className="border-1 rounded p-2 bg-white border-gray-400"
+              name="sort-by"
+              value={sortByValue}
+              onChange={onChangeSortBy}
+            >
+              <option value="name-asc">A-Z</option>
+              <option value="name-desc">Z-A</option>
+              <option value="visits-desc">Visits (high-low)</option>
+              <option value="visits-asc">Visits (low-high)</option>
+              <option value="users-desc">Users (high-low)</option>
+              <option value="users-asc">Users (low-high)</option>
+              <option value="rating-desc">Rating (high-low)</option>
+              <option value="rating-asc">Rating (low-high)</option>
+              {location && (
+                <>
+                  <option value="distance-desc">Distance (high-low)</option>
+                  <option value="distance-asc">Distance (low-high)</option>
+                </>
+              )}
+            </select>
+          </div>
+          {crawls && (
+            <div className="flex flex-row items-center gap-2">
+              <label htmlFor="filter-crawl">Filter by crawl</label>
+              <select
+                className="border-1 rounded p-2 bg-white border-gray-400"
+                name="filter-crawl"
+                value={filterCrawl}
+                onChange={onChangeFilterCrawl}
+              >
+                <option key={"none"} value={""}>
+                  All crawls
+                </option>
+                {crawls.map((crawl) => (
+                  <option key={crawl.crawl_id} value={crawl.crawl_id}>
+                    {crawl.crawl_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       </div>
       {filteredVenues.map((venue) => (
@@ -212,6 +232,7 @@ const Page = () => {
           key={`venue-${venue.venue_id}`}
           venue={venue}
           location={location}
+          filterCrawl={filterCrawl}
         />
       ))}
     </div>
