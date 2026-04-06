@@ -673,7 +673,7 @@ LEFT JOIN (
                 crawl.crawl_bg,
                 crawl.crawl_fg,
                 crawl_venue_count.venue_count,
-                crawl_milestone_agg.milestones,
+                COALESCE(crawl_milestone_agg.milestones, ARRAY[]::INTEGER[]),
                 user_crawl_visit.venue_count
             )::single_user_crawl_data
         ) AS crawls
@@ -697,7 +697,7 @@ LEFT JOIN (
         GROUP BY crawl_venue.crawl_id
     ) crawl_venue_count
     ON crawl.crawl_id = crawl_venue_count.crawl_id
-    INNER JOIN (
+    LEFT JOIN (
         SELECT
             crawl_milestone.crawl_id,
             ARRAY_AGG(crawl_milestone.venues_required) AS milestones
