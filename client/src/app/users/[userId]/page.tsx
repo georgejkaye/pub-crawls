@@ -2,7 +2,7 @@
 import { UserSummaryContext } from "@/app/context/userSummary"
 import { Loader } from "@/app/components/Loader"
 import { useContext, useMemo, useState } from "react"
-import { Venue } from "@/app/api/client"
+import { SingleUserCrawl, SingleUserVisit, Venue } from "@/app/api/client"
 import { notFound } from "next/navigation"
 import { GeoJSON, Feature, GeoJsonProperties, Geometry } from "geojson"
 import { VenuesContext } from "@/app/context/venues"
@@ -17,7 +17,8 @@ import {
   ViewState,
 } from "@vis.gl/react-maplibre"
 import Pin from "@/app/components/Pin"
-import VisitCard from "@/app/components/VisitCard"
+import VisitCard, { getVisitCardUserHeader } from "@/app/components/VisitCard"
+import Link from "next/link"
 
 type InitMapViewProps = Partial<ViewState> & {
   bounds?: LngLatBoundsLike
@@ -89,6 +90,93 @@ const VenueMap = ({ venues, userVenueVisitIds }: VenueMapProps) => {
   )
 }
 
+interface CrawlCardProps {
+  crawl: SingleUserCrawl
+}
+
+const CrawlCard = ({ crawl }: CrawlCardProps) => {
+  const nextMilestone = crawl.milestones
+    .sort()
+    .find((milestone) => milestone > crawl.user_venues)
+  return (
+    <div
+      style={{
+        backgroundColor: crawl.crawl_fg ?? "#000000",
+        color: crawl.crawl_bg ?? "#ffffff",
+      }}
+      className="rounded-xl p-4 flex flex-column lg:flex-row lg:w-1/3"
+    >
+      <Link
+        className="font-bold flex-1 hover:underline"
+        href={`/crawls/${crawl.crawl_id}`}
+      >
+        {crawl.crawl_name}
+      </Link>
+      <div>
+        {crawl.user_venues}
+        {nextMilestone ? `/${nextMilestone}` : ""}
+      </div>
+    </div>
+  )
+}
+
+interface UserCrawlsProps {
+  crawls: SingleUserCrawl[]
+}
+
+const UserCrawls = ({ crawls }: UserCrawlsProps) => {
+  return (
+    <div className="flex flex-col gap-4">
+      <h2 className="font-bold text-lg">Crawls</h2>
+      <div className="flex flex-col lg:flex-row gap-2">
+        {crawls
+          .sort((a, b) =>
+            a.crawl_start == null || b.crawl_start == null
+              ? 0
+              : Date.parse(a.crawl_start) - Date.parse(b.crawl_start),
+          )
+          .map((crawl) => (
+            <CrawlCard key={crawl.crawl_id} crawl={crawl} />
+          ))}
+      </div>
+    </div>
+  )
+}
+
+interface UserVisitsProps {
+  userId: number
+  visits: SingleUserVisit[]
+}
+
+const UserVisits = ({ userId, visits }: UserVisitsProps) => {
+  return (
+    <div className="flex flex-col gap-4">
+      <h2 className="font-bold text-lg">Visits</h2>
+      {visits
+        .sort((a, b) =>
+          a.visit_date == null || b.visit_date == null
+            ? 0
+            : Date.parse(b.visit_date) - Date.parse(a.visit_date),
+        )
+        .map((visit) => (
+          <VisitCard
+            headers={[
+              getVisitCardUserHeader(
+                visit.venue_id,
+                visit.venue_name,
+                true,
+                true,
+              ),
+            ]}
+            key={visit.visit_id}
+            review={visit}
+            visitUserId={userId}
+          />
+        ))}
+    </div>
+  )
+}
+
 const Page = () => {
   const { userSummary, isLoadingUserSummary, isError } =
     useContext(UserSummaryContext)
@@ -126,27 +214,21 @@ const Page = () => {
               </span>{" "}
               visit{userSummary.visits.length === 1 ? "" : "s"}
             </div>
+            <div>
+              <span className="font-bold text-xl">
+                {userSummary.crawls.length}
+              </span>{" "}
+              crawl{userSummary.crawls.length === 1 ? "" : "s"}
+            </div>
           </div>
           {venues && venues.length > 0 && (
             <VenueMap venues={venues} userVenueVisitIds={userVenueVisitIds} />
           )}
-          <div className="flex flex-col gap-4">
-            {userSummary.visits
-              .sort((a, b) =>
-                a.visit_date == null || b.visit_date == null
-                  ? 0
-                  : Date.parse(b.visit_date) - Date.parse(a.visit_date),
-              )
-              .map((visit) => (
-                <VisitCard
-                  key={visit.visit_id}
-                  title={visit.venue_name}
-                  titleHref={`/venues/${visit.venue_id}`}
-                  review={visit}
-                  visitUserId={userSummary.user_id}
-                />
-              ))}
-          </div>
+          <UserCrawls crawls={userSummary.crawls} />
+          <UserVisits
+            userId={userSummary.user_id}
+            visits={userSummary.visits}
+          />
         </div>
       )}
     </div>
