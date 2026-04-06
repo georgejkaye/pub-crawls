@@ -357,23 +357,17 @@ LEFT JOIN (
                 UPPER(crawl.crawl_dates),
                 crawl.crawl_bg,
                 crawl.crawl_fg,
-                COALESCE(crawl_visit_count.visit_count, 0),
-                COALESCE(crawl_visit_count.user_visit_count, 0)
+                COALESCE(crawl_visit_count_view.visit_count, 0),
+                COALESCE(crawl_visit_count_view.user_visit_count, 0)
             )::venue_crawl_data
             ORDER BY crawl.crawl_dates
         ) AS crawls
     FROM crawl_venue
     INNER JOIN crawl
     ON crawl_venue.crawl_id = crawl.crawl_id
-    LEFT JOIN (
-        SELECT
-            crawl_visit.crawl_id,
-            COUNT(crawl_visit.visit_id) AS visit_count,
-            COUNT(DISTINCT crawl_visit.user_id) AS user_visit_count
-        FROM crawl_visit
-        GROUP BY crawl_visit.crawl_id
-    ) crawl_visit_count
-    ON crawl.crawl_id = crawl_visit_count.crawl_id
+    LEFT JOIN crawl_visit_count_view
+    ON crawl_venue.crawl_id = crawl_visit_count_view.crawl_id
+    AND crawl_venue.venue_id = crawl_visit_count_view.venue_id
     LEFT JOIN crawl_user
     ON crawl.crawl_id = crawl_user.crawl_id
     WHERE p_user_id IS NULL OR crawl_user.user_id = p_user_id
@@ -477,12 +471,17 @@ LEFT JOIN (
                 LOWER(crawl.crawl_dates),
                 UPPER(crawl.crawl_dates),
                 crawl.crawl_bg,
-                crawl.crawl_fg
+                crawl.crawl_fg,
+                crawl_visit_count_view.visit_count,
+                crawl_visit_count_view.user_visit_count
             )::venue_crawl_data
         ) AS crawls
     FROM crawl_venue
     INNER JOIN crawl
     ON crawl_venue.crawl_id = crawl.crawl_id
+    LEFT JOIN crawl_visit_count_view
+    ON crawl_venue.crawl_id = crawl_visit_count_view.crawl_id
+    AND crawl_venue.venue_id = crawl_visit_count_view.venue_id
     LEFT JOIN crawl_user
     ON crawl.crawl_id = crawl_user.crawl_id
     WHERE p_user_id IS NULL OR crawl_user.user_id = p_user_id
@@ -550,12 +549,17 @@ LEFT JOIN (
                 LOWER(crawl.crawl_dates),
                 UPPER(crawl.crawl_dates),
                 crawl.crawl_bg,
-                crawl.crawl_fg
+                crawl.crawl_fg,
+                crawl_visit_count_view.visit_count,
+                crawl_visit_count_view.user_visit_count
             )::venue_crawl_data
         ) AS crawls
     FROM crawl_venue
     INNER JOIN crawl
     ON crawl_venue.crawl_id = crawl.crawl_id
+    LEFT JOIN crawl_visit_count_view
+    ON crawl_venue.crawl_id = crawl_visit_count_view.crawl_id
+    AND crawl_venue.venue_id = crawl_visit_count_view.venue_id
     LEFT JOIN crawl_user
     ON crawl.crawl_id = crawl_user.crawl_id
     WHERE p_user_id IS NULL OR crawl_user.user_id = p_user_id
