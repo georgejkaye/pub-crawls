@@ -16,7 +16,7 @@ import { Feature } from "geojson"
 import { notFound, useRouter } from "next/navigation"
 import { useContext, useRef } from "react"
 import { VenueCrawl, VenueVisit } from "@/app/api/client"
-import VisitCard from "@/app/components/VisitCard"
+import VisitCard, { getVisitCardUserHeader } from "@/app/components/VisitCard"
 import { getAverageRating } from "@/app/utils"
 
 interface VenueCrawlCardProps {
@@ -204,8 +204,14 @@ const Page = () => {
               {venue.visits.map((visit) => (
                 <VisitCard
                   key={visit.visit_id}
-                  title={visit.user_display_name}
-                  titleHref={`/users/${visit.user_id}`}
+                  headers={[
+                    getVisitCardUserHeader(
+                      visit.user_id,
+                      visit.user_display_name,
+                      true,
+                      true,
+                    ),
+                  ]}
                   review={visit}
                   visitUserId={visit.user_id}
                 />

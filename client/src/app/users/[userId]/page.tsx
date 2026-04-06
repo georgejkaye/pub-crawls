@@ -115,10 +115,10 @@ const Page = () => {
           <div className="flex flex-row gap-4">
             <div>
               <span className="font-bold text-xl">
-                {userVenueVisitIds.length}
+                {userSummary.venue_count}
               </span>{" "}
               venue
-              {userVenueVisitIds.length === 1 ? "" : "s"}
+              {userSummary.venue_count === 1 ? "" : "s"}
             </div>
             <div>
               <span className="font-bold text-xl">
