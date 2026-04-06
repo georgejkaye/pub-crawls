@@ -18,6 +18,15 @@ CREATE TABLE crawl (
     crawl_fg TEXT
 );
 
+CREATE TABLE crawl_milestone (
+    crawl_milestone_id SERIAL PRIMARY KEY,
+    crawl_id INTEGER NOT NULL,
+    venues_required INTEGER NOT NULL,
+    reward TEXT_NOTNULL,
+    FOREIGN KEY (crawl_id) REFERENCES crawl(crawl_id),
+    UNIQUE (crawl_id, venues_required)
+);
+
 CREATE TABLE crawl_special_venue_type (
     crawl_special_venue_type_id SERIAL PRIMARY KEY,
     crawl_id INTEGER NOT NULL,

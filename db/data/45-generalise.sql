@@ -22,6 +22,27 @@ VALUES (
     '#282e54'
 );
 
+CREATE TABLE IF NOT EXISTS crawl_milestone (
+    crawl_milestone_id SERIAL PRIMARY KEY,
+    crawl_id INTEGER NOT NULL,
+    venues_required INTEGER NOT NULL,
+    reward TEXT_NOTNULL,
+    FOREIGN KEY (crawl_id) REFERENCES crawl(crawl_id),
+    UNIQUE (crawl_id, venues_required)
+);
+
+INSERT INTO crawl_milestone (
+    crawl_id,
+    venues_required,
+    reward
+)
+SELECT
+    crawl_id,
+    25,
+    'Rugby shirt, £25 BCA voucher'
+FROM crawl
+WHERE crawl_name = 'Real Ale Trail 2026';
+
 CREATE TABLE IF NOT EXISTS crawl_special_venue_type (
     crawl_special_venue_type_id SERIAL PRIMARY KEY,
     crawl_id INTEGER NOT NULL,
