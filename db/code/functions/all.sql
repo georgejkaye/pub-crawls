@@ -852,6 +852,59 @@ ORDER BY app_user.user_id;
 $$;
 
 CREATE OR REPLACE FUNCTION select_crawls ()
+RETURNS SETOF crawl_summary_data
+LANGUAGE SQL
+AS
+$$
+SELECT
+    crawl.crawl_id,
+    crawl.crawl_name,
+    LOWER(crawl.crawl_dates) AS crawl_start,
+    UPPER(crawl.crawl_dates) AS crawl_end,
+    crawl.is_public,
+    crawl.crawl_bg,
+    crawl.crawl_fg,
+    COALESCE(crawl_venue_count.venue_count, 0) AS venue_count,
+    COALESCE(crawl_visit_count.visit_count, 0) AS visit_count,
+    COALESCE(crawl_visit_count.user_count, 0) AS user_count,
+    COALESCE(
+        crawl_milestone_agg.milestones,
+        ARRAY[]::INTEGER_NOTNULL[]
+    ) AS milestones
+FROM crawl
+LEFT JOIN (
+    SELECT
+        crawl_venue.crawl_id,
+        COUNT(crawl_venue.venue_id) AS venue_count
+    FROM crawl_venue
+    GROUP BY crawl_venue.crawl_id
+) crawl_venue_count
+ON crawl.crawl_id = crawl_venue_count.crawl_id
+LEFT JOIN (
+    SELECT
+        crawl_visit.crawl_id,
+        COUNT(crawl_visit.visit_id) AS visit_count,
+        COUNT(DISTINCT crawl_visit.user_id) AS user_count
+    FROM crawl_visit
+    GROUP BY crawl_visit.crawl_id
+) crawl_visit_count
+ON crawl.crawl_id = crawl_visit_count.crawl_id
+LEFT JOIN (
+    SELECT
+        crawl_milestone.crawl_id,
+        ARRAY_AGG(
+            crawl_milestone.venues_required
+            ORDER BY crawl_milestone.venues_required
+        ) AS milestones
+    FROM crawl_milestone
+    GROUP BY crawl_milestone.crawl_id
+) crawl_milestone_agg
+ON crawl.crawl_id = crawl_milestone_agg.crawl_id;
+$$;
+
+CREATE OR REPLACE FUNCTION select_crawl_by_crawl_id(
+    p_crawl_id INTEGER_NOTNULL
+)
 RETURNS SETOF crawl_data
 LANGUAGE SQL
 AS
@@ -864,23 +917,77 @@ SELECT
     crawl.is_public,
     crawl.crawl_bg,
     crawl.crawl_fg,
-    crawl_venue_agg.venues
+    COALESCE(crawl_venue_count.venue_count, 0) AS venue_count,
+    COALESCE(crawl_visit_count.visit_count, 0) AS visit_count,
+    COALESCE(crawl_visit_count.user_count, 0) AS user_count,
+    COALESCE(
+        crawl_milestone_agg.milestones,
+        ARRAY[]::INTEGER_NOTNULL[]
+    ) AS milestones
 FROM crawl
-INNER JOIN (
+LEFT JOIN (
+    SELECT
+        crawl_venue.crawl_id,
+        COUNT(crawl_venue.venue_id) AS venue_count
+    FROM crawl_venue
+    GROUP BY crawl_venue.crawl_id
+) crawl_venue_count
+ON crawl.crawl_id = crawl_venue_count.crawl_id
+LEFT JOIN (
+    SELECT
+        crawl_visit.crawl_id,
+        COUNT(crawl_visit.visit_id) AS visit_count,
+        COUNT(DISTINCT crawl_visit.user_id) AS user_count
+    FROM crawl_visit
+    GROUP BY crawl_visit.crawl_id
+) crawl_visit_count
+ON crawl.crawl_id = crawl_visit_count.crawl_id
+LEFT JOIN (
+    SELECT
+        crawl_milestone.crawl_id,
+        ARRAY_AGG(
+            crawl_milestone.venues_required
+            ORDER BY crawl_milestone.venues_required
+        ) AS milestones
+    FROM crawl_milestone
+    GROUP BY crawl_milestone.crawl_id
+) crawl_milestone_agg
+ON crawl.crawl_id = crawl_milestone_agg.crawl_id
+LEFT JOIN (
     SELECT
         crawl_venue.crawl_id,
         ARRAY_AGG(
             (
-                venue.venue_id,
-                venue.venue_name
-            )::crawl_venue_short_data
-        ) AS venues
+                crawl_venue.venue_id,
+                venue.venue_name,
+                venue.venue_address,
+                venue.latitude,
+                venue.longitude,
+                venue_visit_count.visit_count,
+                venue_visit_count.user_count
+            )::crawl_venue_summary_data
+            ORDER BY venue.venue_name
+        )
     FROM crawl_venue
     INNER JOIN venue
     ON crawl_venue.venue_id = venue.venue_id
+    INNER JOIN (
+        SELECT
+            crawl_visit.crawl_id,
+            crawl_visit.venue_id,
+            COUNT(crawl_visit.visit_id) AS visit_count,
+            COUNT(DISTINCT crawl_visit.user_id) AS user_count
+        FROM crawl_visit
+        GROUP BY
+            crawl_visit.crawl_id,
+            crawl_visit.venue_id
+    ) venue_visit_count
+    ON crawl_venue.venue_id = venue_visit_count.venue_id
+    AND crawl_venue.crawl_id = venue_visit_count.crawl_id
     GROUP BY crawl_venue.crawl_id
 ) crawl_venue_agg
-ON crawl.crawl_id = crawl_venue_agg.crawl_id;
+ON crawl.crawl_id = crawl_venue_agg.crawl_id
+WHERE crawl.crawl_id = p_crawl_id;
 $$;
 
 CREATE OR REPLACE FUNCTION update_user (

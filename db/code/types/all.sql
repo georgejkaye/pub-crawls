@@ -4,6 +4,7 @@ DROP DOMAIN IF EXISTS venue_crawl_data_notnull CASCADE;
 DROP DOMAIN IF EXISTS venue_fact_data_notnull CASCADE;
 DROP DOMAIN IF EXISTS user_venue_visit_data_notnull CASCADE;
 DROP DOMAIN IF EXISTS crawl_venue_short_data_notnull CASCADE;
+DROP DOMAIN IF EXISTS crawl_venue_summary_data_notnull CASCADE;
 
 DROP TYPE IF EXISTS user_data CASCADE;
 DROP TYPE IF EXISTS user_visit_crawl_data CASCADE;
@@ -16,6 +17,7 @@ DROP TYPE IF EXISTS venue_fact_data CASCADE;
 DROP TYPE IF EXISTS venue_input_data CASCADE;
 DROP TYPE IF EXISTS venue_data CASCADE;
 DROP TYPE IF EXISTS single_venue_data CASCADE;
+DROP TYPE IF EXISTS crawl_venue_summary_data CASCADE;
 DROP TYPE IF EXISTS crawl_venue_data CASCADE;
 DROP TYPE IF EXISTS user_visit_data CASCADE;
 DROP TYPE IF EXISTS crawl_visit_data CASCADE;
@@ -31,6 +33,7 @@ DROP TYPE IF EXISTS insert_venue_result CASCADE;
 DROP TYPE IF EXISTS insert_crawl_result CASCADE;
 DROP TYPE IF EXISTS insert_visit_result CASCADE;
 DROP TYPE IF EXISTS visit_data CASCADE;
+DROP TYPE IF EXISTS crawl_summary_data CASCADE;
 DROP TYPE IF EXISTS crawl_venue_short_data CASCADE;
 DROP TYPE IF EXISTS crawl_data CASCADE;
 
@@ -153,6 +156,9 @@ CREATE TYPE crawl_venue_data AS (
     visits crawl_venue_visit_data[]
 );
 
+CREATE DOMAIN crawl_venue_data_notnull
+AS crawl_venue_data NOT NULL;
+
 CREATE TYPE user_visit_data AS (
     visit_id INTEGER_NOTNULL,
     user_id INTEGER_NOTNULL,
@@ -177,6 +183,9 @@ CREATE TYPE crawl_visit_data AS (
     rating INTEGER,
     drink TEXT
 );
+
+CREATE DOMAIN crawl_visit_data_notnull
+AS crawl_visit_data NOT NULL;
 
 CREATE TYPE user_venue_visit_data AS (
     visit_id INTEGER_NOTNULL,
@@ -281,13 +290,32 @@ CREATE TYPE visit_data AS (
     crawls visit_crawl_data_notnull[]
 );
 
-CREATE TYPE crawl_venue_short_data AS (
-    venue_id INTEGER_NOTNULL,
-    venue_name TEXT_NOTNULL
+CREATE TYPE crawl_summary_data AS (
+    crawl_id INTEGER_NOTNULL,
+    crawl_name TEXT_NOTNULL,
+    crawl_start TIMESTAMP WITH TIME ZONE,
+    crawl_end TIMESTAMP WITH TIME ZONE,
+    is_public BOOLEAN_NOTNULL,
+    crawl_bg TEXT,
+    crawl_fg TEXT,
+    venue_count INTEGER_NOTNULL,
+    visit_count INTEGER_NOTNULL,
+    user_count INTEGER_NOTNULL,
+    milestones INTEGER_NOTNULL[]
 );
 
-CREATE DOMAIN crawl_venue_short_data_notnull
-AS crawl_venue_short_data NOT NULL;
+CREATE TYPE crawl_venue_summary_data AS (
+    venue_id INTEGER_NOTNULL,
+    venue_name TEXT_NOTNULL,
+    venue_address TEXT_NOTNULL,
+    latitude DECIMAL_NOTNULL,
+    longitude DECIMAL_NOTNULL,
+    visit_count INTEGER_NOTNULL,
+    user_count INTEGER_NOTNULL
+);
+
+CREATE DOMAIN crawl_venue_summary_data_notnull
+AS crawl_venue_summary_data NOT NULL;
 
 CREATE TYPE crawl_data AS (
     crawl_id INTEGER_NOTNULL,
@@ -297,5 +325,9 @@ CREATE TYPE crawl_data AS (
     is_public BOOLEAN_NOTNULL,
     crawl_bg TEXT,
     crawl_fg TEXT,
-    venues crawl_venue_short_data_notnull[]
+    venue_count INTEGER_NOTNULL,
+    visit_count INTEGER_NOTNULL,
+    user_count INTEGER_NOTNULL,
+    venues crawl_venue_summary_data_notnull[],
+    visits crawl_visit_data_notnull[]
 );
