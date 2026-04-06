@@ -21,8 +21,10 @@ DROP TYPE IF EXISTS user_visit_data CASCADE;
 DROP TYPE IF EXISTS crawl_visit_data CASCADE;
 DROP TYPE IF EXISTS user_venue_visit_data CASCADE;
 DROP TYPE IF EXISTS user_venue_data CASCADE;
+DROP TYPE IF EXISTS single_user_crawl_data CASCADE;
 DROP TYPE IF EXISTS single_user_visit_data CASCADE;
 DROP TYPE IF EXISTS user_summary_data CASCADE;
+DROP TYPE IF EXISTS user_favourite_venue_data CASCADE;
 DROP TYPE IF EXISTS user_crawl_count_data CASCADE;
 DROP TYPE IF EXISTS user_count_data CASCADE;
 DROP TYPE IF EXISTS insert_venue_result CASCADE;
@@ -207,10 +209,31 @@ CREATE TYPE single_user_visit_data AS (
     crawls visit_crawl_data_notnull[]
 );
 
+CREATE TYPE single_user_crawl_data AS (
+    crawl_id INTEGER_NOTNULL,
+    crawl_name TEXT_NOTNULL,
+    crawl_start TIMESTAMP WITH TIME ZONE,
+    crawl_end TIMESTAMP WITH TIME ZONE,
+    crawl_bg TEXT,
+    crawl_fg TEXT,
+    total_venues INTEGER_NOTNULL,
+    milestones INTEGER_NOTNULL[],
+    user_venues INTEGER_NOTNULL
+);
+
 CREATE TYPE user_summary_data AS (
     user_id INTEGER_NOTNULL,
     display_name TEXT_NOTNULL,
+    visit_count INTEGER_NOTNULL,
+    venue_count INTEGER_NOTNULL,
+    crawl_count INTEGER_NOTNULL,
+    crawls single_user_crawl_data[],
     visits single_user_visit_data[]
+);
+
+CREATE TYPE user_favourite_venue_data AS (
+    venue_id INTEGER_NOTNULL,
+    venue_name TEXT_NOTNULL
 );
 
 CREATE TYPE user_crawl_count_data AS (
@@ -218,12 +241,16 @@ CREATE TYPE user_crawl_count_data AS (
     crawl_name TEXT_NOTNULL,
     visit_count INTEGER_NOTNULL,
     unique_visit_count INTEGER_NOTNULL,
-    favourite_venue TEXT
+    favourite_venue user_favourite_venue_data
 );
 
 CREATE TYPE user_count_data AS (
     user_id INTEGER_NOTNULL,
     display_name TEXT_NOTNULL,
+    visit_count INTEGER_NOTNULL,
+    venue_count INTEGER_NOTNULL,
+    crawl_count INTEGER_NOTNULL,
+    favourite_venue user_favourite_venue_data,
     crawls user_crawl_count_data[]
 );
 

@@ -1,8 +1,11 @@
+DROP VIEW user_crawl_favourite;
+
 CREATE OR REPLACE VIEW user_crawl_favourite
 AS
 SELECT
     user_favourite_id.user_id,
     user_favourite_id.crawl_id,
+    venue.venue_id,
     venue.venue_name
 FROM (
     SELECT

@@ -645,8 +645,69 @@ $$
 SELECT
     app_user.user_id,
     app_user.display_name,
-    COALESCE(user_visit.visits, ARRAY[]::single_user_visit_data[])
+    user_count.visit_count,
+    user_count.venue_count,
+    user_count.crawl_count,
+    COALESCE(user_crawl.crawls, ARRAY[]::single_user_crawl_data[]) AS crawls,
+    COALESCE(user_visit.visits, ARRAY[]::single_user_visit_data[]) AS visits
 FROM app_user
+LEFT JOIN (
+    SELECT
+        crawl_visit.user_id,
+        COUNT(crawl_visit.visit_id) AS visit_count,
+        COUNT(DISTINCT crawl_visit.venue_id) AS venue_count,
+        COUNT(DISTINCT crawl_visit.crawl_id) AS crawl_count
+    FROM crawl_visit
+    GROUP BY crawl_visit.user_id
+) user_count
+ON app_user.user_id = user_count.user_id
+LEFT JOIN (
+    SELECT
+        user_crawl_visit.user_id,
+        ARRAY_AGG(
+            (
+                crawl.crawl_id,
+                crawl.crawl_name,
+                LOWER(crawl.crawl_dates),
+                UPPER(crawl.crawl_dates),
+                crawl.crawl_bg,
+                crawl.crawl_fg,
+                crawl_venue_count.venue_count,
+                crawl_milestone_agg.milestones,
+                user_crawl_visit.venue_count
+            )::single_user_crawl_data
+        ) AS crawls
+    FROM (
+        SELECT DISTINCT
+            crawl_visit.user_id,
+            crawl_visit.crawl_id,
+            COUNT(DISTINCT crawl_visit.venue_id) AS venue_count
+        FROM crawl_visit
+        GROUP BY
+            crawl_visit.user_id,
+            crawl_visit.crawl_id
+    ) user_crawl_visit
+    INNER JOIN crawl
+    ON user_crawl_visit.crawl_id = crawl.crawl_id
+    INNER JOIN (
+        SELECT
+            crawl_venue.crawl_id,
+            COUNT(crawl_venue.venue_id) AS venue_count
+        FROM crawl_venue
+        GROUP BY crawl_venue.crawl_id
+    ) crawl_venue_count
+    ON crawl.crawl_id = crawl_venue_count.crawl_id
+    INNER JOIN (
+        SELECT
+            crawl_milestone.crawl_id,
+            ARRAY_AGG(crawl_milestone.venues_required) AS milestones
+        FROM crawl_milestone
+        GROUP BY crawl_milestone.crawl_id
+    ) crawl_milestone_agg
+    ON crawl.crawl_id = crawl_milestone_agg.crawl_id
+    GROUP BY user_crawl_visit.user_id
+) user_crawl
+ON app_user.user_id = user_crawl.user_id
 LEFT JOIN (
     SELECT
         visit.user_id,
@@ -699,11 +760,37 @@ $$
 SELECT
     app_user.user_id,
     app_user.display_name,
-    user_crawl_agg.crawls
+    COALESCE(user_visit_count.visits, 0) AS visit_count,
+    COALESCE(user_visit_count.venues, 0) AS visit_count,
+    COALESCE(user_crawl_agg.crawl_count, 0) AS crawl_count,
+    CASE
+        WHEN user_favourite.venue_id IS NULL
+        THEN NULL
+        ELSE (
+            user_favourite.venue_id,
+            user_favourite.venue_name
+        )::user_favourite_venue_data
+    END AS favourite_venue,
+    COALESCE(
+        user_crawl_agg.crawls,
+        ARRAY[]::user_crawl_count_data[]
+    ) AS crawls
 FROM app_user
 LEFT JOIN (
     SELECT
+        visit.user_id,
+        COUNT(visit.visit_id) AS visits,
+        COUNT(DISTINCT visit.venue_id) AS venues
+    FROM visit
+    GROUP BY visit.user_id
+) user_visit_count
+ON app_user.user_id = user_visit_count.user_id
+LEFT JOIN user_favourite
+ON app_user.user_id = user_favourite.user_id
+LEFT JOIN (
+    SELECT
         user_crawl.user_id,
+        COUNT(user_crawl.crawl_id) AS crawl_count,
         ARRAY_AGG(
             (
                 user_crawl.crawl_id,
@@ -720,7 +807,14 @@ LEFT JOIN (
             crawl.crawl_name,
             user_crawl_count.visit_count,
             user_crawl_count.unique_visit_count,
-            user_crawl_favourite.venue_name AS favourite_venue
+            CASE
+                WHEN user_crawl_favourite.venue_id IS NULL
+                THEN NULL
+                ELSE (
+                    user_crawl_favourite.venue_id,
+                    user_crawl_favourite.venue_name
+                )::user_favourite_venue_data
+            END AS favourite_venue
         FROM (
             SELECT
                 crawl_visit.user_id,
