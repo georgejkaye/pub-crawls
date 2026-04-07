@@ -22,7 +22,7 @@ CREATE TABLE crawl_milestone (
     crawl_milestone_id SERIAL PRIMARY KEY,
     crawl_id INTEGER NOT NULL,
     venues_required INTEGER NOT NULL,
-    reward TEXT_NOTNULL,
+    reward TEXT,
     FOREIGN KEY (crawl_id) REFERENCES crawl(crawl_id),
     UNIQUE (crawl_id, venues_required)
 );
