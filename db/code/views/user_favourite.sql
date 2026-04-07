@@ -1,4 +1,4 @@
-DROP VIEW user_favourite;
+DROP VIEW IF EXISTS user_favourite;
 
 CREATE OR REPLACE VIEW user_favourite
 AS

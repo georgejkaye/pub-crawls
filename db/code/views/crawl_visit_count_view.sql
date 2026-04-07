@@ -1,4 +1,4 @@
-DROP VIEW crawl_visit_count_view;
+DROP VIEW IF EXISTS crawl_visit_count_view;
 
 CREATE OR REPLACE VIEW crawl_visit_count_view
 AS
