@@ -325,6 +325,7 @@ CREATE TYPE crawl_data AS (
     is_public BOOLEAN_NOTNULL,
     crawl_bg TEXT,
     crawl_fg TEXT,
+    milestones INTEGER_NOTNULL[],
     venue_count INTEGER_NOTNULL,
     visit_count INTEGER_NOTNULL,
     user_count INTEGER_NOTNULL,

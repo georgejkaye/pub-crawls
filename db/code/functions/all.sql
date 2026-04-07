@@ -14,6 +14,7 @@ DROP FUNCTION IF EXISTS select_visit;
 DROP FUNCTION IF EXISTS select_user_summary;
 DROP FUNCTION IF EXISTS select_user_counts;
 DROP FUNCTION IF EXISTS update_user;
+
 DROP FUNCTION IF EXISTS update_user_display_name;
 DROP FUNCTION IF EXISTS delete_user;
 
@@ -917,13 +918,21 @@ SELECT
     crawl.is_public,
     crawl.crawl_bg,
     crawl.crawl_fg,
+    COALESCE(
+        crawl_milestone_agg.milestones,
+        ARRAY[]::INTEGER_NOTNULL[]
+    ) AS milestones,
     COALESCE(crawl_venue_count.venue_count, 0) AS venue_count,
     COALESCE(crawl_visit_count.visit_count, 0) AS visit_count,
     COALESCE(crawl_visit_count.user_count, 0) AS user_count,
     COALESCE(
-        crawl_milestone_agg.milestones,
-        ARRAY[]::INTEGER_NOTNULL[]
-    ) AS milestones
+        crawl_venue_agg.venues,
+        ARRAY[]::crawl_venue_summary_data[]
+    ) AS venues,
+    COALESCE(
+        crawl_visit_agg.visits,
+        ARRAY[]::crawl_visit_data[]
+    ) AS visits
 FROM crawl
 LEFT JOIN (
     SELECT
@@ -963,15 +972,15 @@ LEFT JOIN (
                 venue.venue_address,
                 venue.latitude,
                 venue.longitude,
-                venue_visit_count.visit_count,
-                venue_visit_count.user_count
+                COALESCE(venue_visit_count.visit_count, 0),
+                COALESCE(venue_visit_count.user_count, 0)
             )::crawl_venue_summary_data
             ORDER BY venue.venue_name
-        )
+        ) AS venues
     FROM crawl_venue
     INNER JOIN venue
     ON crawl_venue.venue_id = venue.venue_id
-    INNER JOIN (
+    LEFT JOIN (
         SELECT
             crawl_visit.crawl_id,
             crawl_visit.venue_id,
@@ -987,6 +996,32 @@ LEFT JOIN (
     GROUP BY crawl_venue.crawl_id
 ) crawl_venue_agg
 ON crawl.crawl_id = crawl_venue_agg.crawl_id
+LEFT JOIN (
+    SELECT
+        crawl_visit.crawl_id,
+        ARRAY_AGG(
+            (
+                crawl_visit.visit_id,
+                crawl_visit.user_id,
+                app_user.display_name,
+                crawl_visit.venue_id,
+                venue.venue_name,
+                crawl_visit.visit_date,
+                visit.notes,
+                visit.rating,
+                visit.drink
+            )::crawl_visit_data_notnull
+        ) AS visits
+    FROM crawl_visit
+    INNER JOIN app_user
+    ON crawl_visit.user_id = app_user.user_id
+    INNER JOIN venue
+    ON crawl_visit.venue_id = venue.venue_id
+    INNER JOIN visit
+    ON crawl_visit.visit_id = visit.visit_id
+    GROUP BY crawl_visit.crawl_id
+) crawl_visit_agg
+ON crawl.crawl_id = crawl_visit_agg.crawl_id
 WHERE crawl.crawl_id = p_crawl_id;
 $$;
 
