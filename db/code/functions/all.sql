@@ -473,8 +473,8 @@ LEFT JOIN (
                 UPPER(crawl.crawl_dates),
                 crawl.crawl_bg,
                 crawl.crawl_fg,
-                crawl_visit_count_view.visit_count,
-                crawl_visit_count_view.user_visit_count
+                COALESCE(crawl_visit_count_view.visit_count, 0),
+                COALESCE(crawl_visit_count_view.user_visit_count, 0)
             )::venue_crawl_data
         ) AS crawls
     FROM crawl_venue
