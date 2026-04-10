@@ -4,91 +4,10 @@ import { Loader } from "@/app/components/Loader"
 import { useContext, useMemo, useState } from "react"
 import { SingleUserCrawl, SingleUserVisit, Venue } from "@/app/api/client"
 import { notFound } from "next/navigation"
-import { GeoJSON, Feature, GeoJsonProperties, Geometry } from "geojson"
 import { VenuesContext } from "@/app/context/venues"
-import bbox from "@turf/bbox"
-import {
-  LngLatBoundsLike,
-  Map,
-  Marker,
-  PaddingOptions,
-  PointLike,
-  Source,
-  ViewState,
-} from "@vis.gl/react-maplibre"
-import Pin from "@/app/components/Pin"
 import VisitCard, { getVisitCardUserHeader } from "@/app/components/VisitCard"
 import Link from "next/link"
-
-type InitMapViewProps = Partial<ViewState> & {
-  bounds?: LngLatBoundsLike
-  fitBoundsOptions?: {
-    offset?: PointLike
-    minZoom?: number
-    maxZoom?: number
-    padding?: number | PaddingOptions
-  }
-}
-
-interface VenueMapProps {
-  venues: Venue[]
-  userVenueVisitIds: number[]
-}
-
-const VenueMap = ({ venues, userVenueVisitIds }: VenueMapProps) => {
-  const features: Feature[] = venues.map((venue) => ({
-    type: "Feature",
-    properties: {
-      id: venue.venue_id,
-      visited: userVenueVisitIds.includes(venue.venue_id),
-    },
-    geometry: {
-      type: "Point",
-      coordinates: [Number(venue.longitude), Number(venue.latitude)],
-    },
-  }))
-  const featureCollection: GeoJSON<Geometry, GeoJsonProperties> = {
-    type: "FeatureCollection",
-    features,
-  }
-  const [minLng, minLat, maxLng, maxLat] = bbox(featureCollection)
-  const [mapViewState, setMapViewState] = useState<InitMapViewProps>({
-    bounds: [minLng, minLat, maxLng, maxLat],
-    fitBoundsOptions: { padding: 50 },
-  })
-
-  const venuePins = useMemo(
-    () =>
-      venues.map((venue) => (
-        <Marker
-          key={venue.venue_id}
-          longitude={Number(venue.longitude)}
-          latitude={Number(venue.latitude)}
-          anchor="bottom"
-        >
-          <Pin
-            colour={
-              userVenueVisitIds.includes(venue.venue_id) ? "#00a300" : "#960000"
-            }
-            size={30}
-          />
-        </Marker>
-      )),
-    [venues],
-  )
-
-  return (
-    <Map
-      {...mapViewState}
-      style={{ height: "500px" }}
-      mapStyle={"https://tiles.openfreemap.org/styles/bright"}
-    >
-      <Source id="venue" type="geojson" data={featureCollection}>
-        {venuePins}
-      </Source>
-    </Map>
-  )
-}
+import { VenueMap } from "@/app/components/VenueMap"
 
 interface CrawlCardProps {
   crawl: SingleUserCrawl
@@ -222,7 +141,7 @@ const Page = () => {
             </div>
           </div>
           {venues && venues.length > 0 && (
-            <VenueMap venues={venues} userVenueVisitIds={userVenueVisitIds} />
+            <VenueMap venues={venues} visitedVenueIds={userVenueVisitIds} />
           )}
           <UserCrawls crawls={userSummary.crawls} />
           <UserVisits

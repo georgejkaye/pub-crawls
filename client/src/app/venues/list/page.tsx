@@ -9,7 +9,7 @@ import {
 import { VenuesContext } from "@/app/context/venues"
 import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
-import { getAverageRating, getDistanceToVenue, sortByName } from "@/app/utils"
+import { getDistanceToVenue, sortByName } from "@/app/utils"
 import { Venue } from "@/app/api/client"
 import { ClientContext } from "@/app/api/ReactQueryClientProvider"
 import { Loader } from "@/app/components/Loader"
