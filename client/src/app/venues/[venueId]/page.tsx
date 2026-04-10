@@ -18,6 +18,7 @@ import { useContext, useRef } from "react"
 import { VenueCrawl, VenueVisit } from "@/app/api/client"
 import VisitCard, { getVisitCardUserHeader } from "@/app/components/VisitCard"
 import { getAverageRating } from "@/app/utils"
+import Link from "next/link"
 
 interface VenueCrawlCardProps {
   crawl: VenueCrawl
@@ -58,7 +59,12 @@ const VenueCrawlCard = ({ crawl }: VenueCrawlCardProps) => {
       }}
     >
       <div className="flex flex-col flex-1">
-        <div className="text-lg font-bold">{crawl.crawl_name}</div>
+        <Link
+          href={`/crawls/${crawl.crawl_id}`}
+          className="text-lg font-bold hover:underline"
+        >
+          {crawl.crawl_name}
+        </Link>
         <div className="">
           {crawlStartString} - {crawlEndString}
         </div>
