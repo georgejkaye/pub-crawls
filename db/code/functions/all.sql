@@ -322,9 +322,7 @@ FROM app_user
 WHERE app_user.email = p_email;
 $$;
 
-CREATE OR REPLACE FUNCTION select_venues (
-    p_user_id INTEGER
-)
+CREATE OR REPLACE FUNCTION select_venues ()
 RETURNS SETOF venue_data
 LANGUAGE SQL
 AS
@@ -369,9 +367,6 @@ LEFT JOIN (
     LEFT JOIN crawl_visit_count_view
     ON crawl_venue.crawl_id = crawl_visit_count_view.crawl_id
     AND crawl_venue.venue_id = crawl_visit_count_view.venue_id
-    LEFT JOIN crawl_user
-    ON crawl.crawl_id = crawl_user.crawl_id
-    WHERE p_user_id IS NULL OR crawl_user.user_id = p_user_id
     GROUP BY crawl_venue.venue_id
 ) venue_crawl
 ON venue.venue_id = venue_crawl.venue_id
