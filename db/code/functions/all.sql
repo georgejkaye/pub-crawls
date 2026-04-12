@@ -661,9 +661,9 @@ $$
 SELECT
     app_user.user_id,
     app_user.display_name,
-    user_count.visit_count,
-    user_count.venue_count,
-    user_count.crawl_count,
+    COALESCE(user_count.visit_count, 0) AS visit_count,
+    COALESCE(user_count.venue_count, 0) AS venue_count,
+    COALESCE(user_count.crawl_count, 0) AS crawl_count,
     COALESCE(user_crawl.crawls, ARRAY[]::single_user_crawl_data[]) AS crawls,
     COALESCE(user_visit.visits, ARRAY[]::single_user_visit_data[]) AS visits
 FROM app_user
