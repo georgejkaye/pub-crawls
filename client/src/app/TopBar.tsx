@@ -1,22 +1,33 @@
 "use client"
 
 import Link from "next/link"
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { UserContext } from "./context/user"
+import { CrawlsContext } from "./context/crawls"
 
 const TopBar = () => {
   const linkStyle = "hover:underline cursor-pointer"
+
   const { user, isLoadingUser, setToken } = useContext(UserContext)
+  const { currentCrawl } = useContext(CrawlsContext)
+
   const onClickLogout = () => {
     setToken(undefined)
     localStorage.removeItem("token")
   }
+
   return (
     <div>
-      <div className="flex flex-row p-4 bg-accent text-accentfg w-full items-center h-[60px]">
+      <div
+        className="flex flex-row p-4 w-full items-center h-[60px]"
+        style={{
+          backgroundColor: currentCrawl?.crawl_fg ?? "#000000",
+          color: currentCrawl?.crawl_bg ?? "#ffffff",
+        }}
+      >
         <div className="flex-1 text-2xl font-bold">
           <Link className={linkStyle} href="/">
-            Real Ale Trail tracker
+            Pub Crawl Tracker
           </Link>
         </div>
         {!isLoadingUser && (
@@ -25,7 +36,10 @@ const TopBar = () => {
               <Link className={linkStyle} href="/">
                 Map
               </Link>
-              <Link className={linkStyle} href="/venues/list">
+              <Link className={linkStyle} href="/crawls">
+                Crawls
+              </Link>
+              <Link className={linkStyle} href="/venues">
                 Venues
               </Link>
               <Link className={linkStyle} href="/visits">

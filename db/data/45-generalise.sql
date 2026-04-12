@@ -1,15 +1,4 @@
-CREATE TABLE app_user (
-    user_id SERIAL PRIMARY KEY,
-    email TEXT NOT NULL UNIQUE,
-    display_name TEXT NOT NULL UNIQUE,
-    hashed_password TEXT NOT NULL,
-    is_active BOOLEAN NOT NULL,
-    is_superuser BOOLEAN NOT NULL,
-    is_verified BOOLEAN NOT NULL,
-    last_verify_request TIMESTAMP WITH TIME ZONE
-);
-
-CREATE TABLE crawl (
+CREATE TABLE IF NOT EXISTS crawl (
     crawl_id SERIAL PRIMARY KEY,
     crawl_name TEXT NOT NULL UNIQUE,
     crawl_dates DATERANGE NOT NULL,
@@ -18,7 +7,22 @@ CREATE TABLE crawl (
     crawl_fg TEXT
 );
 
-CREATE TABLE crawl_milestone (
+INSERT INTO crawl (
+    crawl_name,
+    crawl_dates,
+    is_public,
+    crawl_bg,
+    crawl_fg
+)
+VALUES (
+    'Real Ale Trail 2026',
+    '[2026-03-01,2026-05-31]',
+    't',
+    '#f9eed2',
+    '#282e54'
+);
+
+CREATE TABLE IF NOT EXISTS crawl_milestone (
     crawl_milestone_id SERIAL PRIMARY KEY,
     crawl_id INTEGER NOT NULL,
     venues_required INTEGER NOT NULL,
@@ -27,7 +31,19 @@ CREATE TABLE crawl_milestone (
     UNIQUE (crawl_id, venues_required)
 );
 
-CREATE TABLE crawl_special_venue_type (
+INSERT INTO crawl_milestone (
+    crawl_id,
+    venues_required,
+    reward
+)
+SELECT
+    crawl_id,
+    25,
+    'Rugby shirt, £25 BCA voucher'
+FROM crawl
+WHERE crawl_name = 'Real Ale Trail 2026';
+
+CREATE TABLE IF NOT EXISTS crawl_special_venue_type (
     crawl_special_venue_type_id SERIAL PRIMARY KEY,
     crawl_id INTEGER NOT NULL,
     display_text TEXT NOT NULL,
@@ -35,17 +51,7 @@ CREATE TABLE crawl_special_venue_type (
     UNIQUE (crawl_id, display_text)
 );
 
-CREATE TABLE venue (
-    venue_id SERIAL PRIMARY KEY,
-    venue_name TEXT NOT NULL,
-    venue_address TEXT NOT NULL,
-    latitude DECIMAL NOT NULL,
-    longitude DECIMAL NOT NULL,
-    UNIQUE (venue_name, venue_address)
-);
-
-CREATE TABLE crawl_venue (
-    crawl_venue_id SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS crawl_venue (
     crawl_id INTEGER NOT NULL,
     venue_id INTEGER NOT NULL,
     crawl_special_venue_type_id INTEGER,
@@ -56,7 +62,16 @@ CREATE TABLE crawl_venue (
     UNIQUE (crawl_id, venue_id)
 );
 
-CREATE TABLE crawl_user (
+INSERT INTO crawl_venue (
+    crawl_id,
+    venue_id
+)
+SELECT
+    1,
+    venue_id
+FROM venue;
+
+CREATE TABLE IF NOT EXISTS crawl_user (
     crawl_user_id SERIAL PRIMARY KEY,
     crawl_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
@@ -65,17 +80,14 @@ CREATE TABLE crawl_user (
     UNIQUE (crawl_id, user_id)
 );
 
-CREATE TABLE visit (
-    visit_id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    venue_id INTEGER NOT NULL,
-    visit_date TIMESTAMP WITH TIME ZONE,
-    notes TEXT,
-    rating INTEGER,
-    drink TEXT,
-    FOREIGN KEY (user_id) REFERENCES app_user(user_id),
-    FOREIGN KEY (venue_id) REFERENCES venue(venue_id)
-);
+INSERT INTO crawl_user (
+    crawl_id,
+    user_id
+)
+SELECT
+    1,
+    app_user.user_id
+FROM app_user;
 
 CREATE TABLE IF NOT EXISTS venue_fact (
     venue_fact_id SERIAL PRIMARY KEY,

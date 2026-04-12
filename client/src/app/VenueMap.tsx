@@ -32,7 +32,13 @@ import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
 import { getAverageRating, getFirstVisitToVenue } from "./utils"
 import bbox from "@turf/bbox"
-import { SingleUserVisit, User, Venue, VenueVisit } from "./api/client"
+import {
+  CrawlSummary,
+  SingleUserVisit,
+  User,
+  Venue,
+  VenueVisit,
+} from "./api/client"
 
 const getVenueFeatureCollection = (
   venues: Venue[],
@@ -58,12 +64,14 @@ const getVenueFeatureCollection = (
 interface VenueMarkerProps {
   venue: Venue
   currentVenue: Venue | undefined
+  currentCrawl: CrawlSummary | undefined
   setCurrentVenue: (venue: Venue | undefined) => void
 }
 
 const VenueMarker = ({
   venue,
   currentVenue,
+  currentCrawl,
   setCurrentVenue,
 }: VenueMarkerProps) => {
   const { user } = useContext(UserContext)
@@ -78,7 +86,12 @@ const VenueMarker = ({
   const userHasVisitedVenue = !user
     ? false
     : user.visits.filter(
-        (visit: SingleUserVisit) => visit.venue_id === venue.venue_id,
+        (visit: SingleUserVisit) =>
+          visit.venue_id === venue.venue_id &&
+          (!currentCrawl ||
+            visit.crawls.some(
+              (crawl) => crawl.crawl_id === currentCrawl.crawl_id,
+            )),
       ).length > 0
   const pinColour = !user || !userHasVisitedVenue ? "#960000" : "#00a300"
   return (
@@ -111,8 +124,9 @@ const CurrentVenueBox = ({
   setCurrentVenue,
 }: CurrentVenueBoxProps) => {
   const router = useRouter()
-  const venueVisitCount = venue.visits.length
-  const averageVenueRating = getAverageRating(venue.visits)
+  const venueVisitCount = venue.total_visits
+  const venueUserCount = venue.users_visited
+  const averageVenueRating = venue.average_rating
   const onClickDetails = () => {
     router.push(`/venues/${venue.venue_id}`)
   }
@@ -138,16 +152,21 @@ const CurrentVenueBox = ({
         <div className="font-bold text-xl">
           <Link href={`/venues/${venue.venue_id}`}>{venue.venue_name}</Link>
         </div>
-        <div className="flex flex-row gap-2 h-5">
-          <div>
-            {venueVisitCount} {venueVisitCount === 1 ? "visit" : "visits"}
+        <div className="flex flex-row gap-4">
+          <div className="flex flex-row gap-1 items-end">
+            <span className="font-bold text-lg">{venueVisitCount}</span>
+            {venueVisitCount === 1 ? "visit" : "visits"}
           </div>
-          <Rating
-            style={{ maxWidth: 100 }}
-            value={averageVenueRating}
-            readOnly={true}
-          />
+          <div className="flex flex-row gap-1 items-end">
+            <span className="font-bold text-lg">{venueUserCount}</span>
+            {venueUserCount === 1 ? "user" : "users"} visited
+          </div>
         </div>
+        <Rating
+          style={{ maxWidth: 100 }}
+          value={averageVenueRating ?? 0}
+          readOnly={true}
+        />
         {firstVisitToVenue && firstVisitToVenue.visit_date && (
           <div>
             You visited on{" "}
@@ -170,6 +189,7 @@ interface MapComponentProps {
   venues: Venue[]
   featureCollection: GeoJSON<Geometry, GeoJsonProperties>
   currentVenue: Venue | undefined
+  currentCrawl: CrawlSummary | undefined
   setCurrentVenue: Dispatch<SetStateAction<Venue | undefined>>
   height: number | string
 }
@@ -179,6 +199,7 @@ const MapComponent = ({
   venues,
   featureCollection,
   currentVenue,
+  currentCrawl,
   setCurrentVenue,
   height,
 }: MapComponentProps) => {
@@ -195,6 +216,7 @@ const MapComponent = ({
           venue={venue}
           setCurrentVenue={setCurrentVenue}
           currentVenue={currentVenue}
+          currentCrawl={currentCrawl}
         />
       )),
     [venues, currentVenue, setCurrentVenue],
@@ -247,6 +269,7 @@ interface VenueMapProps {
   user: User | undefined
   venues: Venue[]
   currentVenue: Venue | undefined
+  currentCrawl: CrawlSummary | undefined
   setCurrentVenue: Dispatch<SetStateAction<Venue | undefined>>
 }
 
@@ -264,6 +287,7 @@ export const VenueMap = ({
   user,
   venues,
   currentVenue,
+  currentCrawl,
   setCurrentVenue,
 }: VenueMapProps) => {
   const venueFeatureCollection = getVenueFeatureCollection(venues)
@@ -276,6 +300,7 @@ export const VenueMap = ({
             venues={venues}
             featureCollection={venueFeatureCollection}
             currentVenue={currentVenue}
+            currentCrawl={currentCrawl}
             setCurrentVenue={setCurrentVenue}
             height={"calc(100vh - 60px)"}
           />
@@ -286,6 +311,7 @@ export const VenueMap = ({
             venues={venues}
             featureCollection={venueFeatureCollection}
             currentVenue={currentVenue}
+            currentCrawl={currentCrawl}
             setCurrentVenue={setCurrentVenue}
             height={"calc(100dvh - 120px)"}
           />

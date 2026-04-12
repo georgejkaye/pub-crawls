@@ -2,26 +2,18 @@ networks:
   internal:
     external: false
 services:
-  init:
+  db:
     build:
       context: db
       dockerfile: Dockerfile
-    volumes:
-      - ./db:/db
-  db:
-    image: postgres
-    depends_on:
-      init:
-        condition: service_completed_successfully
     environment:
-      POSTGRES_USER: realaletrail
-      POSTGRES_DB: realaletrail
-      POSTGRES_PASSWORD: realaletrail
+      POSTGRES_USER: pubcrawl
+      POSTGRES_DB: pubcrawl
+      POSTGRES_PASSWORD: pubcrawl
     ports:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql
-      - ./db/.populate/:/docker-entrypoint-initdb.d/
     networks:
       - internal
     healthcheck:
@@ -40,32 +32,10 @@ services:
     environment:
       OUTPUT_MODULE_NAME: api.db
       WATCH_FILES: 0
-      ROLL_SCRIPTS: 1
+      ROLL_SCRIPTS: 0
       DB_HOST: db
-      DB_USER: realaletrail
-      DB_NAME: realaletrail
-      DB_PASSWORD_FILE: /run/secrets/db_secret
-    volumes:
-      - ./db/code:/app/input
-      - ./api/src/api:/app/output
-    networks:
-      - internal
-  codegen:
-    build:
-      context: codegen
-      dockerfile: Dockerfile
-    depends_on:
-      db:
-        condition: service_healthy
-      codegen_init:
-        condition: service_completed_successfully
-    environment:
-      OUTPUT_MODULE_NAME: api.db
-      WATCH_FILES: 1
-      ROLL_SCRIPTS: 1
-      DB_HOST: db
-      DB_USER: realaletrail
-      DB_NAME: realaletrail
+      DB_USER: pubcrawl
+      DB_NAME: pubcrawl
       DB_PASSWORD_FILE: /run/secrets/db_secret
     volumes:
       - ./db/code:/app/input
@@ -84,16 +54,40 @@ services:
       codegen_init:
         condition: service_completed_successfully
     environment:
-      DB_NAME: realaletrail
-      DB_USER: realaletrail
+      DB_NAME: pubcrawl
+      DB_USER: pubcrawl
       DB_HOST: db
       ENV: dev
+    networks:
+      - internal
+  codegen:
+    build:
+      context: codegen
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+      data:
+        condition: service_completed_successfully
+    environment:
+      OUTPUT_MODULE_NAME: api.db
+      WATCH_FILES: 1
+      ROLL_SCRIPTS: 1
+      DB_HOST: db
+      DB_USER: pubcrawl
+      DB_NAME: pubcrawl
+      DB_PASSWORD_FILE: /run/secrets/db_secret
+    volumes:
+      - ./db/code:/app/input
+      - ./api/src/api:/app/output
     networks:
       - internal
   api:
     depends_on:
       db:
         condition: service_healthy
+      codegen_init:
+        condition: service_completed_successfully
     build:
       context: api
       dockerfile: Dockerfile.dev
@@ -107,8 +101,8 @@ services:
       CLIENT_HOST: ${CLIENT_HOST:-localhost:3000}
       CLIENT_PROTOCOL: ${CLIENT_PROTOCOL:-http}
       DB_HOST: db
-      DB_NAME: realaletrail
-      DB_USER: realaletrail
+      DB_NAME: pubcrawl
+      DB_USER: pubcrawl
       DB_PASSWORD: /run/secrets/db_secret
       FROM_EMAIL: ${FROM_EMAIL}
       OPENAPI_JSON_PATH: /app/openapi/openapi.json

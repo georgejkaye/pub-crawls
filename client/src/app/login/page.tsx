@@ -5,7 +5,8 @@ import { UserContext } from "../context/user"
 import Link from "next/link"
 import { SubmitButton, TextInput } from "../components/forms"
 import { useRouter } from "next/navigation"
-import { ClientContext } from "../api/ReactQueryClientProvider"
+import { ClientContext } from "../context/client"
+import { CrawlsContext } from "../context/crawls"
 
 interface LoginBoxProps {
   performLogin: (email: string, password: string) => Promise<void>
@@ -53,7 +54,10 @@ const LoginBox = ({ performLogin }: LoginBoxProps) => {
 const Page = () => {
   const { user, isLoadingUser, setToken } = useContext(UserContext)
   const { client } = useContext(ClientContext)
+  const { cardStyle } = useContext(CrawlsContext)
+
   const router = useRouter()
+
   const [errorString, setErrorString] = useState("")
   const [successString, setSuccessString] = useState("")
   const [freshLogin, setFreshLogin] = useState(false)
@@ -105,7 +109,7 @@ const Page = () => {
         <Loader />
       ) : successString !== "" ? (
         <>
-          <div className="w-full p-4 bg-accent text-accentfg rounded">
+          <div className="w-full p-4 rounded" style={cardStyle}>
             {successString}
           </div>
           <Loader />

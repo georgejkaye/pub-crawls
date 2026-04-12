@@ -10,7 +10,7 @@ import {
   useContext,
 } from "react"
 import { User } from "@/app/api/client"
-import { ClientContext } from "../api/ReactQueryClientProvider"
+import { ClientContext } from "./client"
 
 export const UserContext = createContext({
   token: undefined as string | undefined,

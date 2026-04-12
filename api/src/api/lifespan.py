@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     openapi_json_file = get_env_variable("OPENAPI_JSON_PATH")
     if openapi_json_file is not None:
         openapi = get_openapi(
-            title="Real Ale Trail tracker", version="1.0.0", routes=app.routes
+            title="Pub Crawl Tracker", version="1.0.0", routes=app.routes
         )
         with open(openapi_json_file, "w") as f:
             json.dump(openapi, f)

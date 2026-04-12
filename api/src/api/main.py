@@ -9,17 +9,27 @@ from fastapi_users import FastAPIUsers
 import api.db.functions.all as db
 from api.db.functions.all import (
     insert_visit_fetchone,
+    select_crawl_by_crawl_id_fetchone,
+    select_crawls_fetchall,
     select_user_counts_fetchall,
     select_user_summary_fetchone,
     select_venue_by_venue_id_fetchone,
+    select_venues_by_crawl_id_fetchall,
     select_venues_fetchall,
     select_visit_fetchone,
+    select_visits_by_crawl_id_fetchall,
     select_visits_fetchall,
     update_user_display_name,
     update_visit,
 )
 from api.db.types.all import (
+    CrawlData,
+    CrawlSummaryData,
+    CrawlVenueData,
+    CrawlVisitData,
+    SingleUserCrawlData,
     SingleUserVisitData,
+    SingleVenueData,
     UserCountData,
     UserSummaryData,
     VenueData,
@@ -35,7 +45,7 @@ from api.utils import (
     get_env_variable_with_default,
 )
 
-app = FastAPI(title="Real Ale Trail tracker", lifespan=lifespan)
+app = FastAPI(title="Pub Crawl Tracker", lifespan=lifespan)
 
 
 @app.get("/", summary="Say hello!", tags=["home"])
@@ -71,8 +81,8 @@ async def get_user_by_user_id(user_id: int) -> UserSummaryData:
 
 
 @app.get("/venues", summary="Get a list of venues and their visits", tags=["venue"])
-async def get_venues() -> list[VenueData]:
-    return select_venues_fetchall(get_db_connection())
+async def get_venues(user_id: Optional[int] = None) -> list[VenueData]:
+    return select_venues_fetchall(get_db_connection(), user_id)
 
 
 @app.get(
@@ -81,11 +91,43 @@ async def get_venues() -> list[VenueData]:
     tags=["venue"],
     responses={404: {"model": NotFoundResponse}},
 )
-async def get_venue_by_id(venue_id: int) -> VenueData:
-    venue = select_venue_by_venue_id_fetchone(get_db_connection(), venue_id)
+async def get_venue_by_id(
+    venue_id: int, user_id: Optional[int] = None
+) -> SingleVenueData:
+    venue = select_venue_by_venue_id_fetchone(get_db_connection(), user_id, venue_id)
     if venue is None:
         raise HTTPException(status_code=404)
     return venue
+
+
+@app.get(
+    "/crawls",
+    summary="Get a list of crawls",
+    tags=["crawl"],
+)
+async def get_crawls() -> list[CrawlSummaryData]:
+    return select_crawls_fetchall(get_db_connection())
+
+
+@app.get(
+    "/crawls/{crawl_id}",
+    summary="Get details about a crawl",
+    tags=["crawl"],
+)
+async def get_crawl(crawl_id: int) -> CrawlData:
+    crawl = select_crawl_by_crawl_id_fetchone(get_db_connection(), crawl_id)
+    if crawl is None:
+        raise HTTPException(status_code=404)
+    return crawl
+
+
+@app.get(
+    "/crawls/{crawl_id}/venues",
+    summary="Get a list of venues and their visits in a given crawl",
+    tags=["crawl"],
+)
+async def get_crawl_venues(crawl_id: int) -> list[CrawlVenueData]:
+    return select_venues_by_crawl_id_fetchall(get_db_connection(), crawl_id)
 
 
 @app.get("/visits", summary="Get all the visits", tags=["visit"])
@@ -104,6 +146,15 @@ async def get_visit(visit_id: int) -> VisitData:
     if visit is None:
         raise HTTPException(status_code=404)
     return visit
+
+
+@app.get(
+    "/crawls/{crawl_id}/visits",
+    summary="Get a list of visits in a given crawl",
+    tags=["crawl"],
+)
+async def get_crawl_visits(crawl_id: int) -> list[CrawlVisitData]:
+    return select_visits_by_crawl_id_fetchall(get_db_connection(), crawl_id)
 
 
 @app.post("/visit", summary="Log a visit", tags=["visit"])
@@ -170,6 +221,7 @@ class UserPublicDetails:
     email: str
     display_name: str
     is_verified: bool
+    crawls: list[SingleUserCrawlData]
     visits: list[SingleUserVisitData]
 
 
@@ -183,6 +235,7 @@ async def get_user_details(
         user.email,
         user.display_name,
         user.is_verified,
+        user_details.crawls if user_details is not None else [],
         user_details.visits if user_details is not None else [],
     )
 

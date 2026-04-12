@@ -19,9 +19,9 @@ export const getAverageRating = (ratings: Rated[]) => {
     (acc, cur) => (cur.rating === null ? acc : [...acc, cur.rating]),
     initialRatingsArray,
   )
-  return ratings.length === 0
+  return nonZeroRatings.length === 0
     ? 0
-    : nonZeroRatings.reduce((acc, cur) => acc + cur) / nonZeroRatings.length
+    : nonZeroRatings.reduce((acc, cur) => acc + cur, 0) / nonZeroRatings.length
 }
 
 // https://stackoverflow.com/a/18883819

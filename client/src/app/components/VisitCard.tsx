@@ -1,28 +1,57 @@
+"use client"
+
 import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
 import { useContext } from "react"
-import { ClientContext } from "../api/ReactQueryClientProvider"
+import { ClientContext } from "../context/client"
 import { UserContext } from "../context/user"
 import { Loader } from "./Loader"
+import { RiBeerLine } from "react-icons/ri"
+import { CrawlsContext } from "../context/crawls"
 
-interface VisitCardTitleProps {
+interface VisitCardHeaderProps {
   text: string
-  href?: string
+  href: string
+  icon?: boolean
+  bold?: boolean
 }
 
-const VisitCardTitle = ({ text, href }: VisitCardTitleProps) => {
+const VisitCardHeader = ({ text, href, icon, bold }: VisitCardHeaderProps) => {
   return (
-    <div className="font-bold text-xl">
-      {href ? (
-        <Link href={href} className="font-bold text-xl hover:underline">
-          {text}
-        </Link>
-      ) : (
-        <div>{text}</div>
-      )}
+    <div
+      className={`flex flex-row items-center gap-2 ${bold ? "font-bold" : ""}`}
+    >
+      {icon && <RiBeerLine size={25} />}
+      <Link className="text-lg hover:underline" href={href}>
+        {text}
+      </Link>
     </div>
   )
 }
+
+export const getVisitCardUserHeader = (
+  userId: number,
+  displayName: string,
+  icon: boolean,
+  bold: boolean,
+) => ({
+  text: displayName,
+  href: `/users/${userId}`,
+  icon,
+  bold,
+})
+
+export const getVisitCardVenueHeader = (
+  venueId: number,
+  venueName: string,
+  icon: boolean,
+  bold: boolean,
+) => ({
+  text: venueName,
+  href: `/venues/${venueId}`,
+  icon,
+  bold,
+})
 
 interface Review {
   visit_id: number
@@ -32,21 +61,14 @@ interface Review {
   drink: string | null
 }
 
-interface VisitCardCoreProps {
+interface VisitCardReviewProps {
   visitUserId: number
   review: Review
   deleteVisit: () => void
 }
 
-export const VisitCardCore = ({
-  visitUserId,
-  review,
-  deleteVisit,
-}: VisitCardCoreProps) => {
-  const { user } = useContext(UserContext)
-
+export const VisitCardReview = ({ review }: VisitCardReviewProps) => {
   const visitDate = new Date(Date.parse(review.visit_date))
-  const isCurrentUser = user?.user_id == visitUserId
 
   return (
     <div className="flex flex-col gap-2">
@@ -75,41 +97,93 @@ export const VisitCardCore = ({
       {review.rating !== null && (
         <Rating style={{ maxWidth: 100 }} value={review.rating} readOnly />
       )}
-      {isCurrentUser && (
-        <div className="flex flex-row gap-4">
-          <Link
-            href={`/users/${user?.user_id}/visits/${review.visit_id}/edit`}
-            className="font-bold hover:underline"
-          >
-            Edit
-          </Link>
-          <div
-            className="font-bold hover:underline cursor-pointer"
-            onClick={deleteVisit}
-          >
-            Delete
-          </div>
-        </div>
-      )}
+    </div>
+  )
+}
+
+interface VisitCardActionsProps {
+  userId: number
+  visitId: number
+  deleteVisit: () => void
+}
+
+const VisitCardActions = ({
+  userId,
+  visitId,
+  deleteVisit,
+}: VisitCardActionsProps) => {
+  return (
+    <div className="flex flex-row gap-4">
+      <Link
+        href={`/users/${userId}/visits/${visitId}/edit`}
+        className="font-bold hover:underline"
+      >
+        Edit
+      </Link>
+      <div
+        className="font-bold hover:underline cursor-pointer"
+        onClick={deleteVisit}
+      >
+        Delete
+      </div>
+    </div>
+  )
+}
+
+interface VisitCardCrawlInterface {
+  crawl_id: number
+  crawl_name: string
+  crawl_bg: string | null
+  crawl_fg: string | null
+}
+
+interface VisitCardCrawlBadgeProps {
+  crawl: VisitCardCrawlInterface
+}
+
+const VisitFeedCardCrawl = ({ crawl }: VisitCardCrawlBadgeProps) => {
+  return (
+    <div
+      className="p-2 rounded-lg border-2"
+      style={{
+        borderColor: crawl.crawl_bg ?? "#ffffff",
+        backgroundColor: crawl.crawl_fg ?? "#000000",
+        color: crawl.crawl_bg ?? "#ffffff",
+      }}
+    >
+      <Link className="hover:underline" href={`/crawl/${crawl.crawl_id}`}>
+        {crawl.crawl_name}
+      </Link>
+    </div>
+  )
+}
+
+interface VisitCardCrawlsProps {
+  crawls: VisitCardCrawlInterface[]
+}
+
+export const VisitCardCrawls = ({ crawls }: VisitCardCrawlsProps) => {
+  return (
+    <div className="flex flex-row flex-wrap gap-2">
+      {crawls.map((crawl) => (
+        <VisitFeedCardCrawl key={crawl.crawl_id} crawl={crawl} />
+      ))}
     </div>
   )
 }
 
 interface VisitCardProps {
+  headers?: VisitCardHeaderProps[]
   visitUserId: number
-  title: string
-  titleHref?: string
   review: Review
 }
 
-const VisitCard = ({
-  review,
-  visitUserId,
-  title,
-  titleHref,
-}: VisitCardProps) => {
+const VisitCard = ({ headers, review, visitUserId }: VisitCardProps) => {
   const { client } = useContext(ClientContext)
-  const { token } = useContext(UserContext)
+  const { user, token } = useContext(UserContext)
+  const { cardStyle } = useContext(CrawlsContext)
+
+  const isCurrentUser = user?.user_id == visitUserId
 
   const { mutate: deleteVisit, isPending: isPendingDeleteVisit } =
     client.useMutation("delete", "/visit/{visit_id}", {
@@ -124,7 +198,6 @@ const VisitCard = ({
         )
       },
     })
-
   const performDeleteVisit = () => {
     deleteVisit({
       headers: {
@@ -141,13 +214,29 @@ const VisitCard = ({
   return isPendingDeleteVisit ? (
     <Loader />
   ) : (
-    <div className="rounded-xl bg-accentlight text-accentfg p-4 flex flex-col gap-2">
-      <VisitCardTitle text={title} href={titleHref} />
-      <VisitCardCore
+    <div className="rounded-xl p-4 flex flex-col gap-2" style={cardStyle}>
+      {headers &&
+        headers.map((header) => (
+          <VisitCardHeader
+            key={header.text}
+            text={header.text}
+            href={header.href}
+            icon={header.icon}
+            bold={header.bold}
+          />
+        ))}
+      <VisitCardReview
         visitUserId={visitUserId}
         review={review}
         deleteVisit={performDeleteVisit}
       />
+      {user && isCurrentUser && (
+        <VisitCardActions
+          userId={user.user_id}
+          visitId={review.visit_id}
+          deleteVisit={performDeleteVisit}
+        />
+      )}
     </div>
   )
 }

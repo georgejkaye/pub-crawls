@@ -7,9 +7,12 @@ WORKDIR /app
 
 COPY ./pyproject.toml .
 COPY ./poetry.lock .
+RUN touch README.md
+
+RUN poetry install --no-root
+
 COPY ./src ./src
 
-RUN touch README.md
 RUN poetry install
 
 COPY ./venues.json .

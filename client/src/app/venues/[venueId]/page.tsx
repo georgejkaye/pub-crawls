@@ -1,6 +1,6 @@
 "use client"
 
-import { LinkButton, SubmitButton } from "@/app/components/forms"
+import { LinkButton } from "@/app/components/forms"
 import { UserContext } from "@/app/context/user"
 import { VenueContext } from "@/app/context/venue"
 import Pin from "@/app/components/Pin"
@@ -13,13 +13,61 @@ import {
   Source,
 } from "@vis.gl/react-maplibre"
 import { Feature } from "geojson"
-import Link from "next/link"
 import { notFound, useRouter } from "next/navigation"
 import { useContext, useRef } from "react"
-import { Loader } from "@/app/components/Loader"
-import { VenueVisit } from "@/app/api/client"
-import VisitCard from "@/app/components/VisitCard"
+import { VenueCrawl, VenueVisit } from "@/app/api/client"
+import VisitCard, { getVisitCardUserHeader } from "@/app/components/VisitCard"
 import { getAverageRating } from "@/app/utils"
+import Link from "next/link"
+import {
+  getDateFromNullableString,
+  getDateRangeString,
+} from "@/app/utils/datetime"
+
+interface VenueCrawlCardProps {
+  crawl: VenueCrawl
+}
+
+const VenueCrawlCard = ({ crawl }: VenueCrawlCardProps) => {
+  const crawlStart = getDateFromNullableString(crawl.crawl_start)
+  const crawlEnd = getDateFromNullableString(crawl.crawl_end)
+  const isUpcoming = crawlStart && new Date() < crawlStart
+  const isPassed = crawlEnd && new Date() > crawlEnd
+  return (
+    <div
+      className="rounded-xl p-4 flex flex-row"
+      style={{
+        backgroundColor: crawl.crawl_fg ?? "#ffffff",
+        color: crawl.crawl_bg ?? "#130067",
+      }}
+    >
+      <div className="flex flex-col flex-1">
+        <Link
+          href={`/crawls/${crawl.crawl_id}`}
+          className="text-lg font-bold hover:underline"
+        >
+          {crawl.crawl_name}
+        </Link>
+        <div className="">{getDateRangeString(crawlStart, crawlEnd)}</div>
+      </div>
+      <div>{isUpcoming ? "Upcoming" : isPassed ? "Passed" : "Ongoing"}</div>
+    </div>
+  )
+}
+
+interface VenueCrawlsListProps {
+  crawls: VenueCrawl[]
+}
+
+const VenueCrawlsList = ({ crawls }: VenueCrawlsListProps) => {
+  return (
+    <div className="flex flex-col gap-2">
+      {crawls.map((crawl) => (
+        <VenueCrawlCard key={crawl.crawl_id} crawl={crawl} />
+      ))}
+    </div>
+  )
+}
 
 interface VenueMapProps {
   venueId: number
@@ -78,6 +126,7 @@ interface VenueDetailsProps {
   visits: VenueVisit[]
   longitude: number
   latitude: number
+  crawls: VenueCrawl[]
 }
 
 const VenueDetails = ({
@@ -87,6 +136,7 @@ const VenueDetails = ({
   visits,
   longitude,
   latitude,
+  crawls,
 }: VenueDetailsProps) => {
   const venueVisitCount = visits.length
   const averageVenueRating = getAverageRating(visits)
@@ -108,6 +158,7 @@ const VenueDetails = ({
         />
       </div>
       <VenueMap venueId={venueId} latitude={latitude} longitude={longitude} />
+      <VenueCrawlsList crawls={crawls} />
     </div>
   )
 }
@@ -123,12 +174,7 @@ const Page = () => {
     <div className="flex flex-col md:w-2/3 lg:w-1/2 p-4 md:mx-auto">
       {isError
         ? notFound()
-        : venue &&
-          venue.venue_id &&
-          venue.venue_name &&
-          venue.venue_address &&
-          venue.latitude &&
-          venue.longitude && (
+        : venue && (
             <div className="flex flex-col gap-4">
               <VenueDetails
                 venueId={venue.venue_id}
@@ -137,6 +183,7 @@ const Page = () => {
                 visits={venue.visits}
                 latitude={Number(venue.latitude)}
                 longitude={Number(venue.longitude)}
+                crawls={venue.crawls}
               />
               {user && (
                 <LinkButton label="Record visit" onClick={onClickRecordVisit} />
@@ -144,8 +191,14 @@ const Page = () => {
               {venue.visits.map((visit) => (
                 <VisitCard
                   key={visit.visit_id}
-                  title={visit.user_display_name}
-                  titleHref={`/users/${visit.user_id}`}
+                  headers={[
+                    getVisitCardUserHeader(
+                      visit.user_id,
+                      visit.user_display_name,
+                      true,
+                      true,
+                    ),
+                  ]}
                   review={visit}
                   visitUserId={visit.user_id}
                 />

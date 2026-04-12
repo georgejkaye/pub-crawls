@@ -2,10 +2,9 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Client, ClientPathsWithMethod } from "openapi-fetch"
-import { createContext, useState } from "react"
-import fetchClient from "./client"
-import createClient, { OpenapiQueryClient } from "openapi-react-query"
-import { paths } from "./api"
+import { createContext } from "react"
+import createClient from "openapi-react-query"
+import fetchClient from "../api/client"
 
 const queryClient = new QueryClient({
   defaultOptions: {

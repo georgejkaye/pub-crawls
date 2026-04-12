@@ -1,11 +1,11 @@
 "use client"
 
 import { createContext, PropsWithChildren, useContext } from "react"
-import { Venue } from "../api/client"
-import { ClientContext } from "../api/ReactQueryClientProvider"
+import { SingleVenue } from "../api/client"
+import { ClientContext } from "./client"
 
 export const VenueContext = createContext({
-  venue: undefined as Venue | undefined,
+  venue: undefined as SingleVenue | undefined,
   isLoadingVenue: false,
   isError: false,
 })

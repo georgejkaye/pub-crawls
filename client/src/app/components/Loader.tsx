@@ -15,3 +15,5 @@ export const Loader = ({ size = 50 }: LoaderProps) => {
     </div>
   )
 }
+
+export default Loader

@@ -5,7 +5,7 @@ import { UserContext } from "@/app/context/user"
 import { notFound, unauthorized, useRouter } from "next/navigation"
 import { VenueContext } from "@/app/context/venue"
 import { Loader } from "@/app/components/Loader"
-import { ClientContext } from "@/app/api/ReactQueryClientProvider"
+import { ClientContext } from "@/app/context/client"
 import RecordVisitForm from "@/app/components/RecordVisitForm"
 
 const Page = () => {

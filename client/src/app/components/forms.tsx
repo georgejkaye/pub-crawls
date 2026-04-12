@@ -1,10 +1,15 @@
+"use client"
+
 import {
   Dispatch,
   SetStateAction,
   ChangeEvent,
   KeyboardEvent,
   MouseEvent,
+  useState,
+  useContext,
 } from "react"
+import { CrawlsContext } from "../context/crawls"
 
 interface TextInputProps {
   name?: string
@@ -77,7 +82,7 @@ export const TextAreaInput = ({
 }
 
 const buttonStyle =
-  "font-bold text-white p-2 rounded bg-accent cursor-pointer hover:bg-accentlight disabled:bg-accentdisabled disabled:cursor-not-allowed"
+  "font-bold text-white p-2 rounded cursor-pointer disabled:cursor-not-allowed"
 
 interface SubmitButtonProps {
   label: string
@@ -88,8 +93,23 @@ export const SubmitButton = ({
   label,
   disabled = false,
 }: SubmitButtonProps) => {
+  const { bgColour, fgColour } = useContext(CrawlsContext)
+
+  const [isHovered, setIsHovered] = useState(false)
   return (
-    <button type="submit" className={buttonStyle} disabled={disabled}>
+    <button
+      type="submit"
+      className={buttonStyle}
+      style={{
+        backgroundColor: !isHovered
+          ? fgColour
+          : `color-mix(in oklab, ${fgColour} 50%, white)`,
+        color: bgColour,
+      }}
+      disabled={disabled}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {label}
     </button>
   )
@@ -106,12 +126,24 @@ export const LinkButton = ({
   onClick,
   disabled = false,
 }: LinkButtonProps) => {
+  const { bgColour, fgColour } = useContext(CrawlsContext)
+
+  const [isHovered, setIsHovered] = useState(false)
+
   return (
     <button
       type="button"
       className={buttonStyle}
+      style={{
+        backgroundColor: !isHovered
+          ? fgColour
+          : `color-mix(in oklab, ${fgColour} 80%, white)`,
+        color: bgColour,
+      }}
       disabled={disabled}
       onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {label}
     </button>

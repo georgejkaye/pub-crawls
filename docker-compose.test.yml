@@ -3,26 +3,18 @@ networks:
     external: false
 
 services:
-  init:
+  db:
     build:
       context: db
       dockerfile: Dockerfile
-    volumes:
-      - ./db:/db
-  db:
-    image: postgres
-    depends_on:
-      init:
-        condition: service_completed_successfully
     environment:
-      POSTGRES_USER: realaletrail
-      POSTGRES_DB: realaletrail
-      POSTGRES_PASSWORD: realaletrail
+      POSTGRES_USER: pubcrawl
+      POSTGRES_DB: pubcrawl
+      POSTGRES_PASSWORD: pubcrawl
     ports:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql
-      - ./db/.populate/:/docker-entrypoint-initdb.d/
     networks:
       - internal
     healthcheck:
@@ -49,13 +41,13 @@ services:
       CLIENT_HOST: client
       CLIENT_PROTOCOL: ${CLIENT_PROTOCOL:-https}
       DB_HOST: db
-      DB_NAME: realaletrail
-      DB_USER: realaletrail
+      DB_NAME: pubcrawl
+      DB_USER: pubcrawl
       DB_PASSWORD: /app/db.secret
-      FROM_EMAIL: realaletrail@realaletrail.com
-      SMTP_SERVER: smtp.realaletrail.com
+      FROM_EMAIL: pubcrawl@pubcrawl.com
+      SMTP_SERVER: smtp.pubcrawl.com
       SMTP_PORT: 587
-      SMTP_USER: realaletrail@realaletrail.com
+      SMTP_USER: pubcrawl@pubcrawl.com
       SMTP_PASSWORD: /app/smtp_secret
       USER_SECRET: /app/user_secret
     networks:
