@@ -1,7 +1,7 @@
 import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
 import { useContext } from "react"
-import { ClientContext } from "../api/ReactQueryClientProvider"
+import { ClientContext } from "../context/ReactQueryClientProvider"
 import { UserContext } from "../context/user"
 import { Loader } from "./Loader"
 import { RiBeerLine } from "react-icons/ri"

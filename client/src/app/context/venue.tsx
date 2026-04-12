@@ -2,7 +2,7 @@
 
 import { createContext, PropsWithChildren, useContext } from "react"
 import { SingleVenue } from "../api/client"
-import { ClientContext } from "../api/ReactQueryClientProvider"
+import { ClientContext } from "../context/ReactQueryClientProvider"
 
 export const VenueContext = createContext({
   venue: undefined as SingleVenue | undefined,

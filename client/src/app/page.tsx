@@ -11,7 +11,8 @@ import { VenueMap } from "./VenueMap"
 import { UserContext } from "./context/user"
 import { CrawlSummary, User, Venue } from "./api/client"
 import { Loader } from "./components/Loader"
-import { ClientContext } from "./api/ReactQueryClientProvider"
+import { ClientContext } from "./context/ReactQueryClientProvider"
+import { CrawlsContext } from "./context/crawls"
 
 interface CrawlSelectorProps {
   currentCrawl: CrawlSummary | undefined

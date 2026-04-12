@@ -1,7 +1,7 @@
 "use client"
 
 import { Crawl, CrawlVenueSummary } from "@/app/api/client"
-import { ClientContext } from "@/app/api/ReactQueryClientProvider"
+import { ClientContext } from "@/app/context/ReactQueryClientProvider"
 import { Loader } from "@/app/components/Loader"
 import { VenueMap } from "@/app/components/VenueMap"
 import { UserContext } from "@/app/context/user"

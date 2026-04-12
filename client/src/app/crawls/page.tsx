@@ -1,7 +1,7 @@
 "use client"
 
 import { useContext } from "react"
-import { ClientContext } from "../api/ReactQueryClientProvider"
+import { ClientContext } from "../context/ReactQueryClientProvider"
 import { CrawlSummary } from "../api/client"
 import { Loader } from "../components/Loader"
 import {

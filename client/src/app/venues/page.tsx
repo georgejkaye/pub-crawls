@@ -11,8 +11,9 @@ import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
 import { getDistanceToVenue, sortByName } from "@/app/utils"
 import { Venue } from "@/app/api/client"
-import { ClientContext } from "@/app/api/ReactQueryClientProvider"
+import { ClientContext } from "@/app/context/ReactQueryClientProvider"
 import { Loader } from "@/app/components/Loader"
+import { CrawlsContext } from "../context/crawls"
 
 interface VenueCardProps {
   venue: Venue
