@@ -13,7 +13,7 @@ COPY src ./src
 RUN poetry install
 
 RUN mkdir /run/secrets
-RUN echo "pubcrawl" > /run/secrets/db_secret
+RUN echo "pubcrawls" > /run/secrets/db_secret
 RUN echo "secret" > /run/secrets/user_secret
 
 ENTRYPOINT ["poetry", "run", "python", "src/api/main.py"]

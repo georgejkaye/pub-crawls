@@ -20,7 +20,7 @@ services:
       - db_secret
   api:
     depends_on:
-      data:
+      db:
         condition: service_completed_successfully
     build:
       context: .
@@ -59,10 +59,10 @@ services:
       start_period: 0s
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pubcrawl_api.rule=Host(`${API_HOST}`)"
-      - "traefik.http.routers.pubcrawl_api.tls=true"
-      - "traefik.http.routers.pubcrawl_api.tls.certresolver=lets-encrypt"
-      - "traefik.http.services.pubcrawl_api.loadbalancer.server.port=${API_PORT:-8000}"
+      - "traefik.http.routers.pubcrawls_api.rule=Host(`${API_HOST}`)"
+      - "traefik.http.routers.pubcrawls_api.tls=true"
+      - "traefik.http.routers.pubcrawls_api.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.pubcrawls_api.loadbalancer.server.port=${API_PORT:-8000}"
   client:
     depends_on:
       api:
@@ -90,10 +90,10 @@ services:
       start_period: 0s
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pubcrawl_client.rule=Host(`${CLIENT_HOST}`)"
-      - "traefik.http.routers.pubcrawl_client.tls=true"
-      - "traefik.http.routers.pubcrawl_client.tls.certresolver=lets-encrypt"
-      - "traefik.http.services.pubcrawl_client.loadbalancer.server.port=${CLIENT_PORT:-3000}"
+      - "traefik.http.routers.pubcrawls_client.rule=Host(`${CLIENT_HOST}`)"
+      - "traefik.http.routers.pubcrawls_client.tls=true"
+      - "traefik.http.routers.pubcrawls_client.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.pubcrawls_client.loadbalancer.server.port=${CLIENT_PORT:-3000}"
 secrets:
   smtp_secret:
     file: smtp.secret
