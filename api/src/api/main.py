@@ -27,6 +27,7 @@ from api.db.types.all import (
     CrawlSummaryData,
     CrawlVenueData,
     CrawlVisitData,
+    SingleUserCrawlData,
     SingleUserVisitData,
     SingleVenueData,
     UserCountData,
@@ -220,6 +221,7 @@ class UserPublicDetails:
     email: str
     display_name: str
     is_verified: bool
+    crawls: list[SingleUserCrawlData]
     visits: list[SingleUserVisitData]
 
 
@@ -233,6 +235,7 @@ async def get_user_details(
         user.email,
         user.display_name,
         user.is_verified,
+        user_details.crawls if user_details is not None else [],
         user_details.visits if user_details is not None else [],
     )
 
