@@ -3,21 +3,10 @@ networks:
     external: false
 
 services:
-  init:
+  db:
     build:
       context: db
       dockerfile: Dockerfile
-    environment:
-      POSTGRES_USER: pubcrawl
-      POSTGRES_DB: pubcrawl
-      POSTGRES_PASSWORD: pubcrawl
-    volumes:
-      - ./db:/db
-  db:
-    image: postgres
-    depends_on:
-      init:
-        condition: service_completed_successfully
     environment:
       POSTGRES_USER: pubcrawl
       POSTGRES_DB: pubcrawl
@@ -26,7 +15,6 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql
-      - ./db/.populate/:/docker-entrypoint-initdb.d/
     networks:
       - internal
     healthcheck:
