@@ -5,7 +5,7 @@ import { UserContext } from "../context/user"
 import Link from "next/link"
 import { SubmitButton, TextInput } from "../components/forms"
 import { useRouter } from "next/navigation"
-import { ClientContext } from "../context/ReactQueryClientProvider"
+import { ClientContext } from "../context/client"
 import { CrawlsContext } from "../context/crawls"
 
 interface LoginBoxProps {

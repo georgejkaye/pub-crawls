@@ -1,6 +1,6 @@
 "use client"
 
-import { ClientContext } from "@/app/context/ReactQueryClientProvider"
+import { ClientContext } from "@/app/context/client"
 import { SubmitButton, TextInput } from "@/app/components/forms"
 import { Loader } from "@/app/components/Loader"
 import { use, useContext, useState } from "react"

@@ -2,7 +2,7 @@
 
 import { createContext, PropsWithChildren, useContext } from "react"
 import { UserSummary } from "../api/client"
-import { ClientContext } from "../context/ReactQueryClientProvider"
+import { ClientContext } from "./client"
 
 export const UserSummaryContext = createContext({
   userSummary: undefined as UserSummary | undefined,

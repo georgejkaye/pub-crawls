@@ -1,7 +1,7 @@
 "use client"
 
 import { ChangeEvent, useContext, useState } from "react"
-import { ClientContext } from "../context/ReactQueryClientProvider"
+import { ClientContext } from "../context/client"
 import { Loader } from "../components/Loader"
 import VisitCard, {
   getVisitCardUserHeader,

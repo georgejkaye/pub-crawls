@@ -3,7 +3,7 @@ import { useContext, useState } from "react"
 import { SubmitButton, TextInput } from "../components/forms"
 import Link from "next/link"
 import { Loader } from "../components/Loader"
-import { ClientContext } from "../context/ReactQueryClientProvider"
+import { ClientContext } from "../context/client"
 import { CrawlsContext } from "../context/crawls"
 
 const Page = () => {

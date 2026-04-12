@@ -1,7 +1,7 @@
 "use client"
 
 import { useContext } from "react"
-import { ClientContext } from "../context/ReactQueryClientProvider"
+import { ClientContext } from "../context/client"
 import { Loader } from "../components/Loader"
 import { UserCount } from "../api/client"
 import { FaStar } from "react-icons/fa"

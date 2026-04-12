@@ -6,7 +6,7 @@ import "@smastrom/react-rating/style.css"
 
 import { UserProvider } from "./context/user"
 import { VenuesProvider } from "./context/venues"
-import { ReactQueryClientProvider } from "./context/ReactQueryClientProvider"
+import { ReactQueryClientProvider } from "./context/client"
 import { CrawlsProvider } from "./context/crawls"
 
 import Content from "./Content"

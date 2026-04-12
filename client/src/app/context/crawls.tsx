@@ -10,7 +10,7 @@ import {
   useContext,
 } from "react"
 import { CrawlSummary } from "@/app/api/client"
-import { ClientContext } from "../context/ReactQueryClientProvider"
+import { ClientContext } from "./client"
 
 export const CrawlsContext = createContext({
   crawls: undefined as CrawlSummary[] | undefined,

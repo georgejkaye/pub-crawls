@@ -1,5 +1,5 @@
 "use client"
-import { ClientContext } from "@/app/context/ReactQueryClientProvider"
+import { ClientContext } from "@/app/context/client"
 import { Loader } from "@/app/components/Loader"
 import { CrawlsContext } from "@/app/context/crawls"
 import { use, useContext, useEffect, useState } from "react"

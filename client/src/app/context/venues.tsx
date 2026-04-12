@@ -2,7 +2,7 @@
 
 import { createContext, PropsWithChildren, useContext } from "react"
 import { Venue } from "../api/client"
-import { ClientContext } from "../context/ReactQueryClientProvider"
+import { ClientContext } from "./client"
 
 export const VenuesContext = createContext({
   venues: [] as Venue[],
