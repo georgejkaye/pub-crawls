@@ -8,9 +8,9 @@ services:
       context: db
       dockerfile: Dockerfile
     environment:
-      POSTGRES_USER: pubcrawl
-      POSTGRES_DB: pubcrawl
-      POSTGRES_PASSWORD: pubcrawl
+      POSTGRES_USER: pubcrawls
+      POSTGRES_DB: pubcrawls
+      POSTGRES_PASSWORD: pubcrawls
     ports:
       - 5432:5432
     volumes:
@@ -41,13 +41,13 @@ services:
       CLIENT_HOST: client
       CLIENT_PROTOCOL: ${CLIENT_PROTOCOL:-https}
       DB_HOST: db
-      DB_NAME: pubcrawl
-      DB_USER: pubcrawl
+      DB_NAME: pubcrawls
+      DB_USER: pubcrawls
       DB_PASSWORD: /app/db.secret
-      FROM_EMAIL: pubcrawl@pubcrawl.com
-      SMTP_SERVER: smtp.pubcrawl.com
+      FROM_EMAIL: pubcrawls@pubcrawls.com
+      SMTP_SERVER: smtp.pubcrawls.com
       SMTP_PORT: 587
-      SMTP_USER: pubcrawl@pubcrawl.com
+      SMTP_USER: pubcrawls@pubcrawls.com
       SMTP_PASSWORD: /app/smtp_secret
       USER_SECRET: /app/user_secret
     networks:

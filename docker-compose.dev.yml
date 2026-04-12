@@ -7,9 +7,9 @@ services:
       context: db
       dockerfile: Dockerfile
     environment:
-      POSTGRES_USER: pubcrawl
-      POSTGRES_DB: pubcrawl
-      POSTGRES_PASSWORD: pubcrawl
+      POSTGRES_USER: pubcrawls
+      POSTGRES_DB: pubcrawls
+      POSTGRES_PASSWORD: pubcrawls
     ports:
       - 5432:5432
     volumes:
@@ -34,8 +34,8 @@ services:
       WATCH_FILES: 0
       ROLL_SCRIPTS: 0
       DB_HOST: db
-      DB_USER: pubcrawl
-      DB_NAME: pubcrawl
+      DB_USER: pubcrawls
+      DB_NAME: pubcrawls
       DB_PASSWORD_FILE: /run/secrets/db_secret
     volumes:
       - ./db/code:/app/input
@@ -54,8 +54,8 @@ services:
       codegen_init:
         condition: service_completed_successfully
     environment:
-      DB_NAME: pubcrawl
-      DB_USER: pubcrawl
+      DB_NAME: pubcrawls
+      DB_USER: pubcrawls
       DB_HOST: db
       ENV: dev
     networks:
@@ -74,8 +74,8 @@ services:
       WATCH_FILES: 1
       ROLL_SCRIPTS: 1
       DB_HOST: db
-      DB_USER: pubcrawl
-      DB_NAME: pubcrawl
+      DB_USER: pubcrawls
+      DB_NAME: pubcrawls
       DB_PASSWORD_FILE: /run/secrets/db_secret
     volumes:
       - ./db/code:/app/input
@@ -101,8 +101,8 @@ services:
       CLIENT_HOST: ${CLIENT_HOST:-localhost:3000}
       CLIENT_PROTOCOL: ${CLIENT_PROTOCOL:-http}
       DB_HOST: db
-      DB_NAME: pubcrawl
-      DB_USER: pubcrawl
+      DB_NAME: pubcrawls
+      DB_USER: pubcrawls
       DB_PASSWORD: /run/secrets/db_secret
       FROM_EMAIL: ${FROM_EMAIL}
       OPENAPI_JSON_PATH: /app/openapi/openapi.json
