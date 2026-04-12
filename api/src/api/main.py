@@ -45,7 +45,7 @@ from api.utils import (
     get_env_variable_with_default,
 )
 
-app = FastAPI(title="Real Ale Trail tracker", lifespan=lifespan)
+app = FastAPI(title="Pub Crawl Tracker", lifespan=lifespan)
 
 
 @app.get("/", summary="Say hello!", tags=["home"])

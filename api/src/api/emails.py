@@ -47,7 +47,7 @@ class EmailSender:
     def write_email(self, subject: str, to_email: str, body: str) -> MIMEMultipart:
         message = MIMEMultipart("mixed")
         message["Subject"] = subject
-        message["From"] = formataddr(("Real Ale Trail Tracker", self.from_email))
+        message["From"] = formataddr(("Pub Crawl Tracker", self.from_email))
         message["To"] = to_email
         message["Message-ID"] = make_msgid()
         message.attach(MIMEText(body))
