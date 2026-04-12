@@ -38,7 +38,7 @@ const BottomBar = () => {
               <BottomBarLink href="/" label="Map" />
             </div>
             <div className="w-1/4">
-              <BottomBarLink href="/venues/list" label="Venues" />
+              <BottomBarLink href="/venues" label="Venues" />
             </div>
             <div className="w-1/4">
               <BottomBarLink href="/users" label="Users" />

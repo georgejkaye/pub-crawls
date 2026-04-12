@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { UserContext } from "./context/user"
 
 const TopBar = () => {
@@ -25,7 +25,10 @@ const TopBar = () => {
               <Link className={linkStyle} href="/">
                 Map
               </Link>
-              <Link className={linkStyle} href="/venues/list">
+              <Link className={linkStyle} href="/crawls">
+                Crawls
+              </Link>
+              <Link className={linkStyle} href="/venues">
                 Venues
               </Link>
               <Link className={linkStyle} href="/visits">
