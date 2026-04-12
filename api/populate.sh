@@ -4,7 +4,7 @@ VENUES_JSON="./venues.json"
 
 if [ -z "$DB_PASSWORD_FILE" ]; then
     DB_PASSWORD_FILE="temp.secret"
-    echo "realaletrail" > $DB_PASSWORD_FILE
+    echo "pubcrawl" > $DB_PASSWORD_FILE
 fi
 
 DB_PASSWORD_FILE_PATH=`realpath $DB_PASSWORD_FILE`

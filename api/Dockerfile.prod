@@ -52,7 +52,7 @@ COPY --from=codegen /app/output/db src/api/db
 ARG ENV
 
 RUN if [ "$ENV" = "test" ]; then \
-    echo "realaletrail" > /app/db.secret; \
+    echo "pubcrawl" > /app/db.secret; \
     echo "user" > /app/user.secret; \
     echo "smtp" > /app/smtp.secret; \
     fi
