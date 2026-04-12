@@ -54,7 +54,10 @@ const LoginBox = ({ performLogin }: LoginBoxProps) => {
 const Page = () => {
   const { user, isLoadingUser, setToken } = useContext(UserContext)
   const { client } = useContext(ClientContext)
+  const { cardStyle } = useContext(CrawlsContext)
+
   const router = useRouter()
+
   const [errorString, setErrorString] = useState("")
   const [successString, setSuccessString] = useState("")
   const [freshLogin, setFreshLogin] = useState(false)
@@ -106,7 +109,7 @@ const Page = () => {
         <Loader />
       ) : successString !== "" ? (
         <>
-          <div className="w-full p-4 bg-accent text-accentfg rounded">
+          <div className="w-full p-4 rounded" style={cardStyle}>
             {successString}
           </div>
           <Loader />

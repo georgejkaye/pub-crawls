@@ -22,6 +22,8 @@ interface VenueCardProps {
 }
 
 const VenueCard = ({ venue, location, filterCrawl }: VenueCardProps) => {
+  const { cardStyle } = useContext(CrawlsContext)
+
   const crawl = venue.crawls.find((crawl) => crawl.crawl_id === filterCrawl)
   const visitCount = crawl ? crawl.visit_count : venue.total_visits
   const userCount = crawl ? crawl.user_visit_count : venue.users_visited
@@ -31,7 +33,10 @@ const VenueCard = ({ venue, location, filterCrawl }: VenueCardProps) => {
     : undefined
   return (
     <Link href={`/venues/${venue.venue_id}`}>
-      <div className="p-4 flex md:flex-row items-end gap-4 bg-accent text-accentfg rounded-lg shadow hover:bg-accentlight">
+      <div
+        className="p-4 flex md:flex-row items-end gap-4 rounded-lg shadow"
+        style={cardStyle}
+      >
         <div className="flex flex-col flex-1 gap-2">
           <div className="text-2xl font-bold">{venue.venue_name}</div>
           <div>{venue.venue_address}</div>

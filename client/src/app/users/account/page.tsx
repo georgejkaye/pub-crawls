@@ -8,6 +8,8 @@ import { LinkButton } from "@/app/components/forms"
 
 const Page = () => {
   const { user, logOut } = useContext(UserContext)
+  const { cardStyle } = useContext(CrawlsContext)
+
   const router = useRouter()
   const [isLoggedOut, setLoggedOut] = useState(false)
   const onClickLogout = () => {
@@ -24,7 +26,7 @@ const Page = () => {
     <div className="flex flex-col md:w-1/2 lg:w-1/3 mx-auto p-4 gap-2 items-center">
       {isLoggedOut ? (
         <>
-          <div className="w-full bg-accent text-accentfg rounded p-4">
+          <div className="w-full rounded p-4" style={cardStyle}>
             Successfully logged out, redirecting you to the home page...
           </div>
           <Loader />
@@ -35,12 +37,7 @@ const Page = () => {
         <div className="w-full flex flex-col gap-2">
           <h1 className="font-bold text-2xl">{user.display_name}</h1>
           <div>
-            <button
-              className="font-bold p-2 rounded bg-accent text-accentfg cursor-pointer hover:bg-accentlight"
-              onClick={onClickLogout}
-            >
-              Logout
-            </button>
+            <LinkButton label="Logout" onClick={onClickLogout} />
           </div>
         </div>
       )}

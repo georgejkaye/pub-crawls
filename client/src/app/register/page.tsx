@@ -8,6 +8,7 @@ import { CrawlsContext } from "../context/crawls"
 
 const Page = () => {
   const { client } = useContext(ClientContext)
+  const { cardStyle } = useContext(CrawlsContext)
   const [emailString, setEmailString] = useState("")
   const [displayNameString, setDisplayNameString] = useState("")
   const [passwordString, setPasswordString] = useState("")
@@ -75,7 +76,7 @@ const Page = () => {
             <div className="p-4 bg-red-300 rounded-lg">{errorString}</div>
           )}
           {successString && (
-            <div className="p-4 bg-accent rounded-lg text-accentfg">
+            <div className="p-4 rounded-lg" style={cardStyle}>
               {successString}
             </div>
           )}

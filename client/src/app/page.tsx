@@ -25,6 +25,8 @@ const CrawlSelector = ({
   setCurrentCrawl,
   setSelectingCrawl,
 }: CrawlSelectorProps) => {
+  const { bgColour, fgColour } = useContext(CrawlsContext)
+
   const onClickSelector = () => {
     setSelectingCrawl(true)
   }
@@ -32,9 +34,9 @@ const CrawlSelector = ({
     <div
       className="p-2 rounded-lg border-3 cursor-pointer"
       style={{
-        backgroundColor: currentCrawl?.crawl_fg ?? "#000000",
-        color: currentCrawl?.crawl_bg ?? "#ffffff",
-        borderColor: currentCrawl?.crawl_bg ?? "#ffffff",
+        backgroundColor: fgColour,
+        color: bgColour,
+        borderColor: bgColour,
       }}
     >
       {!currentCrawl ? (
@@ -67,13 +69,14 @@ const VisitStatsPane = ({
   currentVenueCount,
   totalVenueCount,
 }: VisitStatsPaneProps) => {
+  const { bgColour, fgColour } = useContext(CrawlsContext)
   return (
     <div
       className="p-2 rounded-lg bg-white border-3 border-gray-200"
       style={{
-        backgroundColor: currentCrawl?.crawl_fg ?? "#000000",
-        color: currentCrawl?.crawl_bg ?? "#ffffff",
-        borderColor: currentCrawl?.crawl_bg ?? "#ffffff",
+        backgroundColor: fgColour,
+        color: bgColour,
+        borderColor: bgColour,
       }}
     >
       <span className="text-lg font-bold">
@@ -181,22 +184,16 @@ const CrawlSelectScreen = ({
 export default function Home() {
   const { user } = useContext(UserContext)
   const { client } = useContext(ClientContext)
+  const { crawls, isLoadingCrawls, currentCrawl, setCurrentCrawl } =
+    useContext(CrawlsContext)
 
   const { data: venues, isLoading: isLoadingVenues } = client.useQuery(
     "get",
     "/venues",
   )
-  const { data: crawls, isLoading: isLoadingCrawls } = client.useQuery(
-    "get",
-    "/crawls",
-  )
 
   const [currentVenue, setCurrentVenue] = useState<Venue | undefined>(undefined)
-  const [currentCrawl, setCurrentCrawl] = useState<CrawlSummary | undefined>(
-    undefined,
-  )
   const [isSelectingCrawl, setSelectingCrawl] = useState(false)
-  const [isRetrievingFromStorage, setRetrievingFromStorage] = useState(true)
 
   const filteredVenues =
     !venues || !currentCrawl
@@ -207,31 +204,7 @@ export default function Home() {
           ),
         )
 
-  useEffect(() => {
-    const currentCrawlString = localStorage.getItem("crawl")
-    if (currentCrawlString && crawls) {
-      setCurrentCrawl(
-        crawls.find((crawl) => crawl.crawl_id === Number(currentCrawlString)),
-      )
-    }
-    setRetrievingFromStorage(false)
-  }, [crawls])
-
-  useEffect(() => {
-    if (!isRetrievingFromStorage) {
-      if (!currentCrawl) {
-        localStorage.removeItem("crawl")
-      } else {
-        localStorage.setItem("crawl", currentCrawl.crawl_id.toString())
-      }
-    }
-  }, [currentCrawl])
-
-  return isLoadingVenues ||
-    isLoadingCrawls ||
-    !crawls ||
-    !venues ||
-    isRetrievingFromStorage ? (
+  return isLoadingVenues || isLoadingCrawls || !crawls || !venues ? (
     <Loader />
   ) : isSelectingCrawl ? (
     <CrawlSelectScreen

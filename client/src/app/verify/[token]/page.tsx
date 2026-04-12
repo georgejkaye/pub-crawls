@@ -1,11 +1,13 @@
 "use client"
 import { ClientContext } from "@/app/context/ReactQueryClientProvider"
 import { Loader } from "@/app/components/Loader"
+import { CrawlsContext } from "@/app/context/crawls"
 import { use, useContext, useEffect, useState } from "react"
 
 const Page = ({ params }: { params: Promise<{ token: string }> }) => {
   const { token } = use(params)
   const { client } = useContext(ClientContext)
+  const { cardStyle } = useContext(CrawlsContext)
 
   const [errorString, setErrorString] = useState("")
   const [successString, setSuccessString] = useState("")
@@ -36,7 +38,7 @@ const Page = ({ params }: { params: Promise<{ token: string }> }) => {
       ) : errorString !== "" ? (
         <div className="w-full bg-red-200 p-4 rounded">{errorString}</div>
       ) : (
-        <div className="w-full bg-accent text-accentfg p-4 rounded">
+        <div className="w-full p-4 rounded" style={cardStyle}>
           {successString}
         </div>
       )}

@@ -1,20 +1,25 @@
 "use client"
 
 import { useContext } from "react"
-import { ClientContext } from "../api/ReactQueryClientProvider"
+import { ClientContext } from "../context/ReactQueryClientProvider"
 import { Loader } from "../components/Loader"
 import { UserCount } from "../api/client"
 import { FaStar } from "react-icons/fa"
 import Link from "next/link"
+import { CrawlsContext } from "../context/crawls"
 
 interface UserCardProps {
   user: UserCount
 }
 
 const UserCard = ({ user }: UserCardProps) => {
+  const { cardStyle } = useContext(CrawlsContext)
   return (
     <div className="flex flex-col gap-4">
-      <div className="bg-accent p-4 rounded-xl text-accentfg flex flex-col md:flex-col gap-4">
+      <div
+        className="p-4 rounded-xl flex flex-col md:flex-col gap-4"
+        style={cardStyle}
+      >
         <div className="flex flex-row items-center flex-1">
           <Link
             className="text-xl font-bold flex-1 hover:underline"

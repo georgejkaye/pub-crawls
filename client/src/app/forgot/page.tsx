@@ -3,10 +3,13 @@ import { useContext, useState } from "react"
 import { SubmitButton, TextInput } from "../components/forms"
 import Link from "next/link"
 import { Loader } from "../components/Loader"
-import { ClientContext } from "../api/ReactQueryClientProvider"
+import { ClientContext } from "../context/ReactQueryClientProvider"
+import { CrawlsContext } from "../context/crawls"
 
 const Page = () => {
   const { client } = useContext(ClientContext)
+  const { cardStyle } = useContext(CrawlsContext)
+
   const [requestEmail, setRequestEmail] = useState("")
   const [emailString, setEmailString] = useState("")
   const [requestMade, setRequestMade] = useState(false)
@@ -38,7 +41,7 @@ const Page = () => {
           <>
             <h2 className="text-2xl font-bold">Reset your password</h2>
             {requestMade && (
-              <div className="p-4 bg-accent text-accentfg rounded-lg">
+              <div className="p-4 rounded-lg" style={cardStyle}>
                 If it is on our systems, an email has been sent to{" "}
                 <b>{requestEmail}</b> containing details on how to reset your
                 password.

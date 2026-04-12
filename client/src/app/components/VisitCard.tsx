@@ -1,3 +1,5 @@
+"use client"
+
 import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
 import { useContext } from "react"
@@ -5,6 +7,7 @@ import { ClientContext } from "../context/ReactQueryClientProvider"
 import { UserContext } from "../context/user"
 import { Loader } from "./Loader"
 import { RiBeerLine } from "react-icons/ri"
+import { CrawlsContext } from "../context/crawls"
 
 interface VisitCardHeaderProps {
   text: string
@@ -178,6 +181,7 @@ interface VisitCardProps {
 const VisitCard = ({ headers, review, visitUserId }: VisitCardProps) => {
   const { client } = useContext(ClientContext)
   const { user, token } = useContext(UserContext)
+  const { cardStyle } = useContext(CrawlsContext)
 
   const isCurrentUser = user?.user_id == visitUserId
 
@@ -210,7 +214,7 @@ const VisitCard = ({ headers, review, visitUserId }: VisitCardProps) => {
   return isPendingDeleteVisit ? (
     <Loader />
   ) : (
-    <div className="rounded-xl bg-accentlight text-accentfg p-4 flex flex-col gap-2">
+    <div className="rounded-xl p-4 flex flex-col gap-2" style={cardStyle}>
       {headers &&
         headers.map((header) => (
           <VisitCardHeader
