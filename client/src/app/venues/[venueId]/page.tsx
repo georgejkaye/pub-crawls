@@ -19,35 +19,18 @@ import { VenueCrawl, VenueVisit } from "@/app/api/client"
 import VisitCard, { getVisitCardUserHeader } from "@/app/components/VisitCard"
 import { getAverageRating } from "@/app/utils"
 import Link from "next/link"
+import {
+  getDateFromNullableString,
+  getDateRangeString,
+} from "@/app/utils/datetime"
 
 interface VenueCrawlCardProps {
   crawl: VenueCrawl
 }
 
 const VenueCrawlCard = ({ crawl }: VenueCrawlCardProps) => {
-  const crawlStart = !crawl.crawl_start
-    ? undefined
-    : new Date(Date.parse(crawl.crawl_start))
-  const crawlStartString = !crawlStart
-    ? ""
-    : crawlStart.toLocaleDateString("en-UK", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-      })
-  const crawlEnd = !crawl.crawl_end
-    ? undefined
-    : new Date(Date.parse(crawl.crawl_end))
-  if (crawlEnd) {
-    crawlEnd.setDate(crawlEnd.getDate() - 1)
-  }
-  const crawlEndString = !crawlEnd
-    ? ""
-    : crawlEnd.toLocaleDateString("en-UK", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-      })
+  const crawlStart = getDateFromNullableString(crawl.crawl_start)
+  const crawlEnd = getDateFromNullableString(crawl.crawl_end)
   const isUpcoming = crawlStart && new Date() < crawlStart
   const isPassed = crawlEnd && new Date() > crawlEnd
   return (
@@ -65,9 +48,7 @@ const VenueCrawlCard = ({ crawl }: VenueCrawlCardProps) => {
         >
           {crawl.crawl_name}
         </Link>
-        <div className="">
-          {crawlStartString} - {crawlEndString}
-        </div>
+        <div className="">{getDateRangeString(crawlStart, crawlEnd)}</div>
       </div>
       <div>{isUpcoming ? "Upcoming" : isPassed ? "Passed" : "Ongoing"}</div>
     </div>

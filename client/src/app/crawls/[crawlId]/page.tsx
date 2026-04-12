@@ -5,6 +5,10 @@ import { ClientContext } from "@/app/api/ReactQueryClientProvider"
 import { Loader } from "@/app/components/Loader"
 import { VenueMap } from "@/app/components/VenueMap"
 import { UserContext } from "@/app/context/user"
+import {
+  getDateFromNullableString,
+  getDateRangeString,
+} from "@/app/utils/datetime"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { PropsWithChildren, use, useContext, useState } from "react"
@@ -14,34 +18,11 @@ interface CrawlDetailsProps {
 }
 
 const CrawlDetails = ({ crawl }: CrawlDetailsProps) => {
-  const crawlStart = !crawl.crawl_start
-    ? undefined
-    : new Date(Date.parse(crawl.crawl_start))
-  const crawlStartString = !crawlStart
-    ? ""
-    : crawlStart.toLocaleDateString("en-UK", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-      })
-  const crawlEnd = !crawl.crawl_end
-    ? undefined
-    : new Date(Date.parse(crawl.crawl_end))
-  if (crawlEnd) {
-    crawlEnd.setDate(crawlEnd.getDate() - 1)
-  }
-  const crawlEndString = !crawlEnd
-    ? ""
-    : crawlEnd.toLocaleDateString("en-UK", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-      })
+  const crawlStart = getDateFromNullableString(crawl.crawl_start)
+  const crawlEnd = getDateFromNullableString(crawl.crawl_end)
   return (
     <div>
-      <div>
-        {crawlStartString} - {crawlEndString}
-      </div>
+      <div>{getDateRangeString(crawlStart, crawlEnd)}</div>
       <div className="flex flex-row items-end gap-2">
         <div className="font-bold text-lg">{crawl.venue_count}</div>
         <div>venue{crawl.venue_count === 1 ? "" : "s"}</div>
