@@ -73,9 +73,7 @@ class EmailSender:
                 "verify_url": f"{self.client_protocol}://{self.client_host}/verify/{token}"
             },
         )
-        message = self.write_email(
-            "[realaletrail] Verify your account", user.email, body
-        )
+        message = self.write_email("[pubcrawl] Verify your account", user.email, body)
         self.send_email(message)
 
     def send_forgot_password_email(self, user: FastApiUser, token: str) -> None:
@@ -84,6 +82,6 @@ class EmailSender:
             {"reset_url": f"{self.client_protocol}://{self.client_host}/reset/{token}"},
         )
         message = self.write_email(
-            "[realaletrail] Password reset request", user.email, body
+            "[pubcrawl] Password reset request", user.email, body
         )
         self.send_email(message)
