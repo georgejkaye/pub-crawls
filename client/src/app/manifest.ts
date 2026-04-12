@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Real Ale Trail Tracker",
+    name: "Pub Crawl Tracker",
     short_name: "RealAleTrail",
-    description: "Black Country Ales Real Ale Trail tracker",
+    description: "Black Country Ales Pub Crawl Tracker",
     start_url: "/",
     display: "standalone",
     background_color: "#f9eed2",
