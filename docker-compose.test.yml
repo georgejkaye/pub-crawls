@@ -7,6 +7,10 @@ services:
     build:
       context: db
       dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: pubcrawl
+      POSTGRES_DB: pubcrawl
+      POSTGRES_PASSWORD: pubcrawl
     volumes:
       - ./db:/db
   db:
