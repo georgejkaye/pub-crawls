@@ -31,19 +31,22 @@ const BottomBar = () => {
           <Loader />
         ) : (
           <div className="flex flex-row items-center text-center py-4">
-            <div className="w-1/4">
+            <div className="basis-0 grow">
               <BottomBarLink href="/visits" label="Visits" />
             </div>
-            <div className="w-1/4">
-              <BottomBarLink href="/" label="Map" />
-            </div>
-            <div className="w-1/4">
+            <div className="basis-0 grow">
               <BottomBarLink href="/venues" label="Venues" />
             </div>
-            <div className="w-1/4">
+            <div className="basis-0 grow">
+              <BottomBarLink href="/" label="Map" />
+            </div>
+            <div className="basis-0 grow">
+              <BottomBarLink href="/crawls" label="Crawls" />
+            </div>
+            <div className="basis-0 grow">
               <BottomBarLink href="/users" label="Users" />
             </div>
-            <div className="w-1/4">
+            <div className="basis-0 grow">
               {user ? (
                 <BottomBarLink
                   href={`/users/${user.user_id}`}
