@@ -1,38 +1,37 @@
 import type { Metadata } from "next"
+
 import "./globals.css"
-import TopBar from "./TopBar"
-import { UserProvider } from "./context/user"
-import { VenuesProvider } from "./context/venues"
 import "maplibre-gl/dist/maplibre-gl.css"
 import "@smastrom/react-rating/style.css"
-import { ReactQueryClientProvider } from "./api/ReactQueryClientProvider"
-import BottomBar from "./BottomBar"
+
+import { UserProvider } from "./context/user"
+import { VenuesProvider } from "./context/venues"
+import { ReactQueryClientProvider } from "./context/ReactQueryClientProvider"
+import { CrawlsProvider } from "./context/crawls"
+
+import Content from "./Content"
 
 export const metadata: Metadata = {
-  title: "Real Ale Trail Tracker",
-  description: "Track visits to the Black Country Ales Real Ale Trail venues",
+  title: "Pub Crawl Tracker",
+  description: "Track visits on pub crawls",
 }
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
-}>) {
+}>) => {
   return (
     <html lang="en">
-      <body className="bg-back">
-        <ReactQueryClientProvider>
-          <UserProvider>
+      <ReactQueryClientProvider>
+        <UserProvider>
+          <CrawlsProvider>
             <VenuesProvider>
-              <div className="flex flex-col">
-                <TopBar />
-                {children}
-                <BottomBar />
-              </div>
+              <Content>{children}</Content>
             </VenuesProvider>
-          </UserProvider>
-        </ReactQueryClientProvider>
-      </body>
+          </CrawlsProvider>
+        </UserProvider>
+      </ReactQueryClientProvider>
       <link
         rel="icon"
         type="image/png"
@@ -50,3 +49,5 @@ export default function RootLayout({
     </html>
   )
 }
+
+export default RootLayout
