@@ -91,10 +91,8 @@ async def get_venues() -> list[VenueData]:
     tags=["venue"],
     responses={404: {"model": NotFoundResponse}},
 )
-async def get_venue_by_id(
-    venue_id: int, user_id: Optional[int] = None
-) -> SingleVenueData:
-    venue = select_venue_by_venue_id_fetchone(get_db_connection(), user_id, venue_id)
+async def get_venue_by_id(venue_id: int) -> SingleVenueData:
+    venue = select_venue_by_venue_id_fetchone(get_db_connection(), venue_id)
     if venue is None:
         raise HTTPException(status_code=404)
     return venue

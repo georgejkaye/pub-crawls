@@ -440,7 +440,6 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION select_venue_by_venue_id (
-    p_user_id INTEGER,
     p_venue_id INTEGER_NOTNULL
 )
 RETURNS SETOF single_venue_data
@@ -478,9 +477,6 @@ LEFT JOIN (
     LEFT JOIN crawl_visit_count_view
     ON crawl_venue.crawl_id = crawl_visit_count_view.crawl_id
     AND crawl_venue.venue_id = crawl_visit_count_view.venue_id
-    LEFT JOIN crawl_user
-    ON crawl.crawl_id = crawl_user.crawl_id
-    WHERE p_user_id IS NULL OR crawl_user.user_id = p_user_id
     GROUP BY crawl_venue.venue_id
 ) venue_crawl
 ON venue.venue_id = venue_crawl.venue_id
