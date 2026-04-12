@@ -20,5 +20,6 @@ export type VisitCrawl = components["schemas"]["VisitCrawlData"]
 export type Crawl = components["schemas"]["CrawlData"]
 export type CrawlVenueSummary = components["schemas"]["CrawlVenueSummaryData"]
 export type CrawlVisit = components["schemas"]["CrawlVisitData"]
+export type CrawlSummary = components["schemas"]["CrawlSummaryData"]
 
 export default fetchClient
