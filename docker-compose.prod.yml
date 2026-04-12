@@ -20,7 +20,7 @@ services:
       - db_secret
   api:
     depends_on:
-      data:
+      db:
         condition: service_completed_successfully
     build:
       context: .
