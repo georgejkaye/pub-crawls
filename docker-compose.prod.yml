@@ -18,24 +18,6 @@ services:
       - ./db/code:/app/input
     secrets:
       - db_secret
-  data:
-    depends_on:
-      db:
-        condition: service_completed_successfully
-    build:
-      context: api
-      dockerfile: Dockerfile.data
-      args:
-        POETRY_VERSION: 2.3.2
-    environment:
-      DB_HOST: ${DB_HOST}
-      DB_USER: ${DB_USER}
-      DB_NAME: ${DB_NAME}
-      DB_PASSWORD_FILE: /run/secrets/db_secret
-    networks:
-      - internal
-    secrets:
-      - db_secret
   api:
     depends_on:
       data:
