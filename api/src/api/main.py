@@ -81,8 +81,8 @@ async def get_user_by_user_id(user_id: int) -> UserSummaryData:
 
 
 @app.get("/venues", summary="Get a list of venues and their visits", tags=["venue"])
-async def get_venues(user_id: Optional[int] = None) -> list[VenueData]:
-    return select_venues_fetchall(get_db_connection(), user_id)
+async def get_venues() -> list[VenueData]:
+    return select_venues_fetchall(get_db_connection())
 
 
 @app.get(
