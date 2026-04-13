@@ -73,7 +73,7 @@ export const CrawlsProvider = ({ children }: PropsWithChildren) => {
         bgColour,
         fgColour,
         cardStyle: {
-          backgroundColor: `color-mix(in oklab, ${fgColour} 75%, white)`,
+          backgroundColor: `color-mix(in oklab, ${fgColour} 90%, white)`,
           color: currentCrawl?.crawl_bg ?? "#ffffff",
         },
       }}

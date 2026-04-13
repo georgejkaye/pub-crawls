@@ -32,31 +32,34 @@ const VenueCard = ({ venue, location, filterCrawl }: VenueCardProps) => {
     ? getDistanceToVenue(venue, location)
     : undefined
   return (
-    <Link href={`/venues/${venue.venue_id}`}>
-      <div
-        className="p-4 flex md:flex-row items-end gap-4 rounded-lg shadow"
-        style={cardStyle}
-      >
-        <div className="flex flex-col flex-1 gap-2">
-          <div className="text-2xl font-bold">{venue.venue_name}</div>
-          <div>{venue.venue_address}</div>
-          {distanceToVenue && <div>{distanceToVenue.toFixed(2)}km away</div>}
-          <div className="flex flex-row gap-4">
-            <div>
-              {visitCount} {visitCount === 1 ? "visit" : "visits"}
-            </div>
-            <div>
-              {userCount} {userCount === 1 ? "user" : "users"} visited
-            </div>
+    <div
+      className="p-4 flex md:flex-row items-end gap-4 rounded-lg shadow hoverLunderline"
+      style={cardStyle}
+    >
+      <div className="flex flex-col flex-1 gap-2">
+        <Link
+          className="text-2xl font-bold hover:underline"
+          href={`/venues/${venue.venue_id}`}
+        >
+          {venue.venue_name}
+        </Link>
+        <div>{venue.venue_address}</div>
+        {distanceToVenue && <div>{distanceToVenue.toFixed(2)}km away</div>}
+        <div className="flex flex-row gap-4">
+          <div>
+            {visitCount} {visitCount === 1 ? "visit" : "visits"}
           </div>
-          <Rating
-            style={{ maxWidth: 100 }}
-            value={venueAverageRating ?? 0}
-            readOnly
-          />
+          <div>
+            {userCount} {userCount === 1 ? "user" : "users"} visited
+          </div>
         </div>
+        <Rating
+          style={{ maxWidth: 100 }}
+          value={venueAverageRating ?? 0}
+          readOnly
+        />
       </div>
-    </Link>
+    </div>
   )
 }
 

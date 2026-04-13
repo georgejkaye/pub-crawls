@@ -27,28 +27,35 @@ const CrawlSelector = ({
 }: CrawlSelectorProps) => {
   const { bgColour, fgColour } = useContext(CrawlsContext)
 
+  const [isHovered, setHovered] = useState(false)
+
   const onClickSelector = () => {
     setSelectingCrawl(true)
   }
+
   return (
     <div
       className="p-2 rounded-lg border-3 cursor-pointer"
       style={{
-        backgroundColor: fgColour,
+        backgroundColor: isHovered
+          ? `color-mix(in oklab, ${fgColour} 80%, white)`
+          : fgColour,
         color: bgColour,
         borderColor: bgColour,
       }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       {!currentCrawl ? (
         <button
-          className="text-lg font-bold cursor-pointer"
+          className="text-lg font-bold cursor-pointer hover:underline"
           onClick={onClickSelector}
         >
           No crawl selected
         </button>
       ) : (
         <button
-          className="text-lg font-bold cursor-pointer"
+          className="text-lg font-bold cursor-pointer hover:underline"
           onClick={onClickSelector}
         >
           {currentCrawl.crawl_name}
