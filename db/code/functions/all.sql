@@ -727,14 +727,14 @@ LEFT JOIN (
                 visit.notes,
                 visit.rating,
                 visit.drink,
-                visit_crawl.crawls
+                COALESCE(visit_crawl.crawls, ARRAY[]::visit_crawl_data[])
             )::single_user_visit_data
             ORDER BY visit.visit_date
         ) AS visits
     FROM visit
     INNER JOIN venue
     ON visit.venue_id = venue.venue_id
-    INNER JOIN (
+    LEFT JOIN (
         SELECT
             crawl_visit_view.visit_id,
             ARRAY_AGG(
