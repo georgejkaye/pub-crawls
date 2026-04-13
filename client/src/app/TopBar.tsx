@@ -55,7 +55,7 @@ const TopBar = () => {
                   Logout
                 </div>
                 <Link
-                  className="hidden md:flex font-bold"
+                  className={`hidden md:flex font-bold ${linkStyle}}`}
                   href={`/users/${user.user_id}`}
                 >
                   {user.display_name}
