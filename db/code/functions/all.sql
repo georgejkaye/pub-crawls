@@ -426,9 +426,9 @@ LEFT JOIN (
             )::crawl_venue_visit_data
         ) AS visits
     FROM visit_view
-    INNER JOIN crawl_visit
-    ON visit_view.visit_id = crawl_visit.visit_id
-    WHERE crawl_visit.crawl_id = p_crawl_id
+    INNER JOIN crawl_visit_view
+    ON visit_view.visit_id = crawl_visit_view.visit_id
+    WHERE crawl_visit_view.crawl_id = p_crawl_id
     GROUP BY visit_view.venue_id
 ) venue_visit
 ON venue.venue_id = venue_visit.venue_id
@@ -615,9 +615,9 @@ SELECT
     visit_view.rating,
     visit_view.drink
 FROM visit_view
-INNER JOIN crawl_visit
-ON visit_view.visit_id = crawl_visit.visit_id
-WHERE crawl_visit.crawl_id = p_crawl_id;
+INNER JOIN crawl_visit_view
+ON visit_view.visit_id = crawl_visit_view.visit_id
+WHERE crawl_visit_view.crawl_id = p_crawl_id;
 $$;
 
 CREATE OR REPLACE FUNCTION select_visit (
@@ -660,12 +660,12 @@ SELECT
 FROM app_user
 LEFT JOIN (
     SELECT
-        crawl_visit.user_id,
-        COUNT(crawl_visit.visit_id) AS visit_count,
-        COUNT(DISTINCT crawl_visit.venue_id) AS venue_count,
-        COUNT(DISTINCT crawl_visit.crawl_id) AS crawl_count
-    FROM crawl_visit
-    GROUP BY crawl_visit.user_id
+        crawl_visit_view.user_id,
+        COUNT(crawl_visit_view.visit_id) AS visit_count,
+        COUNT(DISTINCT crawl_visit_view.venue_id) AS venue_count,
+        COUNT(DISTINCT crawl_visit_view.crawl_id) AS crawl_count
+    FROM crawl_visit_view
+    GROUP BY crawl_visit_view.user_id
 ) user_count
 ON app_user.user_id = user_count.user_id
 LEFT JOIN (
@@ -686,13 +686,13 @@ LEFT JOIN (
         ) AS crawls
     FROM (
         SELECT DISTINCT
-            crawl_visit.user_id,
-            crawl_visit.crawl_id,
-            COUNT(DISTINCT crawl_visit.venue_id) AS venue_count
-        FROM crawl_visit
+            crawl_visit_view.user_id,
+            crawl_visit_view.crawl_id,
+            COUNT(DISTINCT crawl_visit_view.venue_id) AS venue_count
+        FROM crawl_visit_view
         GROUP BY
-            crawl_visit.user_id,
-            crawl_visit.crawl_id
+            crawl_visit_view.user_id,
+            crawl_visit_view.crawl_id
     ) user_crawl_visit
     INNER JOIN crawl
     ON user_crawl_visit.crawl_id = crawl.crawl_id
@@ -736,21 +736,21 @@ LEFT JOIN (
     ON visit.venue_id = venue.venue_id
     INNER JOIN (
         SELECT
-            crawl_visit.visit_id,
+            crawl_visit_view.visit_id,
             ARRAY_AGG(
                 (
-                    crawl_visit.crawl_id,
+                    crawl_visit_view.crawl_id,
                     crawl.crawl_name,
                     crawl.crawl_bg,
                     crawl.crawl_fg,
-                    crawl_visit.visit_no
+                    crawl_visit_view.visit_no
                 )::visit_crawl_data
-                ORDER BY crawl_visit.crawl_id
+                ORDER BY crawl_visit_view.crawl_id
             ) AS crawls
-        FROM crawl_visit
+        FROM crawl_visit_view
         INNER JOIN crawl
-        ON crawl_visit.crawl_id = crawl.crawl_id
-        GROUP BY crawl_visit.visit_id
+        ON crawl_visit_view.crawl_id = crawl.crawl_id
+        GROUP BY crawl_visit_view.visit_id
     ) visit_crawl
     ON visit.visit_id = visit_crawl.visit_id
     GROUP BY visit.user_id
@@ -824,12 +824,12 @@ LEFT JOIN (
             END AS favourite_venue
         FROM (
             SELECT
-                crawl_visit.user_id,
-                crawl_visit.crawl_id,
-                COUNT(crawl_visit.*) AS visit_count,
-                COUNT(DISTINCT crawl_visit.venue_id) AS unique_visit_count
-            FROM crawl_visit
-            GROUP BY crawl_visit.user_id, crawl_visit.crawl_id
+                crawl_visit_view.user_id,
+                crawl_visit_view.crawl_id,
+                COUNT(crawl_visit_view.*) AS visit_count,
+                COUNT(DISTINCT crawl_visit_view.venue_id) AS unique_visit_count
+            FROM crawl_visit_view
+            GROUP BY crawl_visit_view.user_id, crawl_visit_view.crawl_id
         ) user_crawl_count
         INNER JOIN crawl
         ON user_crawl_count.crawl_id = crawl.crawl_id
@@ -874,11 +874,11 @@ LEFT JOIN (
 ON crawl.crawl_id = crawl_venue_count.crawl_id
 LEFT JOIN (
     SELECT
-        crawl_visit.crawl_id,
-        COUNT(crawl_visit.visit_id) AS visit_count,
-        COUNT(DISTINCT crawl_visit.user_id) AS user_count
-    FROM crawl_visit
-    GROUP BY crawl_visit.crawl_id
+        crawl_visit_view.crawl_id,
+        COUNT(crawl_visit_view.visit_id) AS visit_count,
+        COUNT(DISTINCT crawl_visit_view.user_id) AS user_count
+    FROM crawl_visit_view
+    GROUP BY crawl_visit_view.crawl_id
 ) crawl_visit_count
 ON crawl.crawl_id = crawl_visit_count.crawl_id
 LEFT JOIN (
@@ -935,11 +935,11 @@ LEFT JOIN (
 ON crawl.crawl_id = crawl_venue_count.crawl_id
 LEFT JOIN (
     SELECT
-        crawl_visit.crawl_id,
-        COUNT(crawl_visit.visit_id) AS visit_count,
-        COUNT(DISTINCT crawl_visit.user_id) AS user_count
-    FROM crawl_visit
-    GROUP BY crawl_visit.crawl_id
+        crawl_visit_view.crawl_id,
+        COUNT(crawl_visit_view.visit_id) AS visit_count,
+        COUNT(DISTINCT crawl_visit_view.user_id) AS user_count
+    FROM crawl_visit_view
+    GROUP BY crawl_visit_view.crawl_id
 ) crawl_visit_count
 ON crawl.crawl_id = crawl_visit_count.crawl_id
 LEFT JOIN (
@@ -973,14 +973,14 @@ LEFT JOIN (
     ON crawl_venue.venue_id = venue.venue_id
     LEFT JOIN (
         SELECT
-            crawl_visit.crawl_id,
-            crawl_visit.venue_id,
-            COUNT(crawl_visit.visit_id) AS visit_count,
-            COUNT(DISTINCT crawl_visit.user_id) AS user_count
-        FROM crawl_visit
+            crawl_visit_view.crawl_id,
+            crawl_visit_view.venue_id,
+            COUNT(crawl_visit_view.visit_id) AS visit_count,
+            COUNT(DISTINCT crawl_visit_view.user_id) AS user_count
+        FROM crawl_visit_view
         GROUP BY
-            crawl_visit.crawl_id,
-            crawl_visit.venue_id
+            crawl_visit_view.crawl_id,
+            crawl_visit_view.venue_id
     ) venue_visit_count
     ON crawl_venue.venue_id = venue_visit_count.venue_id
     AND crawl_venue.crawl_id = venue_visit_count.crawl_id
@@ -989,28 +989,28 @@ LEFT JOIN (
 ON crawl.crawl_id = crawl_venue_agg.crawl_id
 LEFT JOIN (
     SELECT
-        crawl_visit.crawl_id,
+        crawl_visit_view.crawl_id,
         ARRAY_AGG(
             (
-                crawl_visit.visit_id,
-                crawl_visit.user_id,
+                crawl_visit_view.visit_id,
+                crawl_visit_view.user_id,
                 app_user.display_name,
-                crawl_visit.venue_id,
+                crawl_visit_view.venue_id,
                 venue.venue_name,
-                crawl_visit.visit_date,
+                crawl_visit_view.visit_date,
                 visit.notes,
                 visit.rating,
                 visit.drink
             )::crawl_visit_data_notnull
         ) AS visits
-    FROM crawl_visit
+    FROM crawl_visit_view
     INNER JOIN app_user
-    ON crawl_visit.user_id = app_user.user_id
+    ON crawl_visit_view.user_id = app_user.user_id
     INNER JOIN venue
-    ON crawl_visit.venue_id = venue.venue_id
+    ON crawl_visit_view.venue_id = venue.venue_id
     INNER JOIN visit
-    ON crawl_visit.visit_id = visit.visit_id
-    GROUP BY crawl_visit.crawl_id
+    ON crawl_visit_view.visit_id = visit.visit_id
+    GROUP BY crawl_visit_view.crawl_id
 ) crawl_visit_agg
 ON crawl.crawl_id = crawl_visit_agg.crawl_id
 WHERE crawl.crawl_id = p_crawl_id;
