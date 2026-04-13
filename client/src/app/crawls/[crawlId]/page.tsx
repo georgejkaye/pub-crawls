@@ -96,7 +96,7 @@ interface CrawlVisitListProps {
   crawl: Crawl
 }
 
-const CrawlVisitList = ({ crawl }: CrawlVenueListProps) => {
+const CrawlVisitList = ({ crawl }: CrawlVisitListProps) => {
   return <div></div>
 }
 
