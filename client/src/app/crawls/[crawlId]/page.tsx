@@ -3,7 +3,7 @@
 import { Crawl, CrawlVenueSummary } from "@/app/api/client"
 import { ClientContext } from "@/app/context/client"
 import { Loader } from "@/app/components/Loader"
-import { VenueMap } from "@/app/components/VenueMap"
+import { VenueMap } from "@/app/components/SmallVenueMap"
 import { UserContext } from "@/app/context/user"
 import {
   getDateFromNullableString,
@@ -11,7 +11,7 @@ import {
 } from "@/app/utils/datetime"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { PropsWithChildren, use, useContext, useState } from "react"
+import { PropsWithChildren, use, useContext } from "react"
 
 interface CrawlDetailsProps {
   crawl: Crawl
@@ -96,7 +96,7 @@ interface CrawlVisitListProps {
   crawl: Crawl
 }
 
-const CrawlVisitList = ({ crawl }: CrawlVenueListProps) => {
+const CrawlVisitList = ({ crawl }: CrawlVisitListProps) => {
   return <div></div>
 }
 
@@ -118,6 +118,13 @@ const Content = ({ crawlId }: ContentProps) => {
       },
     },
   )
+  const crawlVisitedVenues = !user
+    ? []
+    : user.visits
+        .filter((visit) =>
+          visit.crawls.some((crawl) => crawl.crawl_id === crawlId),
+        )
+        .map((visit) => visit.venue_id)
   return (
     <div className="flex flex-col w-full md:w-2/3 lg:w-1/2 mx-auto p-4">
       {isLoadingCrawl ? (
@@ -128,7 +135,10 @@ const Content = ({ crawlId }: ContentProps) => {
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold">{crawl.crawl_name}</h1>
           <CrawlDetails crawl={crawl} />
-          <VenueMap venues={crawl.venues} />
+          <VenueMap
+            venues={crawl.venues}
+            visitedVenueIds={crawlVisitedVenues}
+          />
           <CrawlVenueList crawl={crawl} />
           <CrawlVisitList crawl={crawl} />
         </div>

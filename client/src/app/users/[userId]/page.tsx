@@ -7,7 +7,7 @@ import { notFound } from "next/navigation"
 import { VenuesContext } from "@/app/context/venues"
 import VisitCard, { getVisitCardUserHeader } from "@/app/components/VisitCard"
 import Link from "next/link"
-import { VenueMap } from "@/app/components/VenueMap"
+import { VenueMap } from "@/app/components/SmallVenueMap"
 
 interface CrawlCardProps {
   crawl: SingleUserCrawl

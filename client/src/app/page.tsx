@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react"
-import { VenueMap } from "./VenueMap"
+import { VenueMap } from "./components/LargeVenueMap"
 import { UserContext } from "./context/user"
 import { CrawlSummary, User, Venue } from "./api/client"
 import { Loader } from "./components/Loader"

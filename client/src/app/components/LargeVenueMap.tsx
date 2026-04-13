@@ -24,13 +24,13 @@ import {
   useRef,
   useState,
 } from "react"
-import { UserContext } from "./context/user"
-import Pin from "./components/Pin"
-import { LinkButton } from "./components/forms"
+import { UserContext } from "../context/user"
+import Pin from "./Pin"
+import { LinkButton } from "./forms"
 import { useRouter } from "next/navigation"
 import { Rating } from "@smastrom/react-rating"
 import Link from "next/link"
-import { getAverageRating, getFirstVisitToVenue } from "./utils"
+import { getAverageRating, getFirstVisitToVenue } from "../utils"
 import bbox from "@turf/bbox"
 import {
   CrawlSummary,
@@ -38,7 +38,7 @@ import {
   User,
   Venue,
   VenueVisit,
-} from "./api/client"
+} from "../api/client"
 
 const getVenueFeatureCollection = (
   venues: Venue[],
