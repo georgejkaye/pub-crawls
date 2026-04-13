@@ -8,6 +8,7 @@ import { UserContext } from "../context/user"
 import { Loader } from "./Loader"
 import { RiBeerLine } from "react-icons/ri"
 import { CrawlsContext } from "../context/crawls"
+import { VisitCrawl } from "../api/client"
 
 interface VisitCardHeaderProps {
   text: string
@@ -176,9 +177,15 @@ interface VisitCardProps {
   headers?: VisitCardHeaderProps[]
   visitUserId: number
   review: Review
+  crawls: VisitCardCrawlInterface[]
 }
 
-const VisitCard = ({ headers, review, visitUserId }: VisitCardProps) => {
+const VisitCard = ({
+  headers,
+  review,
+  visitUserId,
+  crawls,
+}: VisitCardProps) => {
   const { client } = useContext(ClientContext)
   const { user, token } = useContext(UserContext)
   const { cardStyle } = useContext(CrawlsContext)
@@ -214,7 +221,7 @@ const VisitCard = ({ headers, review, visitUserId }: VisitCardProps) => {
   return isPendingDeleteVisit ? (
     <Loader />
   ) : (
-    <div className="rounded-xl p-4 flex flex-col gap-2" style={cardStyle}>
+    <div className="rounded-xl p-4 flex flex-col gap-3" style={cardStyle}>
       {headers &&
         headers.map((header) => (
           <VisitCardHeader
@@ -225,6 +232,7 @@ const VisitCard = ({ headers, review, visitUserId }: VisitCardProps) => {
             bold={header.bold}
           />
         ))}
+      <VisitCardCrawls crawls={crawls} />
       <VisitCardReview
         visitUserId={visitUserId}
         review={review}

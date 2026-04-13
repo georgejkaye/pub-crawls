@@ -201,6 +201,7 @@ const Page = () => {
                   ]}
                   review={visit}
                   visitUserId={visit.user_id}
+                  crawls={visit.crawls}
                 />
               ))}
             </div>

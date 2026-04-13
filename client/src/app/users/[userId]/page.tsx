@@ -90,6 +90,7 @@ const UserVisits = ({ userId, visits }: UserVisitsProps) => {
             key={visit.visit_id}
             review={visit}
             visitUserId={userId}
+            crawls={visit.crawls}
           />
         ))}
     </div>

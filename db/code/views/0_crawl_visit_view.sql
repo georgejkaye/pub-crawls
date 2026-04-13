@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW crawl_visit
+CREATE OR REPLACE VIEW crawl_visit_view
 AS
 SELECT
     crawl.crawl_id,
