@@ -51,7 +51,7 @@ const BottomBar = () => {
     <div>
       <div style={{ height: isExpanded ? "120px" : "60px" }} />
       <div
-        className="fixed bottom-0 w-full md:hidden h-[60px] font-bold border-t-2"
+        className="fixed bottom-0 w-full md:hidden h-[60px] font-bold border-t-2 z-3"
         style={{
           backgroundColor: fgColour,
           color: bgColour,
