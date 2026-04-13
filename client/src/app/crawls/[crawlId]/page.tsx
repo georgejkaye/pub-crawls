@@ -11,7 +11,7 @@ import {
 } from "@/app/utils/datetime"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { PropsWithChildren, use, useContext, useState } from "react"
+import { PropsWithChildren, use, useContext } from "react"
 
 interface CrawlDetailsProps {
   crawl: Crawl
