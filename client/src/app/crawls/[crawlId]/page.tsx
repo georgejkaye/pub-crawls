@@ -3,7 +3,7 @@
 import { Crawl, CrawlVenueSummary } from "@/app/api/client"
 import { ClientContext } from "@/app/context/client"
 import { Loader } from "@/app/components/Loader"
-import { VenueMap } from "@/app/components/VenueMap"
+import { VenueMap } from "@/app/components/SmallVenueMap"
 import { UserContext } from "@/app/context/user"
 import {
   getDateFromNullableString,
