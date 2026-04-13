@@ -77,7 +77,7 @@ export const VenueMap = ({ venues, visitedVenueIds }: VenueMapProps) => {
   return (
     <Map
       {...mapViewState}
-      style={{ height: "500px" }}
+      style={{ height: "500px", borderRadius: "8px" }}
       mapStyle={"https://tiles.openfreemap.org/styles/bright"}
     >
       <Source id="venue" type="geojson" data={featureCollection}>
