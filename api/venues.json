@@ -1,6 +1,14 @@
 {
     "crawls": [
         {
+            "key": "bbf2025",
+            "name": "Brum Brew Fest 2025",
+            "start": "2025-08-05",
+            "end": "2026-08-09",
+            "bg": "#ffffff",
+            "fg": "#12ab6f"
+        },
+        {
             "key": "rat2026",
             "name": "Real Ale Trail 2026",
             "start": "2026-03-01",
@@ -19,6 +27,368 @@
     ],
     "venues": [
         {
+            "name": "1000 Trades",
+            "address": "16 Frederick St, Birmingham, B1 3HE",
+            "latitude": "52.485172",
+            "longitude": "-1.911455",
+            "facts": {},
+            "crawls": [
+                "bbf2025",
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "1000 Trades on the Park",
+            "address": "2 Adkins Ln, Bearwood, Smethwick, B67 5DP",
+            "latitude": "52.4720148",
+            "longitude": "-1.9714495",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Actress & Bishop",
+            "address": "36 Ludgate Hill, B3 1EH",
+            "latitude": "52.484524",
+            "longitude": "-1.904776",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "Arch 13 at Connolly's",
+            "address": "220 Livery St, B3 1EU",
+            "latitude": "52.484548",
+            "longitude": "-1.901311",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "Attic Brew Co.",
+            "address": "29B Mary Vale Rd, Stirchley, Birmingham B30 2DA",
+            "latitude": "52.4262647",
+            "longitude": "-1.9254014",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "AutoBrew",
+            "address": "The Custard Factory, 10-11, Greenhouse, Gibb St, Birmingham, B9 4DJ",
+            "latitude": "52.475213",
+            "longitude": "-1.883573",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Birmingham Brewing Company",
+            "address": "Unit 17, Stirchley Trading Estate, Hazelwell Rd, Stirchley, Birmingham, B30 2PF",
+            "latitude": "52.4270455",
+            "longitude": "-1.9177691",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Burning Soul Brewery",
+            "address": "Unit 1, 51 Mott St, B19 3HE",
+            "latitude": "52.488976",
+            "longitude": "-1.905506",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "Burning Soul Brewing",
+            "address": "Unit 1, 51 Mott St, Birmingham, B19 3HE",
+            "latitude": "52.4889908",
+            "longitude": "-1.9054923",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Chance and Counters",
+            "address": "Courtyard Studio 8 Scott House, Custard Factory, Deritend, Birmingham, B9 4AA",
+            "latitude": "52.4754581",
+            "longitude": "-1.8843676",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Cherry Reds",
+            "address": "88-92 John Bright St, Birmingham B1 1BN",
+            "latitude": "52.477033",
+            "longitude": "-1.90115",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "cork and cage",
+            "address": "1373 Pershore Rd, Stirchley, Birmingham, B30 2JR",
+            "latitude": "52.42786",
+            "longitude": "-1.922577",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Craft Inn Bearwood",
+            "address": "608 Bearwood Rd, Bearwood, Birmingham, Smethwick, B66 4BW",
+            "latitude": "52.4729630",
+            "longitude": "-1.9687785",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Fletchers Bar and Eatery",
+            "address": "7 York Rd, King's Heath, Birmingham, B14 7SA",
+            "latitude": "52.4344025",
+            "longitude": "-1.8934453",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "GlassHouse",
+            "address": "Waterside Business Park, Unit 6B, 1649-1652, Pershore Rd, Birmingham, B30 3DR",
+            "latitude": "52.4219842",
+            "longitude": "-1.923876",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Head of Steam",
+            "address": "37 Temple St, Birmingham, B2 5DP",
+            "latitude": "52.480015",
+            "longitude": "-1.8990681",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Hen & Chickens",
+            "address": "27 Constitution Hill, B19 3LE",
+            "latitude": "52.487094",
+            "longitude": "-1.902276",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "HOP & SCOTCH",
+            "address": "9 Institute Rd, King's Heath, Birmingham, B14 7EG",
+            "latitude": "52.4337521",
+            "longitude": "-1.8922043",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Hop Garden",
+            "address": "19 Metchley Ln, Harborne, Birmingham, B17 0HT",
+            "latitude": "52.45993",
+            "longitude": "-1.943325",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Houblon",
+            "address": "7 Institute Rd, King's Heath, Birmingham, B14 7EG",
+            "latitude": "52.4337575",
+            "longitude": "-1.8923317",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Indian Brewery Snowhill",
+            "address": "Arch 15-16, Livery St, B3 1EU",
+            "latitude": "52.484833",
+            "longitude": "-1.901702",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "Indian Brewery Taproom",
+            "address": "1 Mary Ann St, Birmingham, B3 1RL",
+            "latitude": "52.485945",
+            "longitude": "-1.903843",
+            "facts": {},
+            "crawls": [
+                "bbf2025",
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "JQ Bar & Grill",
+            "address": "166 Warstone Ln, B18 6NN",
+            "latitude": "52.487193",
+            "longitude": "-1.913389",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "KILDER",
+            "address": "5 Shaw's Passage, Birmingham, B5 5JG",
+            "latitude": "52.478441",
+            "longitude": "-1.890477",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Purecraft Bar & Kitchen",
+            "address": "30 Waterloo St, Birmingham, B2 5TJ",
+            "latitude": "52.4800132",
+            "longitude": "-1.9017372",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "RedBeer'd",
+            "address": "1891 Pershore Rd, Cotteridge, Birmingham, B30 3DJ",
+            "latitude": "52.4161901",
+            "longitude": "-1.9299923",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Rock & Roll BrewHouse",
+            "address": "19 Hall St, Birmingham, B18 6BS",
+            "latitude": "52.4878625",
+            "longitude": "-1.9088395",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Rock & Roll Brewhouse",
+            "address": "19 Hall St, B18 6BS",
+            "latitude": "52.487861",
+            "longitude": "-1.908832",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "Rose Villa Tavern",
+            "address": "172 Warstone Ln, B18 6JW",
+            "latitude": "52.487181",
+            "longitude": "-1.912184",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "Saint Paul's Market",
+            "address": "4 Mary Ann St, B3 1RL",
+            "latitude": "52.485782",
+            "longitude": "-1.904138",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "Saint Pauls House",
+            "address": "15-20 St. Paul's Sq, B3 1QU",
+            "latitude": "52.485759",
+            "longitude": "-1.905165",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "Samai Thai",
+            "address": "30 Mary Ann St, B3 1RL",
+            "latitude": "52.485411",
+            "longitude": "-1.904556",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "Schooners",
+            "address": "31 York Rd, King's Heath, Birmingham, B14 7SA",
+            "latitude": "52.4344206",
+            "longitude": "-1.8942121",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Stirchley Wines & Spirits",
+            "address": "1535-1537 Pershore Rd, Stirchley, Birmingham, B30 2JH",
+            "latitude": "52.424102",
+            "longitude": "-1.921788",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Temper and Brown",
+            "address": "12-13 Albion St, Birmingham, B1 3ED",
+            "latitude": "52.484619",
+            "longitude": "-1.914499",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "Temper and Brown",
+            "address": "12-13 Albion St, B1 3ED",
+            "latitude": "52.484620",
+            "longitude": "-1.914502",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
             "name": "The Anvil",
             "address": "Aston Rd, Shifnal, Shropshire, TF11 8DU",
             "latitude": 52.667289,
@@ -28,6 +398,17 @@
             },
             "crawls": [
                 "rat2026"
+            ]
+        },
+        {
+            "name": "The Barrel Store",
+            "address": "Arch 32, Water St, Birmingham, B3 1HL",
+            "latitude": "52.4859021",
+            "longitude": "-1.9024120",
+            "facts": {},
+            "crawls": [
+                "bbf2025",
+                "jqbw2026"
             ]
         },
         {
@@ -45,7 +426,7 @@
         {
             "name": "The Black Country Arms",
             "address": "High St, Walsall, West Midlands, WS1 1QW",
-            "latitude": 52.583310,
+            "latitude": 52.58331,
             "longitude": -1.979156,
             "facts": {
                 "Pumps": 20
@@ -79,15 +460,65 @@
             ]
         },
         {
+            "name": "THE BUG AND BARREL",
+            "address": "60 Vittoria St, B1 3PB",
+            "latitude": "52.486004",
+            "longitude": "-1.911165",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "The Button Factory",
+            "address": "25 Frederick St, B1 3HE",
+            "latitude": "52.485852",
+            "longitude": "-1.911852",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "The Church",
+            "address": "22 Great Hampton St, B18 6AQ",
+            "latitude": "52.489518",
+            "longitude": "-1.908038",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
+            "name": "The Colmore",
+            "address": "Victoria House, 114-116 Colmore Row, Birmingham, B3 3BD",
+            "latitude": "52.4804766",
+            "longitude": "-1.9015274",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
             "name": "The Cottage Spring",
             "address": "9 Brook Street, Woodsetton, Dudley, West Midlands, DY3 1AD",
-            "latitude": 52.535740,
+            "latitude": 52.53574,
             "longitude": -2.103066,
             "facts": {
                 "Pumps": 8
             },
             "crawls": [
                 "rat2026"
+            ]
+        },
+        {
+            "name": "The Courtyard",
+            "address": "2 War Ln, Harborne, Birmingham, B17 9RN",
+            "latitude": "52.4577",
+            "longitude": "-1.95875",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
             ]
         },
         {
@@ -127,6 +558,26 @@
             ]
         },
         {
+            "name": "The Dark Horse",
+            "address": "145 Alcester Rd, Moseley, Birmingham, B13 8JP",
+            "latitude": "52.446018",
+            "longitude": "-1.888879",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "The Den",
+            "address": "1465 Pershore Rd, Stirchley, Birmingham, B30 2JL",
+            "latitude": "52.425759",
+            "longitude": "-1.922157",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
             "name": "The Dog",
             "address": "5 Lichfield Street, Burton-Upon-Trent, Staffordshire, DE14 3QZ",
             "latitude": 52.800581,
@@ -148,6 +599,26 @@
             },
             "crawls": [
                 "rat2026"
+            ]
+        },
+        {
+            "name": "The Flapper",
+            "address": "Cambrian Wharf, 8 Kingston Row, Birmingham, B1 2NU",
+            "latitude": "52.480468",
+            "longitude": "-1.912042",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
+            "name": "The Good Intent",
+            "address": "32-33 Great Western Arcade, Birmingham, B2 5HU",
+            "latitude": "52.4818671",
+            "longitude": "-1.8972599",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
             ]
         },
         {
@@ -190,7 +661,7 @@
             "name": "The Horse and Jockey",
             "address": "Market Street, Penkridge, ST19 5DH",
             "latitude": 52.725509,
-            "longitude": -2.114900,
+            "longitude": -2.1149,
             "facts": {
                 "Pumps": 12
             },
@@ -211,6 +682,16 @@
             ]
         },
         {
+            "name": "The Jam House",
+            "address": "3-5 St. Paul's Sq, B3 1QU",
+            "latitude": "52.485011",
+            "longitude": "-1.904733",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
             "name": "The Jewellers Arms",
             "address": "23 Hockley St, Birmingham B18 6BW",
             "latitude": 52.489556,
@@ -221,6 +702,16 @@
             "crawls": [
                 "rat2026",
                 "jqbw2026"
+            ]
+        },
+        {
+            "name": "The Juke",
+            "address": "16 York Rd, King's Heath, Birmingham, B14 7RZ",
+            "latitude": "52.434664",
+            "longitude": "-1.894299",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
             ]
         },
         {
@@ -239,12 +730,22 @@
             "name": "The Lawford Arms",
             "address": "13 Main Street, Long Lawford, Rugby, CV23 9AY",
             "latitude": 52.379422,
-            "longitude": -1.308510,
+            "longitude": -1.30851,
             "facts": {
                 "Pumps": 6
             },
             "crawls": [
                 "rat2026"
+            ]
+        },
+        {
+            "name": "The Lord Clifden",
+            "address": "34 Great Hampton St, B18 6AA",
+            "latitude": "52.490304",
+            "longitude": "-1.909014",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
             ]
         },
         {
@@ -308,10 +809,10 @@
             ]
         },
         {
-            "name": "The Old Bush Revived",
-            "address": "44 Powke Lane, Rowley Regis, West Midlands, B65 0AD",
-            "latitude": 52.476270,
-            "longitude": -2.051069,
+            "name": "The Old Bush",
+            "address": "High Street, Wombourne, WV5 9DT",
+            "latitude": 52.536859,
+            "longitude": -2.180765,
             "facts": {
                 "Pumps": 12
             },
@@ -320,10 +821,10 @@
             ]
         },
         {
-            "name": "The Old Bush",
-            "address": "High Street, Wombourne, WV5 9DT",
-            "latitude": 52.536859,
-            "longitude": -2.180765,
+            "name": "The Old Bush Revived",
+            "address": "44 Powke Lane, Rowley Regis, West Midlands, B65 0AD",
+            "latitude": 52.47627,
+            "longitude": -2.051069,
             "facts": {
                 "Pumps": 12
             },
@@ -356,6 +857,16 @@
             ]
         },
         {
+            "name": "The Plough",
+            "address": "21 High St, Harborne, Birmingham, B17 9NT",
+            "latitude": "52.46108",
+            "longitude": "-1.943751",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
             "name": "The Pretty Bricks",
             "address": "5 John Street, Walsall, West Midlands, WS2 8AF",
             "latitude": 52.591296,
@@ -371,12 +882,22 @@
             "name": "The Prince of Wales",
             "address": "84 Cambridge St, Birmingham B1 2NP",
             "latitude": 52.479488,
-            "longitude": -1.911650,
+            "longitude": -1.91165,
             "facts": {
                 "Pumps": 12
             },
             "crawls": [
                 "rat2026"
+            ]
+        },
+        {
+            "name": "The Queens Arms",
+            "address": "150 Newhall St, B3 1RY",
+            "latitude": "52.483642",
+            "longitude": "-1.906603",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
             ]
         },
         {
@@ -440,6 +961,16 @@
             ]
         },
         {
+            "name": "The Rectory",
+            "address": "50-54 St. Paul's Sq, B3 1QS",
+            "latitude": "52.484594",
+            "longitude": "-1.906434",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
             "name": "The Rising Sun",
             "address": "116 Horseley Road, Tipton, Dudley, West Midlands, DY4 7NH",
             "latitude": 52.534049,
@@ -464,6 +995,16 @@
             ]
         },
         {
+            "name": "The Rolling Mill",
+            "address": "25 Hall St, B18 6BS",
+            "latitude": "52.487782",
+            "longitude": "-1.908534",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
             "name": "The Royal Oak",
             "address": "Coton Hill, Shrewsbury, Shropshire, SY1 2DZ",
             "latitude": 52.715817,
@@ -479,7 +1020,7 @@
             "name": "The Salmon",
             "address": "19 Butt Close Lane, Leicester, Leicestershire, LE1 4QA",
             "latitude": 52.638188,
-            "longitude": -1.135940,
+            "longitude": -1.13594,
             "facts": {
                 "Pumps": 12
             },
@@ -512,6 +1053,16 @@
             ]
         },
         {
+            "name": "The Shakespeare",
+            "address": "31 Summer Row, B3 1JJ",
+            "latitude": "52.481530",
+            "longitude": "-1.906914",
+            "facts": {},
+            "crawls": [
+                "jqbw2026"
+            ]
+        },
+        {
             "name": "The Shrewsbury Arms",
             "address": "75-75A Eastgate Street, Stafford, Staffordshire, ST16 2NG",
             "latitude": 52.806584,
@@ -539,7 +1090,7 @@
             "name": "The Swan",
             "address": "Long Lane, Halesowen, West Midlands, B62 9JY",
             "latitude": 52.468516,
-            "longitude": -2.031800,
+            "longitude": -2.0318,
             "facts": {
                 "Pumps": 17
             },
@@ -550,7 +1101,7 @@
         {
             "name": "The Swan",
             "address": "93 Pelsall Road, Walsall, WS8 7DL",
-            "latitude": 52.645770,
+            "latitude": 52.64577,
             "longitude": -1.942617,
             "facts": {
                 "Pumps": 12
@@ -596,6 +1147,16 @@
             ]
         },
         {
+            "name": "The Victoria",
+            "address": "48 John Bright St, Birmingham, B1 1BN",
+            "latitude": "52.476072",
+            "longitude": "-1.900774",
+            "facts": {},
+            "crawls": [
+                "bbf2025"
+            ]
+        },
+        {
             "name": "The Vine Inn",
             "address": "35 Lichfield Road, Wednesfield, Wolverhampton, West Midlands, WV11 1TN",
             "latitude": 52.602042,
@@ -628,6 +1189,7 @@
                 "Pumps": 27
             },
             "crawls": [
+                "bbf2025",
                 "rat2026"
             ]
         },
@@ -635,7 +1197,7 @@
             "name": "The White Hart",
             "address": "High St, Shifnal, TF11 8BH",
             "latitude": 52.670861,
-            "longitude": -2.372130,
+            "longitude": -2.37213,
             "facts": {
                 "Pumps": 12
             },
@@ -677,6 +1239,17 @@
             },
             "crawls": [
                 "rat2026"
+            ]
+        },
+        {
+            "name": "The Wolf",
+            "address": "2-10 Constitution Hill, Birmingham B19 3LY",
+            "latitude": "52.4864962",
+            "longitude": "-1.9017338",
+            "facts": {},
+            "crawls": [
+                "bbf2025",
+                "jqbw2026"
             ]
         }
     ]
