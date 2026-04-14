@@ -12,6 +12,7 @@ import {
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { PropsWithChildren, use, useContext } from "react"
+import { CrawlsContext } from "@/app/context/crawls"
 
 interface CrawlDetailsProps {
   crawl: Crawl
@@ -32,6 +33,35 @@ const CrawlDetails = ({ crawl }: CrawlDetailsProps) => {
         <div>user{crawl.user_count === 1 ? "" : "s"}</div>
       </div>
     </div>
+  )
+}
+
+interface TrackCrawlButtonProps {
+  crawl: Crawl
+}
+
+const TrackCrawlButton = ({ crawl }: TrackCrawlButtonProps) => {
+  const { currentCrawl, setCurrentCrawl } = useContext(CrawlsContext)
+  const onClickButton = () => {
+    if (currentCrawl?.crawl_id === crawl.crawl_id) {
+      setCurrentCrawl(undefined)
+    } else {
+      setCurrentCrawl(crawl)
+    }
+  }
+  return (
+    <button
+      className="p-2 rounded-xl border-3 font-bold cursor-pointer hover:underline"
+      style={{
+        backgroundColor: crawl.crawl_fg ?? "#00000",
+        color: crawl.crawl_bg ?? "#ffffff",
+      }}
+      onClick={onClickButton}
+    >
+      {currentCrawl?.crawl_id === crawl.crawl_id
+        ? "Stop tracking this crawl"
+        : "Track this crawl"}
+    </button>
   )
 }
 
@@ -77,7 +107,7 @@ const CrawlVenueList = ({ crawl }: CrawlVenueListProps) => {
   )
   const venuesToShow = sortedVenues
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full">
       <div className="flex flex-col gap-2">
         {venuesToShow.map((venue) => (
           <CrawlVenueCard
@@ -132,9 +162,10 @@ const Content = ({ crawlId }: ContentProps) => {
       ) : !crawl ? (
         notFound()
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 items-start">
           <h1 className="text-2xl font-bold">{crawl.crawl_name}</h1>
           <CrawlDetails crawl={crawl} />
+          <TrackCrawlButton crawl={crawl} />
           <VenueMap
             venues={crawl.venues}
             visitedVenueIds={crawlVisitedVenues}
