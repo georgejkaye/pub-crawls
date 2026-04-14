@@ -70,7 +70,6 @@ interface VisitCardReviewProps {
 
 export const VisitCardReview = ({ review }: VisitCardReviewProps) => {
   const visitDate = new Date(Date.parse(review.visit_date))
-
   return (
     <div className="flex flex-col gap-2">
       {visitDate && (
@@ -79,6 +78,7 @@ export const VisitCardReview = ({ review }: VisitCardReviewProps) => {
             weekday: "long",
             day: "2-digit",
             month: "long",
+            year: "numeric",
           })}
           {", "}
           {visitDate.toLocaleTimeString("en-UK", {
@@ -232,7 +232,7 @@ const VisitCard = ({
             bold={header.bold}
           />
         ))}
-      <VisitCardCrawls crawls={crawls} />
+      {crawls.length > 0 && <VisitCardCrawls crawls={crawls} />}
       <VisitCardReview
         visitUserId={visitUserId}
         review={review}
