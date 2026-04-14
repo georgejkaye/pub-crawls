@@ -33,6 +33,18 @@ const TopBar = () => {
         {!isLoadingUser && (
           <div className="flex flex-row gap-4">
             <div className="hidden md:flex flex-row gap-4">
+              {currentCrawl !== undefined ? (
+                <div>
+                  <Link
+                    className={`${linkStyle} font-bold border-3 p-2 rounded-xl`}
+                    href={`/crawls/${currentCrawl.crawl_id}`}
+                  >
+                    {currentCrawl.crawl_name}
+                  </Link>
+                </div>
+              ) : (
+                <div>Click to choose crawl</div>
+              )}
               <Link className={linkStyle} href="/">
                 Map
               </Link>
