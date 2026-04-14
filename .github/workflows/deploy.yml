@@ -23,4 +23,4 @@ jobs:
             sleep 5
             docker compose -f docker-compose.prod.yml build
             sleep 5
-            docker compose -f docker-compose.prod.yml up
+            docker compose -f docker-compose.prod.yml up -d
