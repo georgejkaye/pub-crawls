@@ -49,22 +49,22 @@ const BottomBar = () => {
 
   return (
     <div>
-      <div style={{ height: isExpanded ? "120px" : "60px" }} />
+      <div style={{ height: isExpanded ? "0px" : "60px" }} />
       <div
-        className="fixed bottom-0 w-full md:hidden h-[60px] font-bold border-t-2 z-3"
+        className="fixed bottom-0 w-full md:hidden font-bold border-t-2 z-3"
         style={{
           backgroundColor: fgColour,
           color: bgColour,
           borderColor: `color-mix(in oklab, ${fgColour} 33%, white)`,
-          height: isExpanded ? "120px" : "60px",
+          height: isExpanded ? "100vh" : "60px",
         }}
       >
         {isLoadingUser ? (
           <Loader />
         ) : (
           <div>
-            {isExpanded && (
-              <div className="flex flex-row h-[60px] items-center text-center">
+            {isExpanded ? (
+              <div className="flex flex-row h-screen items-center text-center">
                 <div className="basis-0 grow" />
                 <div className="basis-0 grow">
                   <BottomBarLink href="/venues" label="Venues" />
@@ -76,36 +76,37 @@ const BottomBar = () => {
                   <BottomBarLink href="/users" label="Users" />
                 </div>
               </div>
-            )}
-            <div className="flex flex-row items-center text-center py-4 h-[60px]">
-              {isExpanded ? (
-                <FaAngleDown
-                  className="basis-0 grow cursor-pointer"
-                  onClick={onClickToggleExpand}
-                />
-              ) : (
-                <FaAngleUp
-                  className="basis-0 grow cursor-pointer"
-                  onClick={onClickToggleExpand}
-                />
-              )}
-              <div className="basis-0 grow">
-                <BottomBarLink href="/visits" label="Visits" />
-              </div>
-              <div className="basis-0 grow">
-                <BottomBarLink href="/" label="Map" />
-              </div>
-              <div className="basis-0 grow">
-                {user ? (
-                  <BottomBarLink
-                    href={`/users/${user.user_id}`}
-                    label={user.display_name}
+            ) : (
+              <div className="flex flex-row items-center text-center py-4 h-[60px]">
+                {isExpanded ? (
+                  <FaAngleDown
+                    className="basis-0 grow cursor-pointer"
+                    onClick={onClickToggleExpand}
                   />
                 ) : (
-                  <BottomBarLink href="/login" label="Login" />
+                  <FaAngleUp
+                    className="basis-0 grow cursor-pointer"
+                    onClick={onClickToggleExpand}
+                  />
                 )}
+                <div className="basis-0 grow">
+                  <BottomBarLink href="/visits" label="Visits" />
+                </div>
+                <div className="basis-0 grow">
+                  <BottomBarLink href="/" label="Map" />
+                </div>
+                <div className="basis-0 grow">
+                  {user ? (
+                    <BottomBarLink
+                      href={`/users/${user.user_id}`}
+                      label={user.display_name}
+                    />
+                  ) : (
+                    <BottomBarLink href="/login" label="Login" />
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
       </div>
