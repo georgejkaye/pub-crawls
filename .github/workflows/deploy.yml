@@ -21,4 +21,6 @@ jobs:
             git pull
             docker compose -f docker-compose.prod.yml down
             sleep 5
-            docker compose -f docker-compose.prod.yml up --build -d
+            docker compose -f docker-compose.prod.yml build
+            sleep 5
+            docker compose -f docker-compose.prod.yml up
