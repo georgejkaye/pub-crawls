@@ -10,13 +10,13 @@ SELECT
     visit.notes,
     visit.rating,
     visit.drink,
-    visit_crawls.crawls
+    COALESCE(visit_crawls.crawls, ARRAY[]::visit_crawl_data[]) AS crawls
 FROM visit
 INNER JOIN app_user
 ON visit.user_id = app_user.user_id
 INNER JOIN venue
 ON visit.venue_id = venue.venue_id
-INNER JOIN (
+LEFT JOIN (
     SELECT
         crawl_detail.visit_id,
         ARRAY_AGG(
