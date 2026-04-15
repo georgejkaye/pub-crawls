@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react"
+import { Dispatch, SetStateAction, useContext, useState } from "react"
 import { VenueMap } from "./components/LargeVenueMap"
 import { UserContext } from "./context/user"
 import { CrawlSummary, User, Venue } from "./api/client"
@@ -22,7 +16,6 @@ interface CrawlSelectorProps {
 
 const CrawlSelector = ({
   currentCrawl,
-  setCurrentCrawl,
   setSelectingCrawl,
 }: CrawlSelectorProps) => {
   const { bgColour, fgColour } = useContext(CrawlsContext)
@@ -144,11 +137,6 @@ const MapOverlayButtons = ({
 
   return (
     <div className="absolute top-0 right-0 m-2 flex flex-col items-end gap-1">
-      <CrawlSelector
-        currentCrawl={currentCrawl}
-        setCurrentCrawl={setCurrentCrawl}
-        setSelectingCrawl={setSelectingCrawl}
-      />
       {currentCrawl && (
         <VisitStatsPane
           currentCrawl={currentCrawl}
