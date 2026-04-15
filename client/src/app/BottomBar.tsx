@@ -6,7 +6,7 @@ import { Loader } from "./components/Loader"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { CrawlsContext } from "./context/crawls"
-import { FaAngleDown, FaAngleUp } from "react-icons/fa6"
+import { RiMenuFill, RiCloseFill } from "react-icons/ri"
 
 interface BottomBarLinkProps {
   href: string
@@ -37,6 +37,68 @@ const BottomBarLink = ({ href, label }: BottomBarLinkProps) => {
   )
 }
 
+const Menu = () => {
+  return (
+    <div
+      style={{ height: "calc(100vh - 60px)" }}
+      className="flex flex-row items-center text-center"
+    >
+      <div className="basis-0 grow" />
+      <div className="basis-0 grow">
+        <BottomBarLink href="/venues" label="Venues" />
+      </div>
+      <div className="basis-0 grow">
+        <BottomBarLink href="/crawls" label="Crawls" />
+      </div>
+      <div className="basis-0 grow">
+        <BottomBarLink href="/users" label="Users" />
+      </div>
+    </div>
+  )
+}
+
+interface BarProps {
+  isExpanded: boolean
+  setExpanded: (setter: (old: boolean) => boolean) => void
+}
+
+const Bar = ({ isExpanded, setExpanded }: BarProps) => {
+  const { user } = useContext(UserContext)
+  const onClickToggleMenu = () => {
+    setExpanded((old) => !old)
+  }
+  return (
+    <div className="flex flex-row items-center text-center py-4 h-[60px]">
+      <div
+        className="basis-0 grow cursor-pointer text-center items-center flex flex-col"
+        onClick={onClickToggleMenu}
+      >
+        {isExpanded ? (
+          <RiCloseFill size={40} className="" />
+        ) : (
+          <RiMenuFill size={33} className="" />
+        )}
+      </div>
+      <div className="basis-0 grow">
+        <BottomBarLink href="/visits" label="Visits" />
+      </div>
+      <div className="basis-0 grow">
+        <BottomBarLink href="/" label="Map" />
+      </div>
+      <div className="basis-0 grow">
+        {user ? (
+          <BottomBarLink
+            href={`/users/${user.user_id}`}
+            label={user.display_name}
+          />
+        ) : (
+          <BottomBarLink href="/login" label="Login" />
+        )}
+      </div>
+    </div>
+  )
+}
+
 const BottomBar = () => {
   const { user, isLoadingUser } = useContext(UserContext)
   const { bgColour, fgColour } = useContext(CrawlsContext)
@@ -62,51 +124,9 @@ const BottomBar = () => {
         {isLoadingUser ? (
           <Loader />
         ) : (
-          <div>
-            {isExpanded ? (
-              <div className="flex flex-row h-screen items-center text-center">
-                <div className="basis-0 grow" />
-                <div className="basis-0 grow">
-                  <BottomBarLink href="/venues" label="Venues" />
-                </div>
-                <div className="basis-0 grow">
-                  <BottomBarLink href="/crawls" label="Crawls" />
-                </div>
-                <div className="basis-0 grow">
-                  <BottomBarLink href="/users" label="Users" />
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-row items-center text-center py-4 h-[60px]">
-                {isExpanded ? (
-                  <FaAngleDown
-                    className="basis-0 grow cursor-pointer"
-                    onClick={onClickToggleExpand}
-                  />
-                ) : (
-                  <FaAngleUp
-                    className="basis-0 grow cursor-pointer"
-                    onClick={onClickToggleExpand}
-                  />
-                )}
-                <div className="basis-0 grow">
-                  <BottomBarLink href="/visits" label="Visits" />
-                </div>
-                <div className="basis-0 grow">
-                  <BottomBarLink href="/" label="Map" />
-                </div>
-                <div className="basis-0 grow">
-                  {user ? (
-                    <BottomBarLink
-                      href={`/users/${user.user_id}`}
-                      label={user.display_name}
-                    />
-                  ) : (
-                    <BottomBarLink href="/login" label="Login" />
-                  )}
-                </div>
-              </div>
-            )}
+          <div className="flex flex-col">
+            {isExpanded && <Menu />}
+            <Bar isExpanded={isExpanded} setExpanded={setExpanded} />
           </div>
         )}
       </div>
