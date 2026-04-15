@@ -33,7 +33,7 @@ const TopBar = () => {
         {!isLoadingUser && (
           <div className="flex flex-row gap-4">
             <div className="hidden md:flex flex-row gap-4">
-              {currentCrawl !== undefined ? (
+              {currentCrawl && (
                 <div>
                   <Link
                     className={`${linkStyle} font-bold border-3 p-2 rounded-xl`}
@@ -42,8 +42,6 @@ const TopBar = () => {
                     {currentCrawl.crawl_name}
                   </Link>
                 </div>
-              ) : (
-                <div>Click to choose crawl</div>
               )}
               <Link className={linkStyle} href="/">
                 Map
