@@ -152,7 +152,7 @@ const VisitFeedCardCrawl = ({ crawl }: VisitCardCrawlBadgeProps) => {
         color: crawl.crawl_bg ?? "#ffffff",
       }}
     >
-      <Link className="hover:underline" href={`/crawl/${crawl.crawl_id}`}>
+      <Link className="hover:underline" href={`/crawls/${crawl.crawl_id}`}>
         {crawl.crawl_name}
       </Link>
     </div>
