@@ -6,7 +6,8 @@ SELECT
     crawl_visit_view.crawl_id,
     crawl_visit_view.venue_id,
     COUNT(DISTINCT crawl_visit_view.visit_date) AS visit_count,
-    COUNT(DISTINCT crawl_visit_view.user_id) AS user_visit_count
+    COUNT(DISTINCT crawl_visit_view.user_id) AS user_visit_count,
+    ROUND(AVG(crawl_visit_view.rating), 2) AS rating
 FROM crawl_visit_view
 GROUP BY
     crawl_visit_view.crawl_id,

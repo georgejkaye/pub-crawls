@@ -357,7 +357,8 @@ LEFT JOIN (
                 crawl.crawl_bg,
                 crawl.crawl_fg,
                 COALESCE(crawl_visit_count_view.visit_count, 0),
-                COALESCE(crawl_visit_count_view.user_visit_count, 0)
+                COALESCE(crawl_visit_count_view.user_visit_count, 0),
+                crawl_visit_count_view.rating
             )::venue_crawl_data
             ORDER BY crawl.crawl_dates
         ) AS crawls
@@ -468,7 +469,8 @@ LEFT JOIN (
                 crawl.crawl_bg,
                 crawl.crawl_fg,
                 COALESCE(crawl_visit_count_view.visit_count, 0),
-                COALESCE(crawl_visit_count_view.user_visit_count, 0)
+                COALESCE(crawl_visit_count_view.user_visit_count, 0),
+                crawl_visit_count_view.rating
             )::venue_crawl_data
         ) AS crawls
     FROM crawl_venue
@@ -543,7 +545,8 @@ LEFT JOIN (
                 crawl.crawl_bg,
                 crawl.crawl_fg,
                 crawl_visit_count_view.visit_count,
-                crawl_visit_count_view.user_visit_count
+                crawl_visit_count_view.user_visit_count,
+                crawl_visit_count_view.rating
             )::venue_crawl_data
         ) AS crawls
     FROM crawl_venue

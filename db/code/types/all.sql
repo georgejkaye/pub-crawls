@@ -100,7 +100,8 @@ CREATE TYPE venue_crawl_data AS (
     crawl_bg TEXT,
     crawl_fg TEXT,
     visit_count INTEGER_NOTNULL,
-    user_visit_count INTEGER_NOTNULL
+    user_visit_count INTEGER_NOTNULL,
+    rating DECIMAL
 );
 
 CREATE DOMAIN venue_crawl_data_notnull
