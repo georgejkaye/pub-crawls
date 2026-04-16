@@ -188,22 +188,26 @@ const Page = () => {
               {user && (
                 <LinkButton label="Record visit" onClick={onClickRecordVisit} />
               )}
-              {venue.visits.map((visit) => (
-                <VisitCard
-                  key={visit.visit_id}
-                  headers={[
-                    getVisitCardUserHeader(
-                      visit.user_id,
-                      visit.user_display_name,
-                      true,
-                      true,
-                    ),
-                  ]}
-                  review={visit}
-                  visitUserId={visit.user_id}
-                  crawls={visit.crawls}
-                />
-              ))}
+              {venue.visits
+                .sort(
+                  (a, b) => Date.parse(b.visit_date) - Date.parse(a.visit_date),
+                )
+                .map((visit) => (
+                  <VisitCard
+                    key={visit.visit_id}
+                    headers={[
+                      getVisitCardUserHeader(
+                        visit.user_id,
+                        visit.user_display_name,
+                        true,
+                        true,
+                      ),
+                    ]}
+                    review={visit}
+                    visitUserId={visit.user_id}
+                    crawls={visit.crawls}
+                  />
+                ))}
             </div>
           )}
     </div>
