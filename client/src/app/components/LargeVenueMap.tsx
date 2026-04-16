@@ -39,6 +39,7 @@ import {
   Venue,
   VenueVisit,
 } from "../api/client"
+import { CrawlsContext } from "../context/crawls"
 
 const getVenueFeatureCollection = (
   venues: Venue[],
@@ -123,10 +124,24 @@ const CurrentVenueBox = ({
   venue,
   setCurrentVenue,
 }: CurrentVenueBoxProps) => {
+  const { currentCrawl } = useContext(CrawlsContext)
+
   const router = useRouter()
-  const venueVisitCount = venue.total_visits
-  const venueUserCount = venue.users_visited
-  const averageVenueRating = venue.average_rating
+
+  const venueCrawl = !currentCrawl
+    ? undefined
+    : venue.crawls.find((crawl) => crawl.crawl_id === currentCrawl.crawl_id)
+
+  const venueVisitCount = !venueCrawl
+    ? venue.total_visits
+    : venueCrawl.visit_count
+  const venueUserCount = !venueCrawl
+    ? venue.users_visited
+    : venueCrawl.user_visit_count
+  const averageVenueRating = !venueCrawl
+    ? venue.average_rating
+    : Number(venueCrawl.rating)
+
   const onClickDetails = () => {
     router.push(`/venues/${venue.venue_id}`)
   }
