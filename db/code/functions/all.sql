@@ -357,7 +357,8 @@ LEFT JOIN (
                 crawl.crawl_bg,
                 crawl.crawl_fg,
                 COALESCE(crawl_visit_count_view.visit_count, 0),
-                COALESCE(crawl_visit_count_view.user_visit_count, 0)
+                COALESCE(crawl_visit_count_view.user_visit_count, 0),
+                crawl_visit_count_view.rating
             )::venue_crawl_data
             ORDER BY crawl.crawl_dates
         ) AS crawls
@@ -468,7 +469,8 @@ LEFT JOIN (
                 crawl.crawl_bg,
                 crawl.crawl_fg,
                 COALESCE(crawl_visit_count_view.visit_count, 0),
-                COALESCE(crawl_visit_count_view.user_visit_count, 0)
+                COALESCE(crawl_visit_count_view.user_visit_count, 0),
+                crawl_visit_count_view.rating
             )::venue_crawl_data
         ) AS crawls
     FROM crawl_venue
@@ -543,7 +545,8 @@ LEFT JOIN (
                 crawl.crawl_bg,
                 crawl.crawl_fg,
                 crawl_visit_count_view.visit_count,
-                crawl_visit_count_view.user_visit_count
+                crawl_visit_count_view.user_visit_count,
+                crawl_visit_count_view.rating
             )::venue_crawl_data
         ) AS crawls
     FROM crawl_venue
@@ -803,7 +806,7 @@ LEFT JOIN (
                 user_crawl.crawl_id,
                 user_crawl.crawl_name,
                 user_crawl.visit_count,
-                user_crawl.unique_visit_count,
+                user_crawl.venue_count,
                 user_crawl.favourite_venue
             )::user_crawl_count_data
         ) AS crawls
@@ -813,7 +816,7 @@ LEFT JOIN (
             user_crawl_count.crawl_id,
             crawl.crawl_name,
             user_crawl_count.visit_count,
-            user_crawl_count.unique_visit_count,
+            user_crawl_count.venue_count,
             CASE
                 WHEN user_crawl_favourite.venue_id IS NULL
                 THEN NULL
@@ -827,7 +830,7 @@ LEFT JOIN (
                 crawl_visit_view.user_id,
                 crawl_visit_view.crawl_id,
                 COUNT(crawl_visit_view.*) AS visit_count,
-                COUNT(DISTINCT crawl_visit_view.venue_id) AS unique_visit_count
+                COUNT(DISTINCT crawl_visit_view.venue_id) AS venue_count
             FROM crawl_visit_view
             GROUP BY crawl_visit_view.user_id, crawl_visit_view.crawl_id
         ) user_crawl_count
