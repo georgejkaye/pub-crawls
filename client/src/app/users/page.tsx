@@ -13,7 +13,20 @@ interface UserCardProps {
 }
 
 const UserCard = ({ user }: UserCardProps) => {
-  const { cardStyle } = useContext(CrawlsContext)
+  const { cardStyle, currentCrawl } = useContext(CrawlsContext)
+
+  const userCurrentCrawl = !currentCrawl
+    ? undefined
+    : user.crawls.find((crawl) => crawl.crawl_id === currentCrawl.crawl_id)
+
+  const venueCount = !userCurrentCrawl
+    ? user.venue_count
+    : userCurrentCrawl.venue_count
+
+  const visitCount = !userCurrentCrawl
+    ? user.visit_count
+    : userCurrentCrawl.visit_count
+
   return (
     <div className="flex flex-col gap-4">
       <div
@@ -41,14 +54,17 @@ const UserCard = ({ user }: UserCardProps) => {
         </div>
         <div className="flex flex-row items-center gap-4">
           <div>
-            <span className="text-lg font-bold">{user.venue_count}</span> venues
+            <span className="text-lg font-bold">{venueCount}</span> venues
           </div>
           <div>
-            <span className="text-lg font-bold">{user.visit_count}</span> visits
+            <span className="text-lg font-bold">{visitCount}</span> visits
           </div>
-          <div>
-            <span className="text-lg font-bold">{user.crawl_count}</span> crawls
-          </div>
+          {!currentCrawl && (
+            <div>
+              <span className="text-lg font-bold">{user.crawl_count}</span>{" "}
+              crawls
+            </div>
+          )}
         </div>
       </div>
     </div>
