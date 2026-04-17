@@ -66,11 +66,7 @@ const VenueCard = ({ venue, location, filterCrawl }: VenueCardProps) => {
 const Page = () => {
   const { venues } = useContext(VenuesContext)
   const { client } = useContext(ClientContext)
-
-  const { data: crawls, isLoading: isLoadingCrawls } = client.useQuery(
-    "get",
-    "/crawls",
-  )
+  const { crawls, currentCrawl, isLoadingCrawls } = useContext(CrawlsContext)
 
   const [location, setLocation] = useState<GeolocationPosition | undefined>(
     undefined,
@@ -161,6 +157,10 @@ const Page = () => {
         (!filterCrawl ||
           venue.crawls.find((crawl) => crawl.crawl_id === filterCrawl) !==
             undefined) &&
+        (!currentCrawl ||
+          venue.crawls.find(
+            (crawl) => crawl.crawl_id === currentCrawl.crawl_id,
+          )) &&
         ((venue.venue_name &&
           venue.venue_name.toLowerCase().includes(searchValue.toLowerCase())) ||
           (venue.venue_address &&
@@ -214,7 +214,7 @@ const Page = () => {
               )}
             </select>
           </div>
-          {crawls && (
+          {crawls && !currentCrawl && (
             <div className="flex flex-row items-center gap-2">
               <label htmlFor="filter-crawl">Filter by crawl</label>
               <select
