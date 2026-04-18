@@ -54,9 +54,9 @@ const Page = ({ params }: { params: Promise<{ visitId: string }> }) => {
         visit_id: parseInt(visitId),
       },
       query: {
-        notes: notesText,
-        rating: ratingValue,
-        drink: drinkText,
+        notes: notesText === "" ? null : notesText,
+        rating: ratingValue === 0 ? null : ratingValue,
+        drink: drinkText === "" ? null : drinkText,
       },
     }
     patchVisit({ params, headers: { Authorization: `Bearer ${token}` } })
