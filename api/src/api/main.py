@@ -164,6 +164,8 @@ async def post_visit(
     drink: Optional[str] = None,
     user: FastApiUser = Depends(current_user),
 ) -> None:
+    if rating is not None and (rating < 0 or rating > 5):
+        raise HTTPException(status_code=422)
     insert_visit_fetchone(
         get_db_connection(), user.id, venue_id, visit_date, notes, rating, drink
     )
@@ -172,11 +174,13 @@ async def post_visit(
 @app.patch("/visit/{visit_id}", summary="Update details about a visit", tags=["visit"])
 async def patch_visit(
     visit_id: int,
-    notes: str,
-    rating: int,
-    drink: str,
+    notes: Optional[str] = None,
+    rating: Optional[int] = None,
+    drink: Optional[str] = None,
     user: FastApiUser = Depends(current_user),
 ) -> None:
+    if rating is not None and (rating < 0 or rating > 5):
+        raise HTTPException(status_code=422)
     update_visit(get_db_connection(), user.id, visit_id, notes, rating, drink)
 
 

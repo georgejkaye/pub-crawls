@@ -3,7 +3,7 @@
 import { useContext } from "react"
 import { ClientContext } from "../context/client"
 import { Loader } from "../components/Loader"
-import { UserCount } from "../api/client"
+import { CrawlSummary, UserCount } from "../api/client"
 import { FaStar } from "react-icons/fa"
 import Link from "next/link"
 import { CrawlsContext } from "../context/crawls"
@@ -19,13 +19,23 @@ const UserCard = ({ user }: UserCardProps) => {
     ? undefined
     : user.crawls.find((crawl) => crawl.crawl_id === currentCrawl.crawl_id)
 
-  const venueCount = !userCurrentCrawl
+  const venueCount = !currentCrawl
     ? user.venue_count
-    : userCurrentCrawl.venue_count
+    : !userCurrentCrawl
+      ? 0
+      : userCurrentCrawl.venue_count
 
-  const visitCount = !userCurrentCrawl
+  const visitCount = !currentCrawl
     ? user.visit_count
-    : userCurrentCrawl.visit_count
+    : !userCurrentCrawl
+      ? 0
+      : userCurrentCrawl.visit_count
+
+  const favouriteVenue = !currentCrawl
+    ? user.favourite_venue
+    : !userCurrentCrawl
+      ? undefined
+      : userCurrentCrawl.favourite_venue
 
   return (
     <div className="flex flex-col gap-4">
@@ -40,14 +50,14 @@ const UserCard = ({ user }: UserCardProps) => {
           >
             {user.display_name}
           </Link>
-          {user.favourite_venue && (
+          {favouriteVenue && (
             <div className="flex flex-row gap-2 items-center">
               <FaStar />
               <Link
                 className="hover:underline"
-                href={`/venues/${user.favourite_venue.venue_id}`}
+                href={`/venues/${favouriteVenue.venue_id}`}
               >
-                {user.favourite_venue.venue_name}
+                {favouriteVenue.venue_name}
               </Link>
             </div>
           )}
@@ -73,10 +83,15 @@ const UserCard = ({ user }: UserCardProps) => {
 
 const Page = () => {
   const { client } = useContext(ClientContext)
+  const { currentCrawl } = useContext(CrawlsContext)
+
   const { data: users, isLoading: isLoadingUsers } = client.useQuery(
     "get",
     "/users",
   )
+
+  const getUserCrawl = (targetCrawl: CrawlSummary, user: UserCount) =>
+    user.crawls.find((crawl) => crawl.crawl_id === targetCrawl.crawl_id)
 
   return isLoadingUsers || !users ? (
     <Loader />
@@ -84,7 +99,12 @@ const Page = () => {
     <div className="w-full md:w-2/3 lg:w-1/2 p-4 flex flex-col gap-4 mx-auto">
       <h2 className="text-2xl font-bold">Users</h2>
       {users
-        .sort((a, b) => b.venue_count - a.venue_count)
+        .sort((a, b) =>
+          !currentCrawl
+            ? b.venue_count - a.venue_count
+            : (getUserCrawl(currentCrawl, b)?.venue_count ?? 0) -
+              (getUserCrawl(currentCrawl, a)?.venue_count ?? 0),
+        )
         .map((user) => (
           <UserCard key={user.user_id} user={user} />
         ))}
