@@ -31,6 +31,12 @@ const UserCard = ({ user }: UserCardProps) => {
       ? 0
       : userCurrentCrawl.visit_count
 
+  const favouriteVenue = !currentCrawl
+    ? user.favourite_venue
+    : !userCurrentCrawl
+      ? undefined
+      : userCurrentCrawl.favourite_venue
+
   return (
     <div className="flex flex-col gap-4">
       <div
@@ -44,14 +50,14 @@ const UserCard = ({ user }: UserCardProps) => {
           >
             {user.display_name}
           </Link>
-          {user.favourite_venue && (
+          {favouriteVenue && (
             <div className="flex flex-row gap-2 items-center">
               <FaStar />
               <Link
                 className="hover:underline"
-                href={`/venues/${user.favourite_venue.venue_id}`}
+                href={`/venues/${favouriteVenue.venue_id}`}
               >
-                {user.favourite_venue.venue_name}
+                {favouriteVenue.venue_name}
               </Link>
             </div>
           )}
